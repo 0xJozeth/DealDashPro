@@ -1,11 +1,14 @@
+'use client';
+
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import Navbar from '@/components/Navbar';
+import { Hero } from '@/components/Hero/Hero';
 
 export default function Home() {
 	return (
 		<MaxWidthWrapper>
-			<div className='bg-red-500'>
-				<h1>Hello World</h1>
-			</div>
+			<Navbar />
+			<Hero />
 		</MaxWidthWrapper>
 	);
 }

@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { Fragment } from 'react';
 import MaxWidthWrapper from './MaxWidthWrapper';
+import { RegisterLink, LoginLink } from '@kinde-oss/kinde-auth-nextjs/server';
 
 const Navbar = () => (
 	<>
@@ -20,18 +21,18 @@ const Navbar = () => (
 				<nav className='flex justify-between h-20'>
 					<ul className='flex justify-between gap-x-2'>
 						<li className=' flex justify-center items-center px-2'>
-							<Link href='/' className='px-4 bg-slate-400 '>
+							<LoginLink className='px-4 bg-slate-400 '>
 								<button type='button' className='p-2 text-white '>
 									Login
 								</button>
-							</Link>
+							</LoginLink>
 						</li>
 						<li className='flex justify-center items-center px-2'>
-							<Link href='/' className='px-4 bg-slate-400 '>
+							<RegisterLink className='px-4 bg-slate-400 '>
 								<button type='button' className='p-2 text-white '>
 									Register
 								</button>
-							</Link>
+							</RegisterLink>
 						</li>
 						<li className=' flex justify-center items-center px-2'>
 							<Link href='/' className='px-4 bg-slate-400 '>

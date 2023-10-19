@@ -6,14 +6,16 @@ import MaxWidthWrapper from './MaxWidthWrapper';
 const Navbar = () => (
 	<>
 		<MaxWidthWrapper>
-			<header className='flex justify-between items-center border border-slate-800 shadow-md px-2'>
-				<Image
-					src={'/next.svg'}
-					width={125}
-					height={125}
-					alt={'logo'}
-					className='p-2'
-				/>
+			<header className='flex justify-between items-center px-2'>
+				<Link href='/'>
+					<Image
+						src={'/ddpBlack.svg'}
+						width={225}
+						height={225}
+						alt={'logo'}
+						className='p-2'
+					/>
+				</Link>
 
 				<nav className='flex justify-between h-20'>
 					<ul className='flex justify-between gap-x-2'>

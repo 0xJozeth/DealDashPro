@@ -20,11 +20,11 @@ export default function RootLayout({
 		<html lang='en' className='light'>
 			<body
 				className={cn(
-					'min-h-screen font-sans antialiased grainy',
+					'min-h-screen font-sans antialiased grainy pt-20',
 					inter.className
 				)}
 			>
-				<header>
+				<header className='fixed  w-full top-0 bg-slate-50 z-[9999]'>
 					<Navbar />
 				</header>
 				{children}

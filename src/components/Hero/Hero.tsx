@@ -1,12 +1,5 @@
-import Inventory from '../Inventory';
+import Navigator from './Navigator';
 
 export const Hero = () => {
-	return (
-		<>
-			<div>
-				<div className=''>Hero</div>
-				<Inventory />
-			</div>
-		</>
-	);
+	return <></>;
 };

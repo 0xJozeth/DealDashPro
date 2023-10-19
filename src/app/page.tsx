@@ -3,6 +3,9 @@
 import { useMemo } from 'react';
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import { Hero } from '@/components/Hero/Hero';
+import Navigator from '@/components/Hero/Navigator';
+import Map from '@/components/Map';
+import Navbar from '@/components/Navbar';
 
 export default function Home() {
 	const { isLoaded } = useLoadScript({
@@ -11,19 +14,10 @@ export default function Home() {
 
 	if (!isLoaded) return <p>Loading...</p>;
 	return (
-		<>
-			<Map />
-			<Hero />
-		</>
+		<section className='relative '>
+			<div className='flex justify-center items-center'>
+				<Map />
+			</div>
+		</section>
 	);
-
-	function Map() {
-		return (
-			<GoogleMap
-				zoom={4}
-				center={{ lat: 44, lng: -80 }}
-				mapContainerClassName='map-container w-full h-[100vh]'
-			></GoogleMap>
-		);
-	}
 }

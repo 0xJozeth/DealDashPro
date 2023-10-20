@@ -11,7 +11,7 @@ export const appRouter = router({
 
 		//check if the user is in the database.
 
-		return { sucess: true };
+		return { success: true };
 	}),
 });
 

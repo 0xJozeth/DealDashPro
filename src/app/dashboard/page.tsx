@@ -9,7 +9,7 @@ const Page = async () => {
 
 	if (!user || !user.id) return redirect('/auth-callback?origin=dashboard');
 
-	//send the user to the dashboard if they are present in the db
+	//only if the user does not exist the db the first time they log in, send the user to the dashboard
 	const dbUser = await db.user.findFirst({
 		where: {
 			id: user.id,

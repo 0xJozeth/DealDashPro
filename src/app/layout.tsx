@@ -5,6 +5,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import Navbar from '@/components/Navbar';
 import Providers from '@/components/Providers';
+import Footer from '@/components/Footer';
 
 const lato = Lato({
 	subsets: ['latin'],
@@ -34,6 +35,10 @@ export default function RootLayout({
 						<Navbar />
 					</header>
 					{children}
+					{/* TODO: conditionally render footer based on route. Is not to be displayed on homepage  */}
+					<footer>
+						<Footer />
+					</footer>
 				</body>
 			</Providers>
 		</html>

@@ -12,6 +12,7 @@ const config: Config = {
 			center: true,
 			padding: '2rem',
 			screens: {
+				figma: '920px',
 				'2xl': '1400px',
 			},
 		},

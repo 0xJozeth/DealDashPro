@@ -29,7 +29,7 @@ const PropertyMain = () => {
 						</div>
 						<div>
 							<Link href='#' className='text-xs font-semibold underline'>
-								make an offer
+								<p>make an offer</p>
 							</Link>
 						</div>
 					</section>
@@ -57,7 +57,7 @@ const PropertyMain = () => {
 						</ul>
 						<div>
 							<Link href='#' className='text-xs font-semibold underline'>
-								View More
+								<p>View More</p>
 							</Link>
 						</div>
 					</section>

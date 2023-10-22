@@ -18,30 +18,36 @@ const Navbar = () => (
 					/>
 				</Link>
 
-				<nav className='flex justify-between h-20'>
-					<ul className='flex justify-between gap-x-2'>
-						<li className=' flex justify-center items-center px-2'>
-							<LoginLink className='px-4 bg-slate-400 '>
-								<button type='button' className='p-2 text-white '>
-									Login
-								</button>
-							</LoginLink>
-						</li>
-						<li className='flex justify-center items-center px-2'>
-							<RegisterLink className='px-4 bg-slate-400 '>
-								<button type='button' className='p-2 text-white '>
-									Register
-								</button>
-							</RegisterLink>
-						</li>
-						<li className=' flex justify-center items-center px-2'>
-							<Link href='/' className='px-4 bg-slate-400 '>
-								<button type='button' className='p-2 text-white '>
-									Post A Deal
-								</button>
-							</Link>
-						</li>
-					</ul>
+				<nav className='flex justify-between gap-8 items-center h-20'>
+					<Link href='/'>
+						<div>
+							<p className='text-black text-sm font-normal leading-[14px]'>
+								Post a deal
+							</p>
+						</div>
+					</Link>
+					<Link href='/'>
+						<div className='flex items-center justify-center gap-4 w-[95px] h-[51px] bg-white rounded-[30px] shadow hover:shadow-lg transition-all duration-30 border border-neutral-200'>
+							<div className='relative'>
+								<Image
+									src={'/burgerMenu1.svg'}
+									width={19}
+									height={22}
+									alt={'logo'}
+									className=''
+								/>
+							</div>
+							<div>
+								<Image
+									src={'/signOutPic.svg'}
+									width={35}
+									height={35}
+									alt={'logo'}
+									className=''
+								/>
+							</div>
+						</div>
+					</Link>
 				</nav>
 			</header>
 		</MaxWidthWrapper>

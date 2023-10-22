@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import { Lato } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
@@ -36,7 +35,7 @@ export default function RootLayout({
 						lato.className
 					)}
 				>
-					<header className='fixed  w-full top-0 bg-slate-50 z-[9999]'>
+					<header className='fixed border-b border-zinc-200 shadow-sm w-full bg-white top-0 z-[9999]'>
 						<Navbar />
 					</header>
 					{children}

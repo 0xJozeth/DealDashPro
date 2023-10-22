@@ -11,22 +11,25 @@ const PropertyCards = () => {
 				More Properties from Company Name
 			</h3>
 			{/* TODO: Mapping. */}
-			<div id='cardOuterWrapper' className='flex w-full justify-between gap-4'>
+			<div
+				id='cardOuterWrapper'
+				className='flex w-full justify-between items-center gap-4'
+			>
 				<Link href={'#'}>
 					<div
 						id='cardImageWrapper'
-						className='flex flex-col w-fit h-[180px] rounded-[10px] overflow-hidden border border-zinc-300'
+						className='flex flex-col h-[215px] rounded-t-[10px] overflow-hidden'
 					>
 						<Image
 							src={'/cardProperty1.png'}
 							width={253}
 							height={128}
 							alt={'logo'}
-							className='object-cover relative top-[-30%]'
+							className='object-cover aspect-square relative -top-12'
 						/>
 						<div
 							id='cardDetailsWrapper'
-							className='flex flex-col h-full p-2 bg-white relative top-[-74%]'
+							className='flex flex-col h-full p-2 bg-white border border-zinc-300 rounded-b-[10px] relative -top-32'
 						>
 							<div className='flex justify-between'>
 								<p>$219,000</p>
@@ -44,18 +47,18 @@ const PropertyCards = () => {
 				<Link href={'#'}>
 					<div
 						id='cardImageWrapper'
-						className='flex flex-col w-fit h-[180px] rounded-[10px] overflow-hidden border border-zinc-300'
+						className='flex flex-col h-[215px] rounded-t-[10px] overflow-hidden'
 					>
 						<Image
 							src={'/cardProperty1.png'}
 							width={253}
 							height={128}
 							alt={'logo'}
-							className='object-cover relative top-[-30%]'
+							className='object-cover aspect-square relative -top-12'
 						/>
 						<div
 							id='cardDetailsWrapper'
-							className='flex flex-col h-full p-2 bg-white relative top-[-74%]'
+							className='flex flex-col h-full p-2 bg-white border border-zinc-300 rounded-b-[10px] relative -top-32'
 						>
 							<div className='flex justify-between'>
 								<p>$219,000</p>
@@ -73,18 +76,18 @@ const PropertyCards = () => {
 				<Link href={'#'}>
 					<div
 						id='cardImageWrapper'
-						className='flex flex-col w-fit h-[180px] rounded-[10px] overflow-hidden border border-zinc-300'
+						className='flex flex-col h-[215px] rounded-t-[10px] overflow-hidden'
 					>
 						<Image
 							src={'/cardProperty1.png'}
 							width={253}
 							height={128}
 							alt={'logo'}
-							className='object-cover relative top-[-30%]'
+							className='object-cover aspect-square relative -top-12'
 						/>
 						<div
 							id='cardDetailsWrapper'
-							className='flex flex-col h-full p-2 bg-white relative top-[-74%]'
+							className='flex flex-col h-full p-2 bg-white border border-zinc-300 rounded-b-[10px] relative -top-32'
 						>
 							<div className='flex justify-between'>
 								<p>$219,000</p>
@@ -99,21 +102,21 @@ const PropertyCards = () => {
 						</div>
 					</div>
 				</Link>
-				<Link href='#'>
+				<Link href={'#'}>
 					<div
 						id='cardImageWrapper'
-						className='flex flex-col w-fit h-[180px] rounded-[10px] overflow-hidden border border-zinc-300'
+						className='flex flex-col h-[215px] rounded-t-[10px] overflow-hidden'
 					>
 						<Image
 							src={'/cardProperty1.png'}
 							width={253}
 							height={128}
 							alt={'logo'}
-							className='object-cover relative top-[-30%]'
+							className='object-cover aspect-square relative -top-12'
 						/>
 						<div
 							id='cardDetailsWrapper'
-							className='flex flex-col h-full p-2 bg-white relative top-[-74%]'
+							className='flex flex-col h-full p-2 bg-white border border-zinc-300 rounded-b-[10px] relative -top-32'
 						>
 							<div className='flex justify-between'>
 								<p>$219,000</p>

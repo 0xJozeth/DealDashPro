@@ -1,6 +1,11 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@fortawesome/fontawesome-svg-core': ^6.4.2
+  '@fortawesome/free-brands-svg-icons': ^6.4.2
+  '@fortawesome/free-regular-svg-icons': ^6.4.2
+  '@fortawesome/free-solid-svg-icons': ^6.4.2
+  '@fortawesome/react-fontawesome': ^0.2.0
   '@kinde-oss/kinde-auth-nextjs': ^1.8.24
   '@prisma/client': 5.4.2
   '@react-google-maps/api': ^2.19.2
@@ -14,20 +19,15 @@ specifiers:
   '@types/react': ^18
   '@types/react-dom': ^18
   autoprefixer: ^10
-  client^10.38.4: link:@trpc/client^10.38.4
   clsx: ^2.0.0
   eslint: ^8
   eslint-config-next: 13.5.5
   lucide-react: ^0.288.0
   next: 13.5.5
-  next^10.38.4: link:@trpc/next^10.38.4
   postcss: ^8
   prisma: 5.4.2
   react: ^18
   react-dom: ^18
-  react-query^10.38.4: link:@trpc/react-query^10.38.4
-  react-query^4.35.3: link:@tanstack/react-query^4.35.3
-  server^10.38.4: link:@trpc/server^10.38.4
   tailwind-merge: ^1.14.0
   tailwindcss: ^3
   tailwindcss-animate: ^1.0.7
@@ -35,6 +35,11 @@ specifiers:
   zod: ^3.21.4
 
 dependencies:
+  '@fortawesome/fontawesome-svg-core': 6.4.2
+  '@fortawesome/free-brands-svg-icons': 6.4.2
+  '@fortawesome/free-regular-svg-icons': 6.4.2
+  '@fortawesome/free-solid-svg-icons': 6.4.2
+  '@fortawesome/react-fontawesome': 0.2.0_n6er2j2sfff3f2kho72l4xukey
   '@kinde-oss/kinde-auth-nextjs': 1.8.24_biqbaboplfbrettd7655fr4n2y
   '@prisma/client': 5.4.2_prisma@5.4.2
   '@react-google-maps/api': 2.19.2_biqbaboplfbrettd7655fr4n2y
@@ -44,16 +49,11 @@ dependencies:
   '@trpc/next': 10.38.4_bkudgxkomffeo7xvplladtbfme
   '@trpc/react-query': 10.38.4_h26vr5ami4a6w5knn2y67jqjna
   '@trpc/server': 10.38.4
-  client^10.38.4: link:@trpc/client^10.38.4
   clsx: 2.0.0
   lucide-react: 0.288.0_react@18.2.0
   next: 13.5.5_biqbaboplfbrettd7655fr4n2y
-  next^10.38.4: link:@trpc/next^10.38.4
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
-  react-query^10.38.4: link:@trpc/react-query^10.38.4
-  react-query^4.35.3: link:@tanstack/react-query^4.35.3
-  server^10.38.4: link:@trpc/server^10.38.4
   tailwind-merge: 1.14.0
   tailwindcss-animate: 1.0.7_tailwindcss@3.3.3
   zod: 3.21.4
@@ -124,6 +124,55 @@ packages:
     resolution: {integrity: sha512-HxjQ8Qn+4SI3/AFv6sOrDB+g6PpUTDwSJiQqOrnneEk8L71161srI9gjzzZvYVbzHiVg/BvcH95+cK/zfIt4pg==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
+
+  /@fortawesome/fontawesome-common-types/6.4.2:
+    resolution: {integrity: sha512-1DgP7f+XQIJbLFCTX1V2QnxVmpLdKdzzo2k8EmvDOePfchaIGQ9eCHj2up3/jNEbZuBqel5OxiaOJf37TWauRA==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dev: false
+
+  /@fortawesome/fontawesome-svg-core/6.4.2:
+    resolution: {integrity: sha512-gjYDSKv3TrM2sLTOKBc5rH9ckje8Wrwgx1CxAPbN5N3Fm4prfi7NsJVWd1jklp7i5uSCVwhZS5qlhMXqLrpAIg==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 6.4.2
+    dev: false
+
+  /@fortawesome/free-brands-svg-icons/6.4.2:
+    resolution: {integrity: sha512-LKOwJX0I7+mR/cvvf6qIiqcERbdnY+24zgpUSouySml+5w8B4BJOx8EhDR/FTKAu06W12fmUIcv6lzPSwYKGGg==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 6.4.2
+    dev: false
+
+  /@fortawesome/free-regular-svg-icons/6.4.2:
+    resolution: {integrity: sha512-0+sIUWnkgTVVXVAPQmW4vxb9ZTHv0WstOa3rBx9iPxrrrDH6bNLsDYuwXF9b6fGm+iR7DKQvQshUH/FJm3ed9Q==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 6.4.2
+    dev: false
+
+  /@fortawesome/free-solid-svg-icons/6.4.2:
+    resolution: {integrity: sha512-sYwXurXUEQS32fZz9hVCUUv/xu49PEJEyUOsA51l6PU/qVgfbTb2glsTEaJngVVT8VqBATRIdh7XVgV1JF1LkA==}
+    engines: {node: '>=6'}
+    requiresBuild: true
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 6.4.2
+    dev: false
+
+  /@fortawesome/react-fontawesome/0.2.0_n6er2j2sfff3f2kho72l4xukey:
+    resolution: {integrity: sha512-uHg75Rb/XORTtVt7OS9WoK8uM276Ufi7gCzshVWkUJbHhh3svsUUeqXerrM96Wm7fRiDzfKRwSoahhMIkGAYHw==}
+    peerDependencies:
+      '@fortawesome/fontawesome-svg-core': ~1 || ~6
+      react: '>=16.3'
+    dependencies:
+      '@fortawesome/fontawesome-svg-core': 6.4.2
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
 
   /@googlemaps/js-api-loader/1.16.2:
     resolution: {integrity: sha512-psGw5u0QM6humao48Hn4lrChOM2/rA43ZCm3tKK9qQsEj1/VzqkCqnvGfEOshDbBQflydfaRovbKwZMF4AyqbA==}
@@ -2294,7 +2343,6 @@ packages:
       loose-envify: 1.4.0
       object-assign: 4.1.1
       react-is: 16.13.1
-    dev: true
 
   /punycode/2.3.0:
     resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}
@@ -2316,7 +2364,6 @@ packages:
 
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
-    dev: true
 
   /react-ssr-prepass/1.5.0_react@18.2.0:
     resolution: {integrity: sha512-yFNHrlVEReVYKsLI5lF05tZoHveA5pGzjFbFJY/3pOqqjGOmMmqx83N4hIjN2n6E1AOa+eQEUxs3CgRnPmT0RQ==}

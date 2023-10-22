@@ -1,6 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+//Font Awesome imports
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPhone, faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+
 const PropertyMain = () => {
 	return (
 		<section className=' w-full py-4 h-auto'>
@@ -153,7 +157,7 @@ const PropertyMain = () => {
 						<h3 className='text-[22px] font-semibold leading-relaxed'>
 							Street view
 						</h3>
-						<div className='w-fit rounded-[10px] overflow-hidden '>
+						<div className='relative w-[400px] rounded-[10px] overflow-hidden '>
 							<Image
 								src={'/streetView1.png'}
 								width={400}
@@ -161,6 +165,14 @@ const PropertyMain = () => {
 								alt={'logo'}
 								className='object-cover blur-sm'
 							/>
+							<div className='absolute inset-0 flex justify-center items-center'>
+								<div className='w-[31px] h-[31px] bg-zinc-300 rounded-full'>
+									<FontAwesomeIcon
+										icon={faLock}
+										className='w-full h-full text-center text-neutral-500 mt-[7px]'
+									/>
+								</div>
+							</div>
 						</div>
 					</section>
 					<section
@@ -168,16 +180,27 @@ const PropertyMain = () => {
 						className='flex flex-col w-full py-[24px] gap-1 border-t border-neutral-200'
 					>
 						<h3 className='text-[22px] font-semibold leading-relaxed'>
-							Location
+							Street view
 						</h3>
-						<div className='w-fit rounded-[10px] overflow-hidden '>
-							<Image
-								src={'/location1.png'}
-								width={400}
-								height={264}
-								alt={'logo'}
-								className='object-cover blur-sm'
-							/>
+						<div className='relative w-[400px] rounded-[10px] overflow-hidden'>
+							<div className='relative'>
+								<Image
+									src={'/location1.png'}
+									width={400}
+									height={264}
+									alt={'logo'}
+									className='object-cover blur-sm'
+								/>
+								<div className='absolute inset-0 bg-zinc-700 opacity-50'></div>
+							</div>
+							<div className='absolute inset-0 flex justify-center items-center'>
+								<div className='w-[31px] h-[31px] bg-zinc-300 rounded-full'>
+									<FontAwesomeIcon
+										icon={faLock}
+										className='w-full h-full text-center text-neutral-500 mt-[7px]'
+									/>
+								</div>
+							</div>
 						</div>
 					</section>
 				</div>
@@ -200,9 +223,9 @@ const PropertyMain = () => {
 									</p>
 								</div>
 							</Link>
-							<Link href='#'>
-								<div className='flex justify-center items-center w-[250px] min-w-[175px] h-[45px] rounded-[5px] border border-black'>
-									<p className='text-black text-base font-medium leading-normal'>
+							<Link href='#' className='group'>
+								<div className='flex justify-center items-center w-[250px] min-w-[175px] h-[45px] rounded-[5px] border border-black group-hover:border-[#58A053] transition-all duration-300'>
+									<p className='text-black text-base font-medium leading-normal group-hover:text-[#58A053] transition-all duration-300'>
 										Win it now for $250K
 									</p>
 								</div>
@@ -225,61 +248,79 @@ const PropertyMain = () => {
 								className='flex justify-center items-start w-full gap-4'
 							>
 								<div
-									id='companyImage'
-									className='flex rounded-full overflow-hidden'
-								>
-									{/* TODO: Mapping. */}
-									{/* TODO: need to look into image resizing by uploader and the correct implementation. */}
-									<Image
-										src={'/companyPic1.png'}
-										width={60}
-										height={60}
-										alt={'logo'}
-										className='aspect-square object-cover'
-									/>
-								</div>
-								<div
 									id='companyInfoWrapper'
 									className='flex flex-col gap-4 w-full'
 								>
-									<div className='flex flex-col w-full gap-2'>
-										<p
-											id=''
-											className='text-black text-base font-semibold leading-tight'
-										>
-											Luis Gamez
-										</p>
-										<p
-											id=''
-											className='text-neutral-500 text-sm font-normal leading-tight'
-										>
-											Disposition Manager
-										</p>
-									</div>
-									<div className='flex flex-col w-full gap-2'>
-										<p
-											id=''
-											className='text-[#58A053] text-sm font-normal leading-tight'
-										>
-											Phone Number
-										</p>
-										<p
-											id=''
-											className='text-[#58A053] text-sm font-normal leading-tight'
-										>
-											luisbuyreinow8@gmail.com
-										</p>
+									<div className='flex w-full'>
+										<div className='flex w-full'>
+											<div
+												id='companyImage'
+												className='flex h-[60px] rounded-full overflow-hidden'
+											>
+												{/* TODO: Mapping. */}
+												{/* TODO: need to look into image resizing by uploader and the correct implementation. */}
+												<Image
+													src={'/companyPic1.png'}
+													width={60}
+													height={60}
+													alt={'logo'}
+													className='aspect-square object-cover'
+												/>
+											</div>
+										</div>
+										<div className='flex flex-col w-full'>
+											<div className='flex flex-col w-full gap-2'>
+												<p
+													id=''
+													className='text-black text-base font-semibold leading-tight'
+												>
+													Luis Gamez
+												</p>
+												<p
+													id=''
+													className='text-neutral-500 text-sm font-normal leading-tight'
+												>
+													Disposition Manager
+												</p>
+											</div>
+											<div className='flex flex-col w-full gap-2'>
+												<div className='flex items-center gap-2'>
+													<FontAwesomeIcon
+														icon={faPhone}
+														className='text-[#58A053] text-sm font-normal leading-tight'
+													/>
+													<p
+														id=''
+														className='text-[#58A053] text-sm font-normal leading-tight'
+													>
+														Phone Number
+													</p>
+												</div>
+												<div className='flex items-center gap-2'>
+													<FontAwesomeIcon
+														icon={faEnvelope}
+														className='text-[#58A053] text-sm font-normal leading-tight'
+													/>
+													<p
+														id=''
+														className='text-[#58A053] text-sm font-normal leading-tight'
+													>
+														luisbuyreinow8@gmail.com
+													</p>
+												</div>
+											</div>
+										</div>
 									</div>
 
 									<Link href='#'>
-										<div className='flex justify-center items-center w-[250px] min-w-[175px] h-[45px] rounded-[5px] bg-neutral-500'>
+										<div className='flex justify-center items-center w-full min-w-[175px] h-[45px] rounded-[5px] bg-neutral-500'>
 											<p className='text-white text-base font-medium leading-normal'>
 												Inquire about property
 											</p>
 										</div>
 									</Link>
 									<Link href='#'>
-										<div className='flex justify-center items-center w-[250px] min-w-[175px] h-[45px] rounded-[5px] border border-black'>
+										<div className='flex justify-center items-center w-full min-w-[175px] h-[45px] rounded-[5px] border border-black'>
 											<p className='text-black text-base font-medium leading-normal'>
 												View all company deals
 											</p>

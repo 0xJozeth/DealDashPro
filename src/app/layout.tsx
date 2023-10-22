@@ -6,6 +6,11 @@ import { cn } from '@/lib/utils';
 import Navbar from '@/components/Navbar';
 import Providers from '@/components/Providers';
 import Footer from '@/components/Footer';
+import { config } from '@fortawesome/fontawesome-svg-core';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+
+//setting to `false` prevents Font Awesome core SVG library from inserting <style> elements into the <head> of the page.
+config.autoAddCss = false;
 
 const lato = Lato({
 	subsets: ['latin'],

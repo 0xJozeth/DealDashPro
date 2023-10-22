@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 const PropertyTitle = () => {
 	return (
 		<div className='flex flex-col w-full h-auto py-2'>
@@ -6,16 +8,24 @@ const PropertyTitle = () => {
 					Quick Flipping Opportunity in Houston, TX🏠
 				</h1>
 			</div>
+
 			<div className='flex items-center justify-between py-4 h-[.625rem]'>
-				<p className='text-black text-sm font-normal leading-tight'>
-					Duval County, Jacksonville, Florida
-				</p>
-				<p className='text-black text-sm font-normal underline leading-[18px]'>
-					View full address
-				</p>
-				<p className='text-black text-sm font-normal leading-[14px]'>
-					Deal Posted: {new Date().toDateString()}
-				</p>
+				<div className='flex items-center gap-16 h-[.625rem]'>
+					<p className='text-black text-sm font-normal leading-tight'>
+						Duval County, Jacksonville, Florida
+					</p>
+					<Link
+						href='#'
+						className='text-black text-sm font-normal underline leading-[18px]'
+					>
+						View full address
+					</Link>
+				</div>
+				<div className='flex items-center justify-between h-[.625rem]'>
+					<p className='text-neutral-500 text-sm font-normal leading-[14px]'>
+						Deal Posted: {new Date().toDateString()}
+					</p>
+				</div>
 			</div>
 		</div>
 	);

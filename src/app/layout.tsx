@@ -38,6 +38,7 @@ export default function RootLayout({
 				>
 					<header className='fixed border-b border-zinc-200 shadow-sm w-full bg-white top-0 z-[99999]'>
 						<Navbar>
+							{/* This will be imported into the Navbar as a child. */}
 							<UserNavigation />
 						</Navbar>
 					</header>

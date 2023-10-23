@@ -7,7 +7,10 @@ import Providers from '@/components/Providers';
 import Footer from '@/components/Footer';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
-import UserNavigation from '@/components/ClientComponents/UserNavigation';
+import UserNavigation from '@/components/UserNavigation';
+import NavbarButton from '@/components/NavbarButton';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+import NoAuthUserNavigationButton from '@/components/ClientComponents/NoAuthUserNavigationButton';
 
 //setting to `false` prevents Font Awesome core SVG library from inserting <style> elements into the <head> of the page.
 config.autoAddCss = false;
@@ -21,6 +24,12 @@ export const metadata: Metadata = {
 	title: 'DealDashPro',
 	description: 'Get your next deal done with DealDashPro',
 };
+
+// check if the user is logged in
+const { getUser } = getKindeServerSession();
+const user = getUser();
+
+console.log('user', user);
 
 export default function RootLayout({
 	children,
@@ -37,9 +46,17 @@ export default function RootLayout({
 					)}
 				>
 					<header className='fixed border-b border-zinc-200 shadow-sm w-full bg-white top-0 z-[99999]'>
+						{/* Navbar is a client component */}
 						<Navbar>
-							{/* This will be imported into the Navbar as a child. */}
-							<UserNavigation />
+							{/* NavbarButton is a client component */}
+							{user ? (
+								<NavbarButton>
+									{/* UserNavigation is a SERVER component */}
+									<UserNavigation />
+								</NavbarButton>
+							) : (
+								<NoAuthUserNavigationButton />
+							)}
 						</Navbar>
 					</header>
 					{children}

@@ -180,7 +180,7 @@ const PropertyMain = () => {
 						className='flex flex-col w-full py-[24px] gap-1 border-t border-neutral-200'
 					>
 						<h3 className='text-[22px] font-semibold leading-relaxed'>
-							Street view
+							Location
 						</h3>
 						<div className='relative w-[400px] rounded-[10px] overflow-hidden'>
 							<div className='relative'>

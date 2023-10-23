@@ -7,6 +7,7 @@ import Providers from '@/components/Providers';
 import Footer from '@/components/Footer';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
+import UserNavigation from '@/components/ClientComponents/UserNavigation';
 
 //setting to `false` prevents Font Awesome core SVG library from inserting <style> elements into the <head> of the page.
 config.autoAddCss = false;
@@ -35,8 +36,10 @@ export default function RootLayout({
 						lato.className
 					)}
 				>
-					<header className='fixed border-b border-zinc-200 shadow-sm w-full bg-white top-0 z-[9999]'>
-						<Navbar />
+					<header className='fixed border-b border-zinc-200 shadow-sm w-full bg-white top-0 z-[99999]'>
+						<Navbar>
+							<UserNavigation />
+						</Navbar>
 					</header>
 					{children}
 					{/* TODO: conditionally render footer based on route. Is not to be displayed on homepage  */}

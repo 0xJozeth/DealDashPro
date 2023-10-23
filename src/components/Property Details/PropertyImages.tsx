@@ -81,13 +81,13 @@ const PropertyImages = () => {
 						>
 							<div
 								id='gallerybutton'
-								className=' flex justify-center items-center h-7 gap-1  bg-white border border-black rounded-[5px] w-[131px] shadow-lg group-hover:border-[#58A053] group-hover:bg-black  group-hover:text-white transition-all duration-300'
+								className=' flex justify-center items-center h-7 gap-1  bg-white border border-black rounded-[5px] w-[131px] shadow-lg group-hover:border-white group-hover:bg-zinc-600  group-hover:text-white transition-all duration-300'
 							>
 								<FontAwesomeIcon
 									icon={faImages}
-									className=' group-hover:text-[#58A053]'
+									className=' group-hover:text-white'
 								/>
-								<p className='text-black group-hover:text-[#58A053] text-xs font-normal leading-tight whitespace-nowrap'>
+								<p className='text-black group-hover:text-white text-xs font-normal leading-tight whitespace-nowrap'>
 									Show all photos
 								</p>
 							</div>

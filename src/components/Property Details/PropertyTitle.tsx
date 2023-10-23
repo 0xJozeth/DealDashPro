@@ -18,7 +18,7 @@ const PropertyTitle = () => {
 						href='#'
 						className='text-black text-sm font-normal underline leading-[18px]'
 					>
-						View full address
+						<p>View full address</p>
 					</Link>
 				</div>
 				<div className='flex items-center justify-between h-[.625rem]'>

@@ -1,6 +1,10 @@
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { LoginLink, RegisterLink } from '@kinde-oss/kinde-auth-nextjs/server';
+import {
+	LoginLink,
+	LogoutLink,
+	RegisterLink,
+} from '@kinde-oss/kinde-auth-nextjs/server';
 import Link from 'next/link';
 
 const UserNavigation = () => {
@@ -35,6 +39,14 @@ const UserNavigation = () => {
 					<FontAwesomeIcon icon={faLink} className='text-sm' />
 				</div>
 			</Link>
+			<LogoutLink>
+				<div className='flex w-full h-8 py-5 justify-start gap-1 items-center bg-white hover:bg-zinc-100 transition-all duration-30'>
+					<p className='text-black text-sm font-normal leading-[14px] p-3'>
+						Log Out
+					</p>
+					<FontAwesomeIcon icon={faLink} className='text-sm' />
+				</div>
+			</LogoutLink>
 		</>
 	);
 };

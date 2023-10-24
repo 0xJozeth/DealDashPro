@@ -2,13 +2,11 @@ import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import Image from 'next/image';
 import React from 'react';
 
-//check if the user is logged in
-const { getUser } = getKindeServerSession();
-const user = getUser();
-
-console.log('user', user);
-
 function NavButtonProfilePicture() {
+	//check if the user is logged in
+	const { getUser } = getKindeServerSession();
+	const user = getUser();
+
 	return (
 		<div className=''>
 			<Image

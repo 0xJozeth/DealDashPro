@@ -11,6 +11,7 @@ import UserNavigation from '@/components/UserNavigation';
 import NavbarButton from '@/components/NavbarButton';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import NoAuthUserNavigationButton from '@/components/ClientComponents/NoAuthUserNavigationButton';
+import NavButtonProfilePicture from '@/components/NavButtonProfilePicture';
 
 //setting to `false` prevents Font Awesome core SVG library from inserting <style> elements into the <head> of the page.
 config.autoAddCss = false;
@@ -50,10 +51,12 @@ export default function RootLayout({
 						<Navbar>
 							{/* NavbarButton is a client component */}
 							{user ? (
-								<NavbarButton>
-									{/* UserNavigation is a SERVER component */}
-									<UserNavigation />
-								</NavbarButton>
+								<>
+									<NavbarButton
+										profilePicture={<NavButtonProfilePicture />}
+										navigation={<UserNavigation />}
+									></NavbarButton>
+								</>
 							) : (
 								<NoAuthUserNavigationButton />
 							)}
@@ -68,4 +71,10 @@ export default function RootLayout({
 			</Providers>
 		</html>
 	);
+}
+
+{
+	/* The <NavButtonProfilePicture /> and <UserNavigation /> components are server components. We instantiate
+'profilePicture' and 'navigation' as props that are passed to the client component <NavbarButton>. We are then able
+to access the destructured props directly with the NavbarButton TSX. */
 }

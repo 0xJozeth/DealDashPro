@@ -2,8 +2,15 @@
 
 import Image from 'next/image';
 import { useEffect, useState, useRef } from 'react';
+import NavButtonProfilePicture from './NavButtonProfilePicture';
 
-const NavbarButton = ({ children }: { children: React.ReactNode }) => {
+const NavbarButton = ({
+	profilePicture,
+	navigation,
+}: {
+	profilePicture: React.ReactNode;
+	navigation: React.ReactNode;
+}) => {
 	const [navOpen, setNavOpen] = useState(false);
 	const navbarButtonRef = useRef<HTMLDivElement>(null);
 	const navbarDropdownMenuRef = useRef<HTMLDivElement>(null);
@@ -50,7 +57,10 @@ const NavbarButton = ({ children }: { children: React.ReactNode }) => {
 						className='pointer-events-none'
 					/>
 				</div>
-				<div className=''>
+
+				{/* {children} */}
+				{profilePicture}
+				{/* <div className=''>
 					<Image
 						src={'/signOutPic.svg'}
 						width={35}
@@ -58,7 +68,7 @@ const NavbarButton = ({ children }: { children: React.ReactNode }) => {
 						alt={'logo'}
 						className='pointer-events-none'
 					/>
-				</div>
+				</div> */}
 			</div>
 
 			{navOpen && (
@@ -70,7 +80,8 @@ const NavbarButton = ({ children }: { children: React.ReactNode }) => {
 					}`}
 				>
 					{/* This is the content of the dropdown found in "UserNavigation.tsx" */}
-					{children}
+					{navigation}
+					{/* {children} */}
 				</div>
 			)}
 		</>

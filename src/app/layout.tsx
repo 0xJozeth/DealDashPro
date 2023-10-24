@@ -13,6 +13,11 @@ import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import NoAuthUserNavigationButton from '@/components/ClientComponents/NoAuthUserNavigationButton';
 import NavButtonProfilePicture from '@/components/NavButtonProfilePicture';
 import LayoutProvider from './LayoutProvider';
+import Home from './page';
+import Map from '@/components/Map';
+import MapWrapper from '@/components/MapWrapper';
+import Navigator from '@/components/Hero/Navigator';
+import NavigatorPropertyImage from '@/components/NavigatorPropertyImage';
 
 //setting to `false` prevents Font Awesome core SVG library from inserting <style> elements into the <head> of the page.
 config.autoAddCss = false;
@@ -27,10 +32,9 @@ export const metadata: Metadata = {
 	description: 'Get your next deal done with DealDashPro',
 };
 
-export default function RootLayout({
-	children,
-}: {
-	children: React.ReactNode;
+export default function RootLayout({}: // children,
+{
+	// children: React.ReactNode;
 }) {
 	// check if the user is logged in
 	const { getUser } = getKindeServerSession();
@@ -64,7 +68,16 @@ export default function RootLayout({
 								)}
 							</Navbar>
 						</header>
-						<main>{children}</main>
+						<Home>
+							<MapWrapper>
+								<Map>
+									<Navigator>
+										<NavigatorPropertyImage />
+									</Navigator>
+								</Map>
+							</MapWrapper>
+						</Home>
+						{/* <main>{children}</main> */}
 					</LayoutProvider>
 				</body>
 			</Providers>

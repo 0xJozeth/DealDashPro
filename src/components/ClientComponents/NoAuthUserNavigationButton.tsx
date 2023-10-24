@@ -5,13 +5,11 @@ import { faLink } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 
-//check if the user is logged in
-const { getUser } = getKindeServerSession();
-const user = getUser();
-
-console.log('user', user);
-
 const NoAuthUserNavigationButton = () => {
+	//check if the user is logged in
+	const { getUser } = getKindeServerSession();
+	const user = getUser();
+
 	return (
 		<div className='flex gap-6 justify-between items-center'>
 			<RegisterLink>

@@ -12,6 +12,7 @@ import NavbarButton from '@/components/NavbarButton';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import NoAuthUserNavigationButton from '@/components/ClientComponents/NoAuthUserNavigationButton';
 import NavButtonProfilePicture from '@/components/NavButtonProfilePicture';
+import LayoutProvider from './LayoutProvider';
 
 //setting to `false` prevents Font Awesome core SVG library from inserting <style> elements into the <head> of the page.
 config.autoAddCss = false;
@@ -26,17 +27,17 @@ export const metadata: Metadata = {
 	description: 'Get your next deal done with DealDashPro',
 };
 
-// check if the user is logged in
-const { getUser } = getKindeServerSession();
-const user = getUser();
-
-console.log('user', user);
-
 export default function RootLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
+	// check if the user is logged in
+	const { getUser } = getKindeServerSession();
+	const user = getUser();
+
+	console.log('user', user);
+
 	return (
 		<html lang='en' className='light'>
 			<Providers>
@@ -46,27 +47,25 @@ export default function RootLayout({
 						lato.className
 					)}
 				>
-					<header className='fixed border-b border-zinc-200 shadow-sm w-full bg-white top-0 z-[99999]'>
-						{/* Navbar is a client component */}
-						<Navbar>
-							{/* NavbarButton is a client component */}
-							{user ? (
-								<>
-									<NavbarButton
-										profilePicture={<NavButtonProfilePicture />}
-										navigation={<UserNavigation />}
-									></NavbarButton>
-								</>
-							) : (
-								<NoAuthUserNavigationButton />
-							)}
-						</Navbar>
-					</header>
-					{children}
-					{/* TODO: conditionally render footer based on route. Is not to be displayed on homepage  */}
-					<footer>
-						<Footer />
-					</footer>
+					<LayoutProvider>
+						<header className='fixed border-b border-zinc-200 shadow-sm w-full bg-white top-0 z-[99999]'>
+							{/* Navbar is a client component */}
+							<Navbar>
+								{/* NavbarButton is a client component */}
+								{user ? (
+									<>
+										<NavbarButton
+											profilePicture={<NavButtonProfilePicture />}
+											navigation={<UserNavigation />}
+										></NavbarButton>
+									</>
+								) : (
+									<NoAuthUserNavigationButton />
+								)}
+							</Navbar>
+						</header>
+						<main>{children}</main>
+					</LayoutProvider>
 				</body>
 			</Providers>
 		</html>

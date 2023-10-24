@@ -32,11 +32,12 @@ export const metadata: Metadata = {
 	description: 'Get your next deal done with DealDashPro',
 };
 
-export default function RootLayout({}: // children,
-{
-	// children: React.ReactNode;
+export default function RootLayout({
+	children,
+}: {
+	children: React.ReactNode;
 }) {
-	// check if the user is logged in
+	// // check if the user is logged in
 	const { getUser } = getKindeServerSession();
 	const user = getUser();
 
@@ -68,16 +69,7 @@ export default function RootLayout({}: // children,
 								)}
 							</Navbar>
 						</header>
-						<Home>
-							<MapWrapper>
-								<Map>
-									<Navigator>
-										<NavigatorPropertyImage />
-									</Navigator>
-								</Map>
-							</MapWrapper>
-						</Home>
-						{/* <main>{children}</main> */}
+						<main>{children}</main>
 					</LayoutProvider>
 				</body>
 			</Providers>

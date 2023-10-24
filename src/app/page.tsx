@@ -7,7 +7,7 @@ import Navigator from '@/components/Hero/Navigator';
 import Map from '@/components/Map';
 import Navbar from '@/components/Navbar';
 
-export default function Home({ children }: { children: React.ReactNode }) {
+export default function Home() {
 	const { isLoaded } = useLoadScript({
 		googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
 	});
@@ -16,7 +16,7 @@ export default function Home({ children }: { children: React.ReactNode }) {
 	return (
 		<section className='relative'>
 			<div className='flex justify-center items-center'>
-				<Map>{children}</Map>
+				<Map />
 			</div>
 		</section>
 	);

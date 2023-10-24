@@ -6,17 +6,33 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
 model User {
-  id String @id @unique // matches up with the kinde user id
-  email String @unique 
+  id    String @id @unique // matches up with the kinde user id
+  email String @unique
 
-  stripeCustomerId String? @unique @map(name: "stripe_customer_id")
-  stripeSubscriptionId String? @unique @map(name: "stripe_subscription_id")
-  stripePriceId String? @map(name: "stripe_price_id")
+  PropertyImages PropertyImages[]
+
+  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?   @map(name: "stripe_price_id")
   stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+}
+
+model PropertyImages {
+  id String @id @default(cuid())
+
+  url String
+  key String
+
+  uploadedAt DateTime @default(now())
+
+  
+  @@index([userId])
+  User       User?    @relation(fields: [userId], references: [id])
+  userId     String?
 }

@@ -14,7 +14,7 @@ export default function Home() {
 
 	if (!isLoaded) return <p>Loading...</p>;
 	return (
-		<section className='relative '>
+		<section className='relative'>
 			<div className='flex justify-center items-center'>
 				<Map />
 			</div>

@@ -2,9 +2,9 @@ import NavigatorPropertyImage from '../NavigatorPropertyImage';
 
 const Navigator = () => {
 	return (
-		<div className='fixed top-28 right-8 flex justify-center items-center z-[9999]'>
+		<div className='fixed top-28 right-16 flex justify-center items-center z-[9999]'>
 			<div
-				className='m-8 p-8 top-8 right-0 w-[500px] h-[1000px] min-w-[300px] rounded-[10px] bg-slate-50 z-[100] shadow-xl overflow-hidden'
+				className='m-8 p-8 w-[500px] h-[1000px] min-w-[300px] rounded-[10px] bg-slate-50 z-[100] shadow-xl overflow-hidden'
 				onMouseEnter={() => {
 					const container = document.getElementById('navigator-container');
 					if (container) {
@@ -30,30 +30,134 @@ const Navigator = () => {
 
 				<div
 					id='navigator-container'
-					className='grid grid-cols-2 gap-4 h-[calc(100%-40px)] overflow-hidden'
+					className='grid grid-cols-2 gap-4 overflow-hidden'
 				>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='flex justify-center items-center h-auto rounded-[10px] overflow-hidden bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					{/* <div className='min-w-full h-0  rounded-[10px] bg-red-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-green-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-yellow-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-red-500'>
+						<NavigatorPropertyImage />
+					</div>
 					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-blue-500'>
 						<NavigatorPropertyImage />
 					</div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-red-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-green-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-yellow-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-red-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-blue-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-green-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-yellow-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-red-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-blue-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-green-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-yellow-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-red-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-blue-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-green-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-yellow-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-red-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-blue-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-green-500'></div>
-					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-yellow-500'></div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-green-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-yellow-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-red-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-green-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-yellow-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-red-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-green-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-yellow-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-red-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-blue-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-green-500'>
+						<NavigatorPropertyImage />
+					</div>
+					<div className='min-w-full h-0 pb-[100%] rounded-[10px] bg-yellow-500'>
+						<NavigatorPropertyImage />
+					</div> */}
 				</div>
 			</div>
 		</div>

@@ -44,7 +44,7 @@ export default function RootLayout({
 	console.log('user', user);
 
 	return (
-		<html lang='en' className='light'>
+		<html lang='en' className='light !scroll-smooth'>
 			<Providers>
 				<body
 					className={cn(

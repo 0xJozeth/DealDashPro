@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import { Hero } from '@/components/Hero/Hero';
 import Navigator from '@/components/Hero/Navigator';
-import NavigatorAlt from './ClientComponents/NavigatorAlt';
+import NavigatorAlt from './Hero/Navigator';
 
 export default function Map() {
 	return (
@@ -13,8 +13,7 @@ export default function Map() {
 			center={{ lat: 34, lng: -67 }}
 			mapContainerClassName='relative w-full h-[calc(100vh-80px)]'
 		>
-			{/* <Navigator /> */}
-			<NavigatorAlt />
+			<Navigator />
 		</GoogleMap>
 	);
 }

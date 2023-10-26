@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
-import "./globals.css";
+import "./../globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import Providers from "@/components/Providers";
@@ -12,12 +12,13 @@ import NavbarButton from "@/components/NavbarButton";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import NoAuthUserNavigationButton from "@/components/ClientComponents/UnauthNavButtons";
 import NavButtonProfilePicture from "@/components/NavButtonProfilePicture";
-import LayoutProvider from "./LayoutProvider";
-import Home from "./page";
+// import LayoutProvider from './LayoutProvider';
+// import Home from './page';
 import Map from "@/components/Map";
 import MapWrapper from "@/components/MapWrapper";
 import Navigator from "@/components/Hero/Navigator";
 import NavigatorPropertyImage from "@/components/NavigatorPropertyImage";
+import LayoutProvider from "../LayoutProvider";
 
 //setting to `false` prevents Font Awesome core SVG library from inserting <style> elements into the <head> of the page.
 config.autoAddCss = false;
@@ -44,36 +45,34 @@ export default function RootLayout({
   console.log("user", user);
 
   return (
-    <html lang="en" className="light !scroll-smooth">
-      <Providers>
-        <body
-          className={cn(
-            "grainy min-h-screen pt-20 font-sans antialiased",
-            lato.className,
-          )}
-        >
-          <LayoutProvider>
-            <header className="fixed top-0 z-[99999] w-full border-b border-zinc-200 bg-white shadow-sm">
-              {/* Navbar is a client component */}
-              <Navbar>
-                {/* NavbarButton is a client component */}
-                {user ? (
-                  <>
-                    <NavbarButton
-                      profilePicture={<NavButtonProfilePicture />}
-                      navigation={<UserNavigation />}
-                    ></NavbarButton>
-                  </>
-                ) : (
-                  <NoAuthUserNavigationButton />
-                )}
-              </Navbar>
-            </header>
-            <main>{children}</main>
-          </LayoutProvider>
-        </body>
-      </Providers>
-    </html>
+    <Providers>
+      <body
+        className={cn(
+          "grainy min-h-screen pt-20 font-sans antialiased",
+          lato.className,
+        )}
+      >
+        <LayoutProvider>
+          <header className="fixed top-0 z-[99999] w-full border-b border-zinc-200 bg-white shadow-sm">
+            {/* Navbar is a client component */}
+            <Navbar>
+              {/* NavbarButton is a client component */}
+              {user ? (
+                <>
+                  <NavbarButton
+                    profilePicture={<NavButtonProfilePicture />}
+                    navigation={<UserNavigation />}
+                  ></NavbarButton>
+                </>
+              ) : (
+                <NoAuthUserNavigationButton />
+              )}
+            </Navbar>
+          </header>
+          <main>{children}</main>
+        </LayoutProvider>
+      </body>
+    </Providers>
   );
 }
 

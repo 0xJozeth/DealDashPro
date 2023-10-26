@@ -2,6 +2,7 @@ import {
   faCog,
   faFile,
   faHeart,
+  faPaperPlane,
   faSignOutAlt,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -14,7 +15,7 @@ export const accountItems = [
   },
   {
     name: "Offers sent",
-    icon: faUser,
+    icon: faPaperPlane,
     title: "offers_sent",
   },
   {

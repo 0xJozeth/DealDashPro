@@ -26,12 +26,13 @@ import { ColumnDef } from "@tanstack/react-table";
 //   },
 // ];
 
-type OfferData = {
+export type OfferData = {
   image: string;
   address: string;
   dateSubmitted: string;
   offerSubmitted: string;
   status: "Accepted" | "Pending" | "Denied";
+  cancel: string;
 };
 
 export const OfferData: OfferData[] = [
@@ -40,7 +41,8 @@ export const OfferData: OfferData[] = [
     address: "645 Parkwood St, Jacksonville, FL 32207",
     dateSubmitted: "1/1/2022",
     offerSubmitted: "$224,000",
-    status: "Accepted",
+    status: "Pending",
+    cancel: "display an x here",
   },
   {
     image: "/prop2.png",
@@ -48,13 +50,15 @@ export const OfferData: OfferData[] = [
     dateSubmitted: "1/1/2022",
     offerSubmitted: "156,000",
     status: "Accepted",
+    cancel: "display an x here",
   },
   {
     image: "/prop3.png",
     address: "4078 Spring Park Cir, Jacksonville, FL 32207",
     dateSubmitted: "1/1/2022",
     offerSubmitted: "$70,000",
-    status: "Accepted",
+    status: "Denied",
+    cancel: "display an x here",
   },
 ];
 
@@ -62,21 +66,43 @@ export const columns: ColumnDef<OfferData>[] = [
   {
     accessorKey: "image",
     header: "Image",
+    // cell: (props) => {
+    //   <p>{props.getValue()}</p>;
+    // },
   },
   {
     accessorKey: "address",
     header: "Address",
+    // cell: (props) => {
+    //   <p>{props.getValue()}</p>;
+    // },
   },
   {
     accessorKey: "dateSubmitted",
     header: "Date Submitted",
+    // cell: (props) => {
+    //   <p>{props.getValue()}</p>;
+    // },
   },
   {
     accessorKey: "offerSubmitted",
     header: "Offer Submitted",
+    // cell: (props) => {
+    //   <p>{props.getValue()}</p>;
+    // },
   },
   {
     accessorKey: "status",
     header: "Status",
+    // cell: (props) => {
+    //   <p>{props.getValue()}</p>;
+    // },
+  },
+  {
+    accessorKey: "cancel",
+    header: "Cancel",
+    // cell: (props) => {
+    //   <p>{props.getValue()}</p>;
+    // },
   },
 ];

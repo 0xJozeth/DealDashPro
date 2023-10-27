@@ -91,7 +91,12 @@ function AccountMainContent({
         {accountRoute === "Favorites" && <AccountFavorites />}
         {accountRoute === "Offers sent" && (
           <AccountOffersSent>
-            <DataTable columns={columns} data={data} />
+            <DataTable
+              user={user}
+              isAuthenticated={isAuthenticated}
+              columns={columns}
+              data={data}
+            />
           </AccountOffersSent>
         )}
         {accountRoute === "Documents" && <AccountDocuments />}

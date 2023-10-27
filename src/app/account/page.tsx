@@ -1,6 +1,6 @@
-import AccountDocuments from "@/components/AccountDocuments";
-import AccountFavorites from "@/components/AccountFavorites";
-import AccountOffersSent from "@/components/AccountOffersSent";
+import AccountDocuments from "@/app/account/components/Documents";
+import AccountFavorites from "@/app/account/components/Favorites";
+import AccountOffersSent from "@/app/account/components/OffersSent";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import {
   faHeart,
@@ -16,7 +16,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 
 import { accountItems, propImages } from "@/data/data";
-import AccountMainContent from "@/components/AccountMainContent";
+import AccountMainContent from "@/app/account/components/MainContent";
 import {
   LogoutLink,
   getKindeServerSession,

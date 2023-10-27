@@ -1,3 +1,5 @@
+"use client";
+
 import {
   faCog,
   faFile,
@@ -7,7 +9,15 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
-export const accountItems = [
+import { ColumnDef } from "@tanstack/react-table";
+
+type accountItems = {
+  name: string;
+  icon: any;
+  title: string;
+};
+
+export const accountItems: accountItems[] = [
   {
     name: "Favorites",
     icon: faHeart,
@@ -30,7 +40,25 @@ export const accountItems = [
   },
 ];
 
-export const propImages = [
+type propImages = {
+  name: string;
+  props: {
+    src: string;
+    id: number;
+    width: number;
+    height: number;
+    alt: string;
+    className: string;
+    arv: string;
+    price: string;
+    location: string;
+    beds: string;
+    baths: string;
+    sqft: string;
+  };
+};
+
+export const propImages: propImages[] = [
   {
     name: "prop1",
     props: {

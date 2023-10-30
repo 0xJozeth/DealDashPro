@@ -66,43 +66,25 @@ export const columns: ColumnDef<OfferData>[] = [
   {
     accessorKey: "image",
     header: "Image",
-    // cell: (props) => {
-    //   <p>{props.getValue()}</p>;
-    // },
   },
   {
     accessorKey: "address",
     header: "Address",
-    // cell: (props) => {
-    //   <p>{props.getValue()}</p>;
-    // },
   },
   {
     accessorKey: "dateSubmitted",
     header: "Date Submitted",
-    // cell: (props) => {
-    //   <p>{props.getValue()}</p>;
-    // },
   },
   {
     accessorKey: "offerSubmitted",
     header: "Offer Submitted",
-    // cell: (props) => {
-    //   <p>{props.getValue()}</p>;
-    // },
   },
   {
     accessorKey: "status",
     header: "Status",
-    // cell: (props) => {
-    //   <p>{props.getValue()}</p>;
-    // },
   },
   {
     accessorKey: "cancel",
     header: "Cancel",
-    // cell: (props) => {
-    //   <p>{props.getValue()}</p>;
-    // },
   },
 ];

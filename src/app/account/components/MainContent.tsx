@@ -14,7 +14,8 @@ import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 // imports for data table
 import { OfferData } from "./columns";
 import { columns } from "./columns";
-import { DataTable } from "./data-table";
+import { TableDemo } from "./data-table";
+// import { DataTable } from "./data-table";
 
 function AccountMainContent({
   user,
@@ -91,12 +92,13 @@ function AccountMainContent({
         {accountRoute === "Favorites" && <AccountFavorites />}
         {accountRoute === "Offers sent" && (
           <AccountOffersSent>
-            <DataTable
+            <TableDemo />
+            {/* <DataTable
               user={user}
               isAuthenticated={isAuthenticated}
               columns={columns}
               data={data}
-            />
+            /> */}
           </AccountOffersSent>
         )}
         {accountRoute === "Documents" && <AccountDocuments />}

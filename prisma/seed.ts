@@ -6,8 +6,8 @@ async function main() {
   try {
     await prisma.propertyDetails.create({
       data: {
-        id: 1,
-        image: "/prop1.png",
+        id: 2,
+        image: "/prop2.png",
         address: "645 Parkwood St, Jacksonville, FL 32207",
         dateSubmitted: "1/1/2022",
         offerSubmitted: "$224,000",

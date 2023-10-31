@@ -2,14 +2,20 @@
 
 import { accountItems } from "@/data/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { Children, useEffect, useState } from "react";
-import AccountFavorites from "./AccountFavorites";
-import AccountOffersSent from "./AccountOffersSent";
-import AccountDocuments from "./AccountDocuments";
-import AccountSettings from "./AccountSettings";
+import React, { Children, PropsWithChildren, useEffect, useState } from "react";
+import AccountFavorites from "./Favorites";
+import AccountOffersSent from "./OffersSent";
+import AccountDocuments from "./Documents";
+import AccountSettings from "./Settings";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
 import Link from "next/link";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+
+// imports for data table
+import { OfferData } from "./columns";
+import { columns } from "./columns";
+import { TableDemo } from "./data-table";
+// import { DataTable } from "./data-table";
 
 function AccountMainContent({
   user,
@@ -36,6 +42,8 @@ function AccountMainContent({
   }, [accountRoute]);
 
   console.log("accountRoute", accountRoute);
+
+  const data = OfferData;
 
   return (
     <section className="flex flex-col justify-center p-2 ">
@@ -82,7 +90,17 @@ function AccountMainContent({
         {/* Content Section */}
 
         {accountRoute === "Favorites" && <AccountFavorites />}
-        {accountRoute === "Offers sent" && <AccountOffersSent />}
+        {accountRoute === "Offers sent" && (
+          <AccountOffersSent>
+            <TableDemo />
+            {/* <DataTable
+              user={user}
+              isAuthenticated={isAuthenticated}
+              columns={columns}
+              data={data}
+            /> */}
+          </AccountOffersSent>
+        )}
         {accountRoute === "Documents" && <AccountDocuments />}
         {accountRoute === "Account settings" && <AccountSettings />}
       </div>

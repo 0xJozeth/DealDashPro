@@ -6,10 +6,6 @@ import { trpc } from "@/app/_trpc/client";
 import { httpBatchLink } from "@trpc/client";
 
 const Providers = ({ children }: PropsWithChildren) => {
-  console.log("Providers Props", children);
-
-  console.log("user");
-
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({

@@ -2,7 +2,7 @@
 
 import { accountItems } from "@/data/data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { Children, PropsWithChildren, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AccountFavorites from "./Favorites";
 import AccountOffersSent from "./OffersSent";
 import AccountDocuments from "./Documents";
@@ -10,28 +10,31 @@ import AccountSettings from "./Settings";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
 import Link from "next/link";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-
-// imports for data table
-import { OfferData } from "./columns";
-import { columns } from "./columns";
-import { TableDemo } from "./data-table";
-// import { DataTable } from "./data-table";
+import { FavoritesDataProps } from '../../../../prisma/data';
 
 function AccountMainContent({
+  children,
   user,
   isAuthenticated,
+  favorites,
 }: {
+  children: React.ReactNode;
   user: KindeUser;
   isAuthenticated: boolean;
+  favorites: FavoritesDataProps[];
 }) {
+  
+  // Define state to store the selected item
   const [accountRoute, setAccountRoute] = useState("Favorites");
 
-  const handleContent = (itemName: string) => {
+  // Define function to handle the content when onClick listener is triggered
+  function handleContent(itemName: string) {
     const selectedItem = accountItems.find((item) => item.name === itemName);
     if (selectedItem) {
       setAccountRoute((prev) => selectedItem.name);
     }
   };
+  // Check if the selected item exists
   useEffect(() => {
     const selectedItem = accountItems.find(
       (item) => item.name === accountRoute,
@@ -41,17 +44,13 @@ function AccountMainContent({
     }
   }, [accountRoute]);
 
-  console.log("accountRoute", accountRoute);
-
-  const data = OfferData;
-
   return (
     <section className="flex flex-col justify-center p-2 ">
       <div id="mainContainerWrapper" className="flex w-full gap-4 p-2 ">
         {/* Account Navigation Section */}
         <section
           id="accountPanel"
-          className="flex h-[217px] w-auto min-w-[200px] flex-col justify-center rounded-[20px]  border border-black p-4"
+          className="hidden md:flex h-[217px] w-auto min-w-[200px] flex-col justify-center rounded-[20px]  border border-black p-4"
         >
           {accountItems.map((item) => (
             <button
@@ -59,7 +58,7 @@ function AccountMainContent({
               key={item.name}
               id={item.title}
               onClick={() => {
-                handleContent(item.name), console.log(accountRoute);
+                handleContent(item.name);
               }}
             >
               <div className="duration-10 flex h-8 w-full items-center gap-2 transition-all hover:bg-zinc-50">
@@ -89,16 +88,10 @@ function AccountMainContent({
 
         {/* Content Section */}
 
-        {accountRoute === "Favorites" && <AccountFavorites />}
+        {accountRoute === "Favorites" && <AccountFavorites user={user} isAuthenticated={isAuthenticated} favorites={favorites}/>}
         {accountRoute === "Offers sent" && (
           <AccountOffersSent>
-            <TableDemo />
-            {/* <DataTable
-              user={user}
-              isAuthenticated={isAuthenticated}
-              columns={columns}
-              data={data}
-            /> */}
+            {children}
           </AccountOffersSent>
         )}
         {accountRoute === "Documents" && <AccountDocuments />}

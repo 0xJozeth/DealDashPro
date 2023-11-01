@@ -16,12 +16,15 @@ model User {
   email String @unique
 
   // Define the favorites relationship: a user can have multiple favorite properties
-  favorites PropertyDetails[] @relation("UserFavorites")
+  favorites  PropertyDetails[] @relation("UserFavorites")
+  // Define the offers sent relationship: a user can have multiple offers
+  offersSent OffersSent[]
 
-  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
-  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
-  stripePriceId          String?   @map(name: "stripe_price_id")
-  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+  stripeCustomerId       String?     @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?     @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?     @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime?   @map(name: "stripe_current_period_end")
+  Favorites              Favorites[]
 }
 
 model PropertyDetails {
@@ -34,7 +37,7 @@ model PropertyDetails {
   cancel         Boolean
 
   // Define the favorites relationship: a property can be favorited by multiple users
-  favorites      User[]     @relation("UserFavorites")
+  Favorites User[] @relation("UserFavorites")
 
   // Add any other fields you need for PropertyDetails
 
@@ -45,8 +48,44 @@ model PropertyDetails {
   // User   User?   @relation(fields: [userId], references: [id])
 }
 
+model OffersSent {
+  id             Int        @id @default(autoincrement())
+  image          String
+  address        String
+  dateSubmitted  DateTime   @default(now()) // Time of offer submission
+  offerSubmitted String // Offer price defined as string
+  status         EnumStatus // Change this to match your desired data type for status
+  cancel         Boolean
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  @@index([userId])
+}
+
 enum EnumStatus {
   Accepted
   Pending
   Denied
+}
+
+model Favorites {
+  id        Int    @id @default(autoincrement())
+  url       String @unique @default(cuid())
+  imgSrc    String
+  imgWidth  Int
+  imgHeight Int
+  alt       String
+  cn        String
+  askPrice  String
+  arv       String
+  location  String
+  beds      Int
+  baths     Int
+  sqft      Int
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  @@index([userId])
 }

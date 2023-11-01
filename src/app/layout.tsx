@@ -32,19 +32,17 @@ export default function RootLayout({
   const { getUser } = getKindeServerSession();
   const user = getUser();
 
-  console.log("user", user);
-
   return (
     <html lang="en" className="light !scroll-smooth">
       <Providers>
         <body
           className={cn(
-            "grainy min-h-screen  font-sans antialiased",
+            "grainy min-h-screen font-sans antialiased",
             lato.className,
           )}
         >
           <Header />
-          <main>{children}</main>
+          <main className='m-0 p-0'>{children}</main>
           <Footer />
         </body>
       </Providers>

@@ -16,11 +16,8 @@ const propImages = [
 ];
 
 function NavigatorPropertyImage({ props }: any) {
-	console.log('PROPS', props);
 	const [user, setUser] = useState<any>();
 	const [authStatus, setAuthStatus] = useState(null);
-
-	console.log('current user right now', user);
 
 	useEffect(() => {
 		const getKindeSession = async () => {
@@ -28,7 +25,6 @@ function NavigatorPropertyImage({ props }: any) {
 			const data = await res.json();
 			setUser(data.user);
 			setAuthStatus(data.authenticated);
-			console.log('current data right now', data);
 		};
 
 		getKindeSession();

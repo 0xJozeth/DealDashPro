@@ -1,21 +1,18 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, EnumStatus } from "@prisma/client";
+import { FavoritesData, OfferData } from './data';
 
 const prisma = new PrismaClient();
 
 async function main() {
   try {
-    await prisma.propertyDetails.create({
-      data: {
-        id: 2,
-        image: "/prop2.png",
-        address: "645 Parkwood St, Jacksonville, FL 32207",
-        dateSubmitted: "1/1/2022",
-        offerSubmitted: "$224,000",
-        status: "Pending",
-        cancel: false,
-      },
+    await prisma.favorites.createMany({
+      data: FavoritesData,
     });
-    console.log("Added property details data");
+    console.log("Added favorites data");
+    await prisma.offersSent.createMany({
+      data: OfferData,
+    });
+    console.log("Added favorites data");
   } catch (e) {
     console.error(e);
     process.exit(1);

@@ -6,8 +6,6 @@ import { usePathname } from 'next/navigation';
 export const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
 	const pathname = usePathname();
 
-	console.log('pathname', pathname);
-
 	return (
 		<>
 			{children}

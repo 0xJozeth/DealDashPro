@@ -1,5 +1,5 @@
 import { PrismaClient, EnumStatus } from "@prisma/client";
-import { FavoritesData, OfferData } from './data';
+import { FavoritesData } from "./data";
 
 const prisma = new PrismaClient();
 
@@ -9,9 +9,7 @@ async function main() {
       data: FavoritesData,
     });
     console.log("Added favorites data");
-    await prisma.offersSent.createMany({
-      data: OfferData,
-    });
+    //add navigator data
     console.log("Added favorites data");
   } catch (e) {
     console.error(e);
@@ -19,6 +17,6 @@ async function main() {
   } finally {
     await prisma.$disconnect();
   }
-};
+}
 
 main();

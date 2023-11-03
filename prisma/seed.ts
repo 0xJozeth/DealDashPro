@@ -1,16 +1,15 @@
-import { PrismaClient, EnumStatus } from "@prisma/client";
-import { FavoritesData } from "./data";
+import { PrismaClient, EnumStatus, EnumPopularity } from "@prisma/client";
+import { PropertyData } from "./data";
+import { v4 as uuidv4 } from "uuid";
 
 const prisma = new PrismaClient();
 
 async function main() {
   try {
-    await prisma.favorites.createMany({
-      data: FavoritesData,
+    await prisma.property.createMany({
+      data: PropertyData,
     });
-    console.log("Added favorites data");
-    //add navigator data
-    console.log("Added favorites data");
+    console.log("Added property data");
   } catch (e) {
     console.error(e);
     process.exit(1);

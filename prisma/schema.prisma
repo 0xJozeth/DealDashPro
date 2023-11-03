@@ -1,6 +1,5 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -52,10 +51,8 @@ model SentOffers {
   @@index([propertyId])
 }
 
-
-
 model Property {
-  id      Int    @id @default(autoincrement())
+  id      Int    @id @unique @default(autoincrement()) @map("id")
   url     String @unique @default(cuid())
   heading String
 
@@ -64,30 +61,31 @@ model Property {
   imgHeight  Int
   imgAlt     String
   cn         String
-  views      String
+  views      Int
   popularity EnumPopularity
 
   desc        String
   streetView  String
   mapLocation String
 
-  askPrice  String
-  arv       String
-  address1  String
-  address2  String
-  city      String
-  state     String
-  county    String
-  zip       String
-  beds      Int
-  baths     Int
-  sqft      Int
+  askPrice String
+  arv      String
+  address1 String
+  address2 String?
+  city     String
+  state    String
+  county   String
+  zip      String
+  beds     Int
+  baths    Int
+  sqft     Int
+
   type      String
   parking   String
   yearBuilt Int
   lotSize   Int
 
-  listedAt DateTime @default(now()) // Timestamp when the property was listed
+  listedAt String // Timestamp when the property was listed
   // Add other properties and relationships as needed
 
   // Define a relation with a unique name for the user who created the property
@@ -104,15 +102,13 @@ model Property {
   @@index([favoritedByUserId])
 }
 
-
-
 model Favorites {
-  id               Int       @id @default(autoincrement())
+  id               Int                  @id @default(autoincrement())
   propertyId       Int
   propertyType     String
   favoriteTags     String
   favoriteCategory EnumFavoriteCategory
-  lastVisitedDate  DateTime? @map(name: "last_visited_date")
+  lastVisitedDate  DateTime?            @map(name: "last_visited_date")
 
   user     User     @relation(fields: [userId], references: [id])
   userId   String
@@ -121,7 +117,6 @@ model Favorites {
   @@index([userId])
   @@index([propertyId])
 }
-
 
 enum EnumStatus {
   Accepted

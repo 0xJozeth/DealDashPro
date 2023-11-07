@@ -1,82 +1,58 @@
-import { PrismaClient, EnumStatus, EnumFavoriteCategory } from "@prisma/client";
-import { url } from "inspector";
-import { v4 as uuidv4 } from "uuid";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { FavoritesDataProps, PropertyDataProps } from "../database";
+import { EnumPopularity } from "@prisma/client";
 
-// export type OfferData = {
-//   image: string;
-//   address: string;
-//   dateSubmitted: Date;
-//   offerSubmitted: string;
-//   status: "Accepted" | "Pending" | "Denied";
-//   cancel: boolean;
-//   userId: string;
+// const { getUser } = getKindeServerSession();
+// const user = getUser();
+
+// const getServerSideProps = async () => {
+//   const res = await fetch("/api/property/clonkhcyo0004p01l0vbwak2o");
+//   const data = await res.json();
+//   console.log("data)", data);
+//   return {
+//     props: {
+//       propertyId: data.id,
+//     },
+//   };
 // };
 
-// export const OfferData: OfferData[] = [
-//   {
-//     image: "/prop1.png",
-//     address: "645 Parkwood St, Jacksonville, FL 32207",
-//     dateSubmitted: new Date(),
-//     offerSubmitted: "$224,000",
-//     status: EnumStatus.Pending,
-//     cancel: false,
-//     userId: "kp_2bffb8fd600a4643bc0acda106ab0a0e",
-//   },
-//   {
-//     image: "/prop2.png",
-//     address: "4078 Spring Park Cir, Jacksonville, FL 32207",
-//     dateSubmitted: new Date(),
-//     offerSubmitted: "156,000",
-//     status: EnumStatus.Accepted,
-//     cancel: false,
-//     userId: "kp_2bffb8fd600a4643bc0acda106ab0a0e",
-//   },
-//   {
-//     image: "/prop3.png",
-//     address: "4078 Spring Park Cir, Jacksonville, FL 32207",
-//     dateSubmitted: new Date(),
-//     offerSubmitted: "$70,000",
-//     status: EnumStatus.Denied,
-//     cancel: false,
-//     userId: "kp_2bffb8fd600a4643bc0acda106ab0a0e",
-//   },
-//   {
-//     image: "/prop4.png",
-//     address: "645 Parkwood St, Jacksonville, FL 32207",
-//     dateSubmitted: new Date(),
-//     offerSubmitted: "$224,000",
-//     status: EnumStatus.Pending,
-//     cancel: false,
-//     userId: "kp_2bffb8fd600a",
-//   },
-//   {
-//     image: "/prop5.png",
-//     address: "4078 Spring Park Cir, Jacksonville, FL 32207",
-//     dateSubmitted: new Date(),
-//     offerSubmitted: "$156,000",
-//     status: EnumStatus.Accepted,
-//     cancel: false,
-//     userId: "kp_2bffb8fd600a",
-//   },
-//   {
-//     image: "/prop6.png",
-//     address: "4078 Spring Park Cir, Jacksonville, FL 32207",
-//     dateSubmitted: new Date(),
-//     offerSubmitted: "$70,000",
-//     status: EnumStatus.Denied,
-//     cancel: false,
-//     userId: "kp_2bffb8fd600a",
-//   },
-// ];
+// getServerSideProps();
 
-export const FavoritesData = [
+export const PropertyData: PropertyDataProps[] = [
   {
-    id: 1,
-    userId: "1",
-    propertyId: 1,
-    propertyType: "Single Family",
-    favoriteTags: "Spacious, Modern",
-    favoriteCategory: "NeedsRehab",
-    lastVisitedDate: new Date(),
+    heading: "Amazing New Home",
+    imgSrc: "/prop1.png",
+    imgWidth: 400,
+    imgHeight: 200,
+    imgAlt: "image alt here",
+    cn: "classname",
+    views: 276,
+    popularity: EnumPopularity.Pending,
+    desc: "Here's a description of the property!",
+    streetView: "street view url here",
+    mapLocation: "map location url here",
+    askPrice: "$245,000",
+    arv: "$328,000",
+    address1: "Address 1 here",
+    address2: "Address 2 here",
+    city: "Jacksonville",
+    state: "FL",
+    county: "Duval",
+    zip: "32255",
+    beds: 2,
+    baths: 2,
+    sqft: 1000,
+    type: "Single-family",
+    parking: "Street",
+    yearBuilt: 1998,
+    lotSize: 8998,
+    listedAt: new Date().toLocaleDateString("en-US"),
+  },
+];
+
+export const FavoritesData: FavoritesDataProps[] = [
+  {
+    propertyId: "clonkhcyo0004p01l0vbwak2o",
+    userId: "kp_2bffb8fd600a4643bc0acda106ab0a0e",
   },
 ];

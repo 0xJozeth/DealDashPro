@@ -1,9 +1,12 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
+
+// generator erd {
+//   provider = "prisma-erd-generator"
+// }
 
 datasource db {
   provider     = "mysql"
@@ -12,7 +15,7 @@ datasource db {
 }
 
 model User {
-  id    String @id @unique // matches up with the kinde user id
+  id    String @id @default(cuid()) // matches up with the kinde user id
   email String @unique
 
   stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
@@ -20,14 +23,18 @@ model User {
   stripePriceId          String?   @map(name: "stripe_price_id")
   stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   // Define the favorites relationship: a user can have multiple favorite properties
-  favorites  Favorites[]
+  favorites  Favorites[] 
+
   // Define the offers sent relationship: a user can have multiple offers
   offersSent SentOffers[]
 
   // Define a unique relation name for the user who created the property
-  createdProperties Property[] @relation("PropertyCreatedBy")
-  UserId            String?
+  properties Property[] @relation("PropertyCreatedBy")
+  userId     String?
 
   // Define a unique relation name for the user who favorited the property
   favoritedProperties Property[] @relation(name: "PropertyFavoritedBy")
@@ -35,7 +42,7 @@ model User {
 }
 
 model SentOffers {
-  id Int @id @default(autoincrement())
+  id String @id @default(cuid())
 
   dateSubmitted  DateTime   @default(now()) // Time of offer submission
   offerSubmitted String // Offer price defined as string
@@ -43,7 +50,7 @@ model SentOffers {
   cancel         Boolean
 
   property   Property @relation(fields: [propertyId], references: [id])
-  propertyId Int
+  propertyId String
 
   user   User?   @relation(fields: [userId], references: [id])
   userId String?
@@ -52,51 +59,54 @@ model SentOffers {
   @@index([propertyId])
 }
 
-
-
 model Property {
-  id      Int    @id @default(autoincrement())
-  url     String @unique @default(cuid())
+  id      String  @id @default(cuid())
+  url     String?  @unique @default(cuid())
   heading String
 
-  imgSrc     String
-  imgWidth   Int
-  imgHeight  Int
-  imgAlt     String
-  cn         String
-  views      String
-  popularity EnumPopularity
+  imgSrc     String?
+  imgWidth   Int?
+  imgHeight  Int?
+  imgAlt     String?
+  cn         String?
+  views      Int?
+  popularity EnumPopularity?
 
-  desc        String
-  streetView  String
-  mapLocation String
+  desc        String?
+  streetView  String?
+  mapLocation String?
 
-  askPrice  String
-  arv       String
-  address1  String
-  address2  String
-  city      String
-  state     String
-  county    String
-  zip       String
-  beds      Int
-  baths     Int
-  sqft      Int
-  type      String
-  parking   String
-  yearBuilt Int
-  lotSize   Int
+  askPrice String?
+  arv      String?
+  address1 String?
+  address2 String?
+  city     String?
+  state    String?
+  county   String?
+  zip      String?
+  beds     Int?
+  baths    Int?
+  sqft     Int?
 
-  listedAt DateTime @default(now()) // Timestamp when the property was listed
+  type      String?
+  parking   String?
+  yearBuilt Int?
+  lotSize   Int?
+
+  listedAt  String // Timestamp when the property was listed
+  createdAt DateTime @default(now()) // Timestamp when the property was created
+  updatedAt DateTime @updatedAt // Timestamp when the property was updated
+
   // Add other properties and relationships as needed
 
   // Define a relation with a unique name for the user who created the property
-  createdBy User?   @relation(name: "PropertyCreatedBy", fields: [userId], references: [id])
-  userId    String?
+  user   User?   @relation(fields: [userId], references: [id], name: "PropertyCreatedBy")
+  userId String? 
 
   // Define another relation with a unique name for the user who favorited the property
   favoritedBy       User?        @relation(name: "PropertyFavoritedBy", fields: [favoritedByUserId], references: [id])
-  favoritedByUserId String?
+  favoritedByUserId String? @unique
+
   SentOffers        SentOffers[]
   Favorites         Favorites[]
 
@@ -104,24 +114,25 @@ model Property {
   @@index([favoritedByUserId])
 }
 
-
-
 model Favorites {
-  id               Int       @id @default(autoincrement())
-  propertyId       Int
-  propertyType     String
-  favoriteTags     String
-  favoriteCategory EnumFavoriteCategory
-  lastVisitedDate  DateTime? @map(name: "last_visited_date")
+  id String @id @default(cuid())
+
+  propertyId String 
+  userId     String 
+
+  propertyType     String?
+  favoriteTags     String?
+  favoriteCategory EnumFavoriteCategory?
+  lastVisitedDate  DateTime?            @map(name: "last_visited_date")
+
 
   user     User     @relation(fields: [userId], references: [id])
-  userId   String
   property Property @relation(fields: [propertyId], references: [id])
 
-  @@index([userId])
+  @@unique([userId, propertyId], name: "UserFavorites")
   @@index([propertyId])
+  @@index([userId])
 }
-
 
 enum EnumStatus {
   Accepted

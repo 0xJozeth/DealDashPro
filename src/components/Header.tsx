@@ -20,8 +20,8 @@ function Header() {
   return (
     <>
       <header className="relative z-[9999] flex h-[324px] items-start justify-between bg-[url('/hero.jpeg')] bg-cover bg-local bg-center bg-no-repeat px-20 ">
-        <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-t from-transparent via-transparent to-black" />
-        <nav className="group relative mt-8 flex w-full items-center justify-between gap-8 bg-transparent">
+        <div className="absolute left-0 top-0 z-[2] h-full w-full bg-gradient-to-t from-transparent via-transparent to-black opacity-[70%] mix-blend-multiply" />
+        <nav className="group relative z-[9999] mt-8 flex w-full items-center justify-between gap-8 bg-transparent">
           <Link href="/">
             <Image
               src={"/ddpWhite.svg"}

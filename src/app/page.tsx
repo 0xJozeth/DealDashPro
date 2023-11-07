@@ -1,10 +1,16 @@
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Card from "@/components/Card";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { Property } from "@prisma/client";
 import { db } from "@/db";
 
-export default async function Home({}) {
-  // get all properties
-  const propertyData = await db.property.findMany({});
+export default async function Home() {
+  const { getUser } = getKindeServerSession();
+  const user = getUser();
+
+  const propertyData: Property[] = await db.property.findMany({});
+
+  console.log("NEW propertyData", propertyData);
 
   return (
     <>
@@ -39,7 +45,7 @@ export default async function Home({}) {
         </div>
         <section className="grid grid-cols-2 gap-1 md:grid-cols-3 md:gap-4">
           {propertyData.map((property) => (
-            <Card key={property.id} propertyData={property} />
+            <Card key={property.id} propertyData={property} user={user} />
           ))}
         </section>
       </MaxWidthWrapper>

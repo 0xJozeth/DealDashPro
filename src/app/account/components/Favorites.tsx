@@ -1,33 +1,47 @@
-
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { accountItems, propImages } from "@/data/data";
-import { KindeUser, getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import { FavoritesDataProps } from '../../../../prisma/data';
-import Card from '@/components/Card';
+import {
+  KindeUser,
+  getKindeServerSession,
+} from "@kinde-oss/kinde-auth-nextjs/server";
+import Card from "@/components/Card";
+import { FavoritesDataProps } from "../../../../database";
+import { db } from "@/db";
+import { Favorites } from "@prisma/client";
 
+async function AccountFavorites({
+  user,
+  isAuthenticated,
+}: {
+  user: KindeUser;
+  isAuthenticated: boolean;
+}) {
+  const favorites: Favorites[] = await db.favorites.findMany({
+    where: {
+      userId: user.id!,
+    },
+  });
 
-
-function AccountFavorites({favorites, user, isAuthenticated}: {favorites: FavoritesDataProps[], user: KindeUser, isAuthenticated: boolean}) {
-  
+  console.log("favorites", favorites);
   return (
     <section
       id="contentWrapper"
-      className="block m-0 p-0 w-full flex-col gap-4">
-      <div className='p-4'>
-        <h2 className="text-[26px] font-medium leading-[17px] text-black ml-6">
-          Favorites 
+      className="m-0 block w-full flex-col gap-4 p-0"
+    >
+      <div className="p-4">
+        <h2 className="ml-6 text-[26px] font-medium leading-[17px] text-black">
+          Favorites
         </h2>
       </div>
 
-      <div className="flex flex-wrap p-4 gap-6 justify-center box-border !scroll-smooth scrollbar-hide">
-        {favorites.map((item, index) => (
-          <Card key={index} item={item} index={index} favorites={favorites}/>
-        ))}
-
+      <div className="scrollbar-hide box-border flex flex-wrap justify-center gap-6 !scroll-smooth p-4">
+        {/* {favorites.map((item, index) => (
+          // <Card favorites={favorites} />
+        ))} */}
       </div>
       <div className="flex w-full items-center justify-center p-2 ">
         <div>

@@ -9,9 +9,10 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "eslint . --ext .ts"
 	},
 	"dependencies": {
+		"@faker-js/faker": "^8.2.0",
 		"@fortawesome/fontawesome-svg-core": "^6.4.2",
 		"@fortawesome/free-brands-svg-icons": "^6.4.2",
 		"@fortawesome/free-regular-svg-icons": "^6.4.2",
@@ -38,6 +39,7 @@
 		"prettier": "^3.0.3",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
+		"swr": "^2.2.4",
 		"tailwind-merge": "^1.14.0",
 		"tailwind-scrollbar-hide": "^1.1.7",
 		"tailwindcss-animate": "^1.0.7",
@@ -57,6 +59,7 @@
 		"postcss": "^8.4.31",
 		"prettier-plugin-tailwindcss": "^0.5.6",
 		"prisma": "5.5.2",
+		"prisma-erd-generator": "^1.11.1",
 		"tailwindcss": "^3.3.5",
 		"ts-node": "^10.9.1",
 		"tsx": "^3.14.0",

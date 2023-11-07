@@ -1,19 +1,34 @@
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { FavoritesDataProps, PropertyDataProps } from "../database";
 import { EnumPopularity } from "@prisma/client";
-import { url } from "inspector";
-import { v4 as uuidv4 } from "uuid";
-import { PropertyDataProps } from "../database";
+
+// const { getUser } = getKindeServerSession();
+// const user = getUser();
+
+// const getServerSideProps = async () => {
+//   const res = await fetch("/api/property/clonkhcyo0004p01l0vbwak2o");
+//   const data = await res.json();
+//   console.log("data)", data);
+//   return {
+//     props: {
+//       propertyId: data.id,
+//     },
+//   };
+// };
+
+// getServerSideProps();
 
 export const PropertyData: PropertyDataProps[] = [
   {
-    heading: "bruh",
+    heading: "Amazing New Home",
     imgSrc: "/prop1.png",
     imgWidth: 400,
     imgHeight: 200,
     imgAlt: "image alt here",
-    cn: "bruh",
+    cn: "classname",
     views: 276,
-    popularity: EnumPopularity.NewHome,
-    desc: "bruh",
+    popularity: EnumPopularity.Pending,
+    desc: "Here's a description of the property!",
     streetView: "street view url here",
     mapLocation: "map location url here",
     askPrice: "$245,000",
@@ -32,5 +47,12 @@ export const PropertyData: PropertyDataProps[] = [
     yearBuilt: 1998,
     lotSize: 8998,
     listedAt: new Date().toLocaleDateString("en-US"),
+  },
+];
+
+export const FavoritesData: FavoritesDataProps[] = [
+  {
+    propertyId: "clonkhcyo0004p01l0vbwak2o",
+    userId: "kp_2bffb8fd600a4643bc0acda106ab0a0e",
   },
 ];

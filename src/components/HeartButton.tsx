@@ -4,7 +4,7 @@ import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Property } from "@prisma/client";
 import axios from "axios";
 import Image from "next/image";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 const HeartButton = ({
   user,
@@ -13,18 +13,22 @@ const HeartButton = ({
   user: KindeUser;
   property: Property;
 }) => {
-  const [favoriteStatus, setFavoriteStatus] = useState(false);
+  const route = usePathname();
 
-  const toggleFavorite = async () => {
+  const addFavorite = async () => {
     try {
       const response = await axios.post(
-        `/api/user/${user.id}/property/${property.id}/toggle`,
+        `/api/user/${user.id}/property/${property.id}`,
       );
-      setFavoriteStatus(response.data.isFavorited);
-      console.log(
-        `Property ${
-          response.data.isFavorited ? "added to" : "removed from"
-        } favorites`,
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const deleteFavorite = async () => {
+    try {
+      const response = await axios.delete(
+        `/api/user/${user.id}/property/${property.id}`,
       );
     } catch (error) {
       console.error("Error:", error);
@@ -36,7 +40,7 @@ const HeartButton = ({
       title="heart"
       type="button"
       className="flex"
-      onClick={toggleFavorite}
+      onClick={route === "/" ? addFavorite : deleteFavorite}
     >
       <Image
         src="/heart-outline.svg"

@@ -17,7 +17,7 @@ function AccountPanel() {
           type="button"
           key={item.name}
           id={item.title}
-          className="border border-red-600"
+          className="{/*border border-red-600*/}"
         >
           <Link href={`/account/${item.url}`}>
             <div className="duration-10 flex h-8 w-full items-center gap-2 transition-all hover:bg-zinc-50">

@@ -100,8 +100,12 @@ function AccountPath() {
           )}
           {route === "/account/offers" && (
             <AccountOffersSent>
-              {Array.isArray(offerData) && offerData.length > 0 && (
-                <TableDemo offer={offerData} />
+              {Array.isArray(offerData) && offerData.length > 0 ? (
+                <TableDemo offer={offerData} user={userData} />
+              ) : (
+                <div className=" mx-auto flex items-center justify-center text-xl text-zinc-300">
+                  No offers yet. Submit an offer to see it here.
+                </div>
               )}
             </AccountOffersSent>
           )}

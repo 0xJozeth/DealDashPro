@@ -27,6 +27,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   favorites Favorite[]
+  offers    Offers[]
 }
 
 model Favorite {
@@ -83,6 +84,28 @@ model Property {
   updatedAt DateTime @updatedAt // Timestamp when the property was updated
 
   favorites Favorite[]
+}
+
+model Offers {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  image          String?
+  address1       String?
+  address2       String?
+  city           String?
+  state          String?
+  county         String?
+  zip            String?
+  dateSubmitted  DateTime @default(now())
+  offerSubmitted String?
+  status         EnumStatus?
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@index([userId])
 }
 
 enum EnumStatus {

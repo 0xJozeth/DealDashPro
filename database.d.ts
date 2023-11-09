@@ -1,4 +1,4 @@
-import { EnumPopularity } from "@prisma/client";
+import { EnumStatus, EnumPopularity } from "@prisma/client";
 
 interface Tag {
   [key: string]: {
@@ -40,6 +40,20 @@ interface PropertyDataProps {
   lotSize: number;
 
   listedAt: string;
+}
+
+interface OfferProps {
+  image: string;
+  address1: string;
+  address2: string;
+  city: string;
+  state: string;
+  county: string;
+  zip: string;
+  dateSubmitted: string;
+  offerSubmitted: string;
+  status: EnumStatus;
+  userId: string;
 }
 
 interface FavoritesDataProps {

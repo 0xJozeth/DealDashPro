@@ -1,5 +1,5 @@
-import { PropertyDataProps } from "../database";
-import { EnumPopularity } from "@prisma/client";
+import { PropertyDataProps, OfferProps } from "../database";
+import { EnumStatus, EnumPopularity } from "@prisma/client";
 
 // const { getUser } = getKindeServerSession();
 // const user = getUser();
@@ -75,5 +75,21 @@ export const PropertyData: PropertyDataProps[] = [
     yearBuilt: 1998,
     lotSize: 8998,
     listedAt: new Date().toLocaleDateString("en-US"),
+  },
+];
+
+export const Offers: OfferProps[] = [
+  {
+    image: "/prop6.png",
+    address1: "123 Adams St",
+    address2: "STE 201",
+    city: "Jacksonville",
+    state: "FL",
+    county: "Duval",
+    zip: "32256",
+    dateSubmitted: new Date().toISOString(),
+    offerSubmitted: "$741,000",
+    status: EnumStatus.Pending,
+    userId: "kp_2bffb8fd600a4643bc0acda106ab0a0e",
   },
 ];

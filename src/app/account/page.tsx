@@ -6,7 +6,7 @@ import {
 } from "@kinde-oss/kinde-auth-nextjs/server";
 import { db } from "@/db";
 import AccountOffersSent from "./_components/OffersSent";
-import { EnumStatus } from "@prisma/client";
+// import { EnumStatus } from "@prisma/client";
 import { redirect } from "next/navigation";
 
 export interface offerDataProps {
@@ -15,7 +15,7 @@ export interface offerDataProps {
   address: string;
   dateSubmitted: Date;
   offerSubmitted: string;
-  status: EnumStatus;
+  // status: EnumStatus;
   cancel: boolean;
   userId: string | null;
 }
@@ -37,11 +37,11 @@ const AccountSettings = async () => {
 
   if (!user || !user.id) return redirect("/auth-callback?origin=dashboard");
 
-  const favorites = await db.favorites.findMany({
-    where: {
-      userId: user?.id,
-    },
-  });
+  // const favorites = await db.favorites.findMany({
+  //   where: {
+  //     userId: user?.id,
+  //   },
+  // });
 
   return (
     <MaxWidthWrapper className="max-w-[1280px] border border-red-600">

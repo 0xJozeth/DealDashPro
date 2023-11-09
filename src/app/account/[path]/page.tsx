@@ -11,13 +11,16 @@ import {
   getKindeServerSession,
 } from "@kinde-oss/kinde-auth-nextjs/server";
 import { db } from "@/db";
-import { PrismaClient, Property } from "@prisma/client";
+import { Offers, PrismaClient, Property } from "@prisma/client";
 import AccountFavorites from "../_components/Favorites";
 import Card from "@/components/Card";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import AccountOffersSent from "../_components/OffersSent";
 import AccountDocuments from "../_components/Documents";
 import AccountSettings from "../_components/Settings";
+import { TableDemo } from "../_components/data-table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 function AccountPath() {
   const route = usePathname();
@@ -31,7 +34,7 @@ function AccountPath() {
   });
 
   const { data: propertyData, isLoading: propertyLoading } = useQuery({
-    queryKey: ["favorites", userData?.id],
+    queryKey: ["favorites"],
     queryFn: async () => {
       if (!userData) return [];
       const { data } = await axios.get(`/api/user/${userData.id}/favorites`);
@@ -39,8 +42,43 @@ function AccountPath() {
     },
   });
 
+  const { data: offerData, isLoading: offerLoading } = useQuery({
+    queryKey: ["offers"],
+    queryFn: async () => {
+      if (!userData) return [];
+      const { data } = await axios.get(`/api/user/${userData.id}/offers`);
+      return data as Offers;
+    },
+  });
+
+  const HandleCancel = ({
+    id,
+    userData,
+  }: {
+    id: string;
+    userData: KindeUser;
+  }) => {
+    const mutation = useMutation(async () => {
+      if (!userData) return [];
+      const { data } = await axios.delete(
+        `/api/user/${userData.id}/offers/${id}`,
+      );
+      return data as Offers;
+    });
+
+    const handleClick = () => {
+      mutation.mutate();
+    };
+
+    return (
+      <button type="button" title="cancel" onClick={handleClick}>
+        <FontAwesomeIcon icon={faClose} className="text-sm text-[#6f7070]" />
+      </button>
+    );
+  };
+
   //Loading state...
-  if (userLoading || propertyLoading) {
+  if (userLoading || propertyLoading || offerLoading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
         Loading...
@@ -49,6 +87,7 @@ function AccountPath() {
   }
 
   console.log("propertyData", propertyData);
+  console.log("offerData", offerData);
 
   return (
     <MaxWidthWrapper className="{/*border border-red-600*/} max-w-[1280px]">
@@ -85,7 +124,13 @@ function AccountPath() {
               </div>
             </section>
           )}
-          {route === "/account/offers" && <AccountOffersSent />}
+          {route === "/account/offers" && (
+            <AccountOffersSent>
+              {Array.isArray(offerData) && offerData.length > 0 && (
+                <TableDemo offer={offerData} HandleCancel={HandleCancel} />
+              )}
+            </AccountOffersSent>
+          )}
           {route === "/account/documents" && <AccountDocuments />}
           {route === "/account/settings" && <AccountSettings />}
         </div>

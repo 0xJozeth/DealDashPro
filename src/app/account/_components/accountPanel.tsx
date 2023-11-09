@@ -10,7 +10,7 @@ function AccountPanel() {
   return (
     <section
       id="accountPanel"
-      className="hidden h-[217px] w-auto min-w-[200px] flex-col justify-center rounded-[20px] border  border-black p-4 md:flex"
+      className="mt-[72px] hidden h-[217px] w-auto min-w-[200px] flex-col justify-center rounded-[20px] border  border-black p-4 md:flex"
     >
       {accountItems.map((item) => (
         <button

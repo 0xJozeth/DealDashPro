@@ -20,9 +20,8 @@ import AccountDocuments from "../_components/Documents";
 import AccountSettings from "../_components/Settings";
 
 function AccountPath() {
-  const router = usePathname();
-  // const { getUser, isAuthenticated } = getKindeServerSession();
-  // const user = getUser();
+  const route = usePathname();
+
   const { data: userData, isLoading: userLoading } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
@@ -48,24 +47,12 @@ function AccountPath() {
       </div>
     );
   }
-  // let propertyData: Property[] = [];
 
   console.log("propertyData", propertyData);
 
-  // try {
-  //   const response = await axios.get(
-  //     `http://localhost:3000/api/user/${user.id}/favorites`,
-  //   );
-  //   propertyData = response.data;
-  // } catch (error) {
-  //   console.error("Error:", error);
-  // }
-
-  console.log("component type");
-
   return (
     <MaxWidthWrapper className="{/*border border-red-600*/} max-w-[1280px]">
-      <section className="{/*border border-red-600*/} flex flex-col justify-center p-2">
+      <section className="{/*border border-red-600*/} flex min-h-screen flex-col justify-start p-2">
         <div
           id="mainContainerWrapper"
           className="{/*border border-red-600*/} flex w-full gap-4 p-2"
@@ -74,7 +61,7 @@ function AccountPath() {
           <AccountPanel />
 
           {/* Content Section */}
-          {router === "/account/favorites" && (
+          {route === "/account/favorites" && (
             <section
               id="contentWrapper"
               className="{/*border border-red-600*/} m-0 block w-full flex-col gap-4 p-0"
@@ -98,9 +85,9 @@ function AccountPath() {
               </div>
             </section>
           )}
-          {router === "/account/offers" && <AccountOffersSent />}
-          {router === "/account/documents" && <AccountDocuments />}
-          {router === "/account/settings" && <AccountSettings />}
+          {route === "/account/offers" && <AccountOffersSent />}
+          {route === "/account/documents" && <AccountDocuments />}
+          {route === "/account/settings" && <AccountSettings />}
         </div>
       </section>
     </MaxWidthWrapper>

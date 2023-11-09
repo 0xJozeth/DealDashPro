@@ -50,10 +50,10 @@ function Card({
 
   return (
     // <Link href={`/property-details/${propertyData.url}`}>
-    <Link href="#">
+    <Link href={`/property-details/${propertyData.url}`}>
       <div
         id="cardMainWrapper"
-        className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg p-2"
+        className="relative flex h-full w-full min-w-[250px] flex-col items-center justify-center overflow-hidden rounded-lg p-2"
       >
         {/* Dynamically render tag from db enum criteria */}
         {selectedTag && (

@@ -15,7 +15,8 @@ const HeartButton = ({
 }) => {
   const route = usePathname();
 
-  const addFavorite = async () => {
+  const addFavorite: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
+    e.preventDefault();
     try {
       const response = await axios.post(
         `/api/user/${user.id}/property/${property.id}`,
@@ -25,7 +26,10 @@ const HeartButton = ({
     }
   };
 
-  const deleteFavorite = async () => {
+  const deleteFavorite: React.MouseEventHandler<HTMLButtonElement> = async (
+    e,
+  ) => {
+    e.preventDefault();
     try {
       const response = await axios.delete(
         `/api/user/${user.id}/property/${property.id}`,

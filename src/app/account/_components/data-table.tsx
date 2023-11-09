@@ -10,16 +10,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
-import { redirect } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import { Offers, PrismaClient } from "@prisma/client";
-import { db } from "@/db";
-import { allOffersProps, offerDataProps } from "../page";
+import { Offers } from "@prisma/client";
 import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
+import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 
 function getStatusColorClass(status: string): {
   bgColor: string;
@@ -39,13 +35,18 @@ function getStatusColorClass(status: string): {
 
 // TableDemoProps definition
 
-export function TableDemo({
-  offer,
-  HandleCancel,
-}: {
-  HandleCancel: React.ReactNode;
-  offer: Offers[];
-}) {
+export function TableDemo({ offer }: { offer: Offers[] }) {
+  const userId = offer.map((i) => i.userId);
+  const handleCancel = async (id: string) => {
+    console.log(
+      `Cancel button clicked for offer id: ${id} and userid: ${userId}`,
+    );
+    if (!userId) return;
+    await axios.delete(`/api/user/${userId}/offers/${id}`);
+    // Add logic to update the UI after the offer is deleted
+    location.reload();
+  };
+
   return (
     <Table className="mt-[72px]">
       <TableCaption>A list of your recent offers.</TableCaption>
@@ -63,22 +64,30 @@ export function TableDemo({
         {offer.map((offers) => (
           <TableRow key={offers.id}>
             <TableCell className="font-medium">
-              <Image
-                src={offers.image} // Assuming the property name is "image"
-                alt="Offer Image"
-                width={55}
-                height={55}
-                className="aspect-square rounded-full"
-              />
+              <AspectRatio
+                ratio={1 / 1}
+                className="flex items-center justify-center"
+              >
+                <Image
+                  src={offers.image} // Assuming the property name is "image"
+                  alt="Offer Image"
+                  fill
+                  sizes="(max-width: 640px) 40px, (max-width: 768px) 50px, (max-width: 1024px) 60px, (max-width: 1280px) 70px, (max-width: 1536px) 80px, 90px"
+                  className="m-auto max-h-[55px] max-w-[55px] rounded-full object-cover"
+                />
+              </AspectRatio>
             </TableCell>
             <TableCell className="hover:text-blue-300 hover:underline">
-              <Link href="/">{offers.address1}</Link>
+              <Link href={`/property-details/${offers.id}`}>
+                {offers.address1}, <br />
+                {offers.city}, {offers.state}
+              </Link>
             </TableCell>
             <TableCell className="text-center">
-              {/* {offers.dateSubmitted} */}
+              {offers.dateSubmitted?.toLocaleString() || null}
             </TableCell>
             <TableCell className="text-center">
-              <p>{offers.offerSubmitted}</p>
+              <p>{offers.offerPrice}</p>
             </TableCell>
             <TableCell className="text-center">
               <div
@@ -92,18 +101,17 @@ export function TableDemo({
               </div>
             </TableCell>
             <TableCell className="text-right">
-              <HandleCancel id={offers.id} userData={offers} />
-              {/* <button
+              <button
                 title="Cancel"
                 type="button"
                 className="flex w-full items-center justify-center"
-                // onClick={}
+                onClick={() => handleCancel(offers.id)}
               >
                 <FontAwesomeIcon
                   icon={faClose}
                   className="text-sm text-[#6f7070]"
                 />
-              </button> */}
+              </button>
             </TableCell>
           </TableRow>
         ))}

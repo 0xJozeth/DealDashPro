@@ -34,7 +34,7 @@ function AccountPath() {
   });
 
   const { data: propertyData, isLoading: propertyLoading } = useQuery({
-    queryKey: ["favorites"],
+    queryKey: ["favorites", userData?.id],
     queryFn: async () => {
       if (!userData) return [];
       const { data } = await axios.get(`/api/user/${userData.id}/favorites`);
@@ -43,39 +43,13 @@ function AccountPath() {
   });
 
   const { data: offerData, isLoading: offerLoading } = useQuery({
-    queryKey: ["offers"],
+    queryKey: ["offers", userData?.id],
     queryFn: async () => {
       if (!userData) return [];
       const { data } = await axios.get(`/api/user/${userData.id}/offers`);
       return data as Offers;
     },
   });
-
-  const HandleCancel = ({
-    id,
-    userData,
-  }: {
-    id: string;
-    userData: KindeUser;
-  }) => {
-    const mutation = useMutation(async () => {
-      if (!userData) return [];
-      const { data } = await axios.delete(
-        `/api/user/${userData.id}/offers/${id}`,
-      );
-      return data as Offers;
-    });
-
-    const handleClick = () => {
-      mutation.mutate();
-    };
-
-    return (
-      <button type="button" title="cancel" onClick={handleClick}>
-        <FontAwesomeIcon icon={faClose} className="text-sm text-[#6f7070]" />
-      </button>
-    );
-  };
 
   //Loading state...
   if (userLoading || propertyLoading || offerLoading) {
@@ -127,7 +101,7 @@ function AccountPath() {
           {route === "/account/offers" && (
             <AccountOffersSent>
               {Array.isArray(offerData) && offerData.length > 0 && (
-                <TableDemo offer={offerData} HandleCancel={HandleCancel} />
+                <TableDemo offer={offerData} />
               )}
             </AccountOffersSent>
           )}

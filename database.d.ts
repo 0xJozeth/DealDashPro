@@ -51,7 +51,7 @@ interface OfferProps {
   county: string;
   zip: string;
   dateSubmitted: string;
-  offerSubmitted: string;
+  offerPrice: string;
   status: EnumStatus;
   userId: string;
 }

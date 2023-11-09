@@ -48,6 +48,7 @@ export default function UserButton({
                     alt="user avatar"
                     className="inline-block rounded-full"
                     fill
+                    sizes="(max-width: 640px) 40px, (max-width: 768px) 50px, (max-width: 1024px) 60px, (max-width: 1280px) 70px, (max-width: 1536px) 80px, 90px"
                   />
                 </div>
               </div>

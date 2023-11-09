@@ -26,42 +26,27 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Define the favorites relationship: a user can have multiple favorite properties
-  favorites  Favorites[] 
-
-  // Define the offers sent relationship: a user can have multiple offers
-  offersSent SentOffers[]
-
-  // Define a unique relation name for the user who created the property
-  properties Property[] @relation("PropertyCreatedBy")
-  userId     String?
-
-  // Define a unique relation name for the user who favorited the property
-  favoritedProperties Property[] @relation(name: "PropertyFavoritedBy")
-  favoritedByUserId   String?
+  favorites Favorite[]
 }
 
-model SentOffers {
-  id String @id @default(cuid())
+model Favorite {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  dateSubmitted  DateTime   @default(now()) // Time of offer submission
-  offerSubmitted String // Offer price defined as string
-  status         EnumStatus // Change this to match your desired data type for status
-  cancel         Boolean
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
-  property   Property @relation(fields: [propertyId], references: [id])
   propertyId String
+  property   Property @relation(fields: [propertyId], references: [id])
 
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String?
-
-  @@index([userId])
+  @@unique([userId, propertyId])
   @@index([propertyId])
 }
 
 model Property {
   id      String  @id @default(cuid())
-  url     String?  @unique @default(cuid())
+  url     String? @unique @default(cuid())
   heading String
 
   imgSrc     String?
@@ -97,41 +82,7 @@ model Property {
   createdAt DateTime @default(now()) // Timestamp when the property was created
   updatedAt DateTime @updatedAt // Timestamp when the property was updated
 
-  // Add other properties and relationships as needed
-
-  // Define a relation with a unique name for the user who created the property
-  user   User?   @relation(fields: [userId], references: [id], name: "PropertyCreatedBy")
-  userId String? 
-
-  // Define another relation with a unique name for the user who favorited the property
-  favoritedBy       User?        @relation(name: "PropertyFavoritedBy", fields: [favoritedByUserId], references: [id])
-  favoritedByUserId String? @unique
-
-  SentOffers        SentOffers[]
-  Favorites         Favorites[]
-
-  @@index([userId])
-  @@index([favoritedByUserId])
-}
-
-model Favorites {
-  id String @id @default(cuid())
-
-  propertyId String 
-  userId     String 
-
-  propertyType     String?
-  favoriteTags     String?
-  favoriteCategory EnumFavoriteCategory?
-  lastVisitedDate  DateTime?            @map(name: "last_visited_date")
-
-
-  user     User     @relation(fields: [userId], references: [id])
-  property Property @relation(fields: [propertyId], references: [id])
-
-  @@unique([userId, propertyId], name: "UserFavorites")
-  @@index([propertyId])
-  @@index([userId])
+  favorites Favorite[]
 }
 
 enum EnumStatus {

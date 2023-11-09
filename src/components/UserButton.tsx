@@ -146,7 +146,7 @@ export default function UserButton({
               <Menu.Item>
                 {({ active }) => (
                   <Link
-                    href="/account"
+                    href="/account/favorites"
                     className={clsx(
                       active && "bg-stone-700/50 dark:bg-stone-200",
                       "inline-flex items-center gap-2 px-[34px] py-2 text-sm font-normal leading-[14px] text-black dark:text-stone-500",

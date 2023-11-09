@@ -1,24 +1,10 @@
 "use client";
 
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
-import { EnumPopularity, Property } from "@prisma/client";
+import { Property } from "@prisma/client";
+import axios from "axios";
 import Image from "next/image";
-import Router from "next/router";
-import { useState } from "react";
-import { PropertyDataProps } from "../../database";
-
-// const getServerSideProps = async () => {
-//   const res = await fetch("/api/kindeSession");
-//   const data = await res.json();
-//   console.log("data)", data);
-//   return {
-//     props: {
-//       user: data.user,
-//     },
-//   };
-// };
-
-// getServerSideProps();
+import { usePathname } from "next/navigation";
 
 const HeartButton = ({
   user,
@@ -27,8 +13,39 @@ const HeartButton = ({
   user: KindeUser;
   property: Property;
 }) => {
+  const route = usePathname();
+
+  const addFavorite: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        `/api/user/${user.id}/property/${property.id}`,
+      );
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const deleteFavorite: React.MouseEventHandler<HTMLButtonElement> = async (
+    e,
+  ) => {
+    e.preventDefault();
+    try {
+      const response = await axios.delete(
+        `/api/user/${user.id}/property/${property.id}`,
+      );
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   return (
-    <button title="heart" type="button" className="flex">
+    <button
+      title="heart"
+      type="button"
+      className="flex"
+      onClick={route === "/" ? addFavorite : deleteFavorite}
+    >
       <Image
         src="/heart-outline.svg"
         width={22}

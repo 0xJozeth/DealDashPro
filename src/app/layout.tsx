@@ -28,10 +28,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // // check if the user is logged in
-  const { getUser } = getKindeServerSession();
-  const user = getUser();
-
   return (
     <html lang="en" className="light !scroll-smooth">
       <Providers>

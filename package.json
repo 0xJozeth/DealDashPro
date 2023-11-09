@@ -32,6 +32,7 @@
 		"@trpc/next": "10.38.4",
 		"@trpc/react-query": "10.38.4",
 		"@trpc/server": "10.38.4",
+		"axios": "^1.6.1",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.0.0",
 		"lucide-react": "^0.288.0",

@@ -7,18 +7,18 @@ import { PropertyDataProps, Tag } from "../../database";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { db } from "@/db";
-import { Favorites, PrismaClient, Property } from "@prisma/client";
+import { Property } from "@prisma/client";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
 import HeartButton from "./HeartButton";
 import useSWR from "swr";
 
-const AddFavorite = dynamic(() => import("./AddFavorite"), { ssr: false });
-
 function Card({
   user,
+  isAuthenticated,
   propertyData,
 }: {
   user: KindeUser;
+  isAuthenticated: boolean;
   propertyData: Property;
 }) {
   const tag: Tag = {
@@ -50,10 +50,10 @@ function Card({
 
   return (
     // <Link href={`/property-details/${propertyData.url}`}>
-    <Link href="/api/favorite">
+    <Link href={`/property-details/${propertyData.url}`}>
       <div
         id="cardMainWrapper"
-        className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg p-2"
+        className="relative flex h-full w-full min-w-[250px] flex-col items-center justify-center overflow-hidden rounded-lg p-2"
       >
         {/* Dynamically render tag from db enum criteria */}
         {selectedTag && (
@@ -79,7 +79,7 @@ function Card({
         </AspectRatio>
         <div
           id="cardContents"
-          className="flex h-[88px] w-full flex-col justify-center space-y-2 rounded-b-[10px] border border-zinc-300 bg-white p-4"
+          className="flex h-[88px] w-full flex-col justify-center space-y-2 overflow-hidden rounded-b-[10px] border border-zinc-300 bg-white p-4"
         >
           <div className="flex items-center justify-between">
             <p className="text-sm font-normal leading-[14px] text-zinc-950">

@@ -1,5 +1,3 @@
-"use client";
-
 import {
   faCog,
   faFile,
@@ -15,6 +13,7 @@ type accountItems = {
   name: string;
   icon: any;
   title: string;
+  url: string;
 };
 
 export const accountItems: accountItems[] = [
@@ -22,21 +21,25 @@ export const accountItems: accountItems[] = [
     name: "Favorites",
     icon: faHeart,
     title: "favorites",
+    url: "favorites",
   },
   {
     name: "Offers sent",
     icon: faPaperPlane,
     title: "offers_sent",
+    url: "offers",
   },
   {
     name: "Documents",
     icon: faFile,
     title: "documents",
+    url: "documents",
   },
   {
     name: "Account settings",
     icon: faCog,
     title: "account_settings",
+    url: "settings",
   },
 ];
 

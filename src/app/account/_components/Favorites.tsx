@@ -11,22 +11,16 @@ import {
 import Card from "@/components/Card";
 import { FavoritesDataProps } from "../../../../database";
 import { db } from "@/db";
-import { Favorites } from "@prisma/client";
 
-async function AccountFavorites({
+function AccountFavorites({
   user,
   isAuthenticated,
 }: {
   user: KindeUser;
   isAuthenticated: boolean;
 }) {
-  const favorites: Favorites[] = await db.favorites.findMany({
-    where: {
-      userId: user.id!,
-    },
-  });
+  // console.log("FAVORITES user", user);
 
-  console.log("favorites", favorites);
   return (
     <section
       id="contentWrapper"
@@ -38,11 +32,7 @@ async function AccountFavorites({
         </h2>
       </div>
 
-      <div className="scrollbar-hide box-border flex flex-wrap justify-center gap-6 !scroll-smooth p-4">
-        {/* {favorites.map((item, index) => (
-          // <Card favorites={favorites} />
-        ))} */}
-      </div>
+      <div className="scrollbar-hide box-border flex flex-wrap justify-center gap-6 !scroll-smooth p-4"></div>
       <div className="flex w-full items-center justify-center p-2 ">
         <div>
           <button

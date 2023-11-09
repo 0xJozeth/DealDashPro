@@ -10,7 +10,7 @@ import AccountSettings from "./Settings";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
 import Link from "next/link";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-import { FavoritesDataProps } from '../../../../prisma/data';
+import { Favorites } from "@prisma/client";
 
 function AccountMainContent({
   children,
@@ -21,9 +21,8 @@ function AccountMainContent({
   children: React.ReactNode;
   user: KindeUser;
   isAuthenticated: boolean;
-  favorites: FavoritesDataProps[];
+  favorites: Favorites[];
 }) {
-  
   // Define state to store the selected item
   const [accountRoute, setAccountRoute] = useState("Favorites");
 
@@ -33,7 +32,7 @@ function AccountMainContent({
     if (selectedItem) {
       setAccountRoute((prev) => selectedItem.name);
     }
-  };
+  }
   // Check if the selected item exists
   useEffect(() => {
     const selectedItem = accountItems.find(
@@ -50,7 +49,7 @@ function AccountMainContent({
         {/* Account Navigation Section */}
         <section
           id="accountPanel"
-          className="hidden md:flex h-[217px] w-auto min-w-[200px] flex-col justify-center rounded-[20px]  border border-black p-4"
+          className="hidden h-[217px] w-auto min-w-[200px] flex-col justify-center rounded-[20px] border  border-black p-4 md:flex"
         >
           {accountItems.map((item) => (
             <button
@@ -88,11 +87,11 @@ function AccountMainContent({
 
         {/* Content Section */}
 
-        {accountRoute === "Favorites" && <AccountFavorites user={user} isAuthenticated={isAuthenticated} favorites={favorites}/>}
+        {accountRoute === "Favorites" && (
+          <AccountFavorites user={user} isAuthenticated={isAuthenticated} />
+        )}
         {accountRoute === "Offers sent" && (
-          <AccountOffersSent>
-            {children}
-          </AccountOffersSent>
+          <AccountOffersSent>{children}</AccountOffersSent>
         )}
         {accountRoute === "Documents" && <AccountDocuments />}
         {accountRoute === "Account settings" && <AccountSettings />}

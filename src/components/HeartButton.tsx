@@ -34,6 +34,7 @@ const HeartButton = ({
       const response = await axios.delete(
         `/api/user/${user.id}/property/${property.id}`,
       );
+      location.reload();
     } catch (error) {
       console.error("Error:", error);
     }

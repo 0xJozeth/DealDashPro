@@ -1,5 +1,5 @@
-import { PropertyDataProps } from "../database";
-import { EnumPopularity } from "@prisma/client";
+import { PropertyDataProps, OfferProps } from "../database";
+import { EnumStatus, EnumPopularity } from "@prisma/client";
 
 // const { getUser } = getKindeServerSession();
 // const user = getUser();
@@ -75,5 +75,47 @@ export const PropertyData: PropertyDataProps[] = [
     yearBuilt: 1998,
     lotSize: 8998,
     listedAt: new Date().toLocaleDateString("en-US"),
+  },
+];
+
+export const Offers: OfferProps[] = [
+  {
+    image: "/prop6.png",
+    address1: "123 Adams St",
+    address2: "STE 201",
+    city: "Jacksonville",
+    state: "FL",
+    county: "Duval",
+    zip: "32256",
+    dateSubmitted: new Date().toLocaleDateString("en-US"),
+    offerPrice: "$741,000",
+    status: EnumStatus.Pending,
+    userId: "kp_2bffb8fd600a4643bc0acda106ab0a0e",
+  },
+  {
+    image: "/prop4.png",
+    address1: "456 Elm St",
+    address2: "STE 301",
+    city: "Miami",
+    state: "FL",
+    county: "Miami-Dade",
+    zip: "33101",
+    dateSubmitted: new Date().toLocaleDateString("en-US"),
+    offerPrice: "$820,000",
+    status: EnumStatus.Accepted,
+    userId: "kp_6b4b1e68f72340fdbb69a9c60634d084",
+  },
+  {
+    image: "/prop2.png",
+    address1: "789 Maple Ave",
+    address2: "STE 401",
+    city: "Tampa",
+    state: "FL",
+    county: "Hillsborough",
+    zip: "33601",
+    dateSubmitted: new Date().toLocaleDateString("en-US"),
+    offerPrice: "$900,000",
+    status: EnumStatus.Denied,
+    userId: "kp_1234567890abcdef",
   },
 ];

@@ -11,13 +11,16 @@ import {
   getKindeServerSession,
 } from "@kinde-oss/kinde-auth-nextjs/server";
 import { db } from "@/db";
-import { PrismaClient, Property } from "@prisma/client";
+import { Offers, PrismaClient, Property } from "@prisma/client";
 import AccountFavorites from "../_components/Favorites";
 import Card from "@/components/Card";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import AccountOffersSent from "../_components/OffersSent";
 import AccountDocuments from "../_components/Documents";
 import AccountSettings from "../_components/Settings";
+import { TableDemo } from "../_components/data-table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 function AccountPath() {
   const route = usePathname();
@@ -39,8 +42,17 @@ function AccountPath() {
     },
   });
 
+  const { data: offerData, isLoading: offerLoading } = useQuery({
+    queryKey: ["offers", userData?.id],
+    queryFn: async () => {
+      if (!userData) return [];
+      const { data } = await axios.get(`/api/user/${userData.id}/offers`);
+      return data as Offers;
+    },
+  });
+
   //Loading state...
-  if (userLoading || propertyLoading) {
+  if (userLoading || propertyLoading || offerLoading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
         Loading...
@@ -49,6 +61,7 @@ function AccountPath() {
   }
 
   console.log("propertyData", propertyData);
+  console.log("offerData", offerData);
 
   return (
     <MaxWidthWrapper className="{/*border border-red-600*/} max-w-[1280px]">
@@ -85,7 +98,17 @@ function AccountPath() {
               </div>
             </section>
           )}
-          {route === "/account/offers" && <AccountOffersSent />}
+          {route === "/account/offers" && (
+            <AccountOffersSent>
+              {Array.isArray(offerData) && offerData.length > 0 ? (
+                <TableDemo offer={offerData} user={userData} />
+              ) : (
+                <div className=" mx-auto flex items-center justify-center text-xl text-zinc-300">
+                  No offers yet. Submit an offer to see it here.
+                </div>
+              )}
+            </AccountOffersSent>
+          )}
           {route === "/account/documents" && <AccountDocuments />}
           {route === "/account/settings" && <AccountSettings />}
         </div>

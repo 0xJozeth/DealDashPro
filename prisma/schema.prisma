@@ -50,7 +50,7 @@ model Property {
   url     String? @unique @default(cuid())
   heading String
 
-  imgSrc     String?
+  imgSrc     String
   imgWidth   Int?
   imgHeight  Int?
   imgAlt     String?

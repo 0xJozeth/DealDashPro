@@ -1,34 +1,35 @@
-import Link from 'next/link';
+import { Property } from "@prisma/client";
+import Link from "next/link";
 
-const PropertyTitle = () => {
-	return (
-		<div className='flex flex-col w-full h-auto py-2'>
-			<div className='flex items-center py-4 h-[1.8rem]'>
-				<h1 className='text-black text-[26px] font-medium leading-[30px]'>
-					Quick Flipping Opportunity in Houston, TX🏠
-				</h1>
-			</div>
+const PropertyTitle = ({ data }: { data: Property }) => {
+  return (
+    <div className="flex h-auto w-full flex-col py-2">
+      <div className="flex h-[1.8rem] items-center py-4">
+        <h1 className="text-[26px] font-medium leading-[30px] text-black">
+          {data.heading}
+        </h1>
+      </div>
 
-			<div className='flex items-center justify-between py-4 h-[.625rem]'>
-				<div className='flex items-center gap-16 h-[.625rem]'>
-					<p className='text-black text-sm font-normal leading-tight'>
-						Duval County, Jacksonville, Florida
-					</p>
-					<Link
-						href='#'
-						className='text-black text-sm font-normal underline leading-[18px]'
-					>
-						<p>View full address</p>
-					</Link>
-				</div>
-				<div className='flex items-center justify-between h-[.625rem]'>
-					<p className='text-neutral-500 text-sm font-normal leading-[14px]'>
-						Deal Posted: {new Date().toDateString()}
-					</p>
-				</div>
-			</div>
-		</div>
-	);
+      <div className="flex h-[.625rem] items-center justify-between py-4">
+        <div className="flex h-[.625rem] items-center gap-16">
+          <p className="text-sm font-normal leading-tight text-black">
+            {data.county}, {data.city}, {data.state}
+          </p>
+          <Link
+            href="#"
+            className="text-sm font-normal leading-[18px] text-black underline"
+          >
+            <p>View full address</p>
+          </Link>
+        </div>
+        <div className="flex h-[.625rem] items-center justify-between">
+          <p className="text-sm font-normal leading-[14px] text-neutral-500">
+            Deal Posted: {data.createdAt.toDateString()}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default PropertyTitle;

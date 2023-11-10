@@ -19,7 +19,7 @@ import { EnumStatus, EnumPopularity } from "@prisma/client";
 
 export const PropertyData: PropertyDataProps[] = [
   {
-    heading: "NO favorite properties",
+    heading: "Amazing New home in the heart of Jacksonville",
     imgSrc: "/prop1.png",
     imgWidth: 400,
     imgHeight: 200,

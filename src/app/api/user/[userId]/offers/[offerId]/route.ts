@@ -43,7 +43,7 @@ export async function DELETE(
   if (!offer) {
     return NextResponse.error();
   }
-  console.log("params", params);
+  // console.log("params", params);
 
   return NextResponse.json(offer);
 }

@@ -1,3 +1,4 @@
+import useModalContext from "@/app/hooks/useModalContext";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
@@ -9,132 +10,121 @@ function OfferStepOne({
   user: KindeUser;
   propertyId: string;
 }) {
-  // Logic for handling offer form & validation
-  const [offerPrice, setOfferPrice] = useState<string>("");
-  const [offerPriceError, setOfferPriceError] = useState(
-    "Enter your offer price.",
-  );
+  const context = useModalContext();
 
-  const [emdAmount, setEmdAmount] = useState<string>("");
-  const [emdAmountError, setEmdAmountError] = useState(
-    "Enter an amount above $5000.",
-  );
+  let handleOfferPrice = (e: React.ChangeEvent<HTMLInputElement>) => {},
+    offerPrice,
+    offerPriceError,
+    emdAmount,
+    setEmdAmount = (value: string) => {},
+    emdAmountError,
+    setEmdAmountError = (value: string) => {},
+    reqFinancing,
+    setReqFinancing = (value: boolean) => {},
+    reqFinancingError,
+    setReqFinancingError = (value: string) => {},
+    lenderName,
+    setLenderName = (value: string) => {},
+    buyerName,
+    setBuyerName = (value: string) => {},
+    buyerCompany,
+    setBuyerCompany = (value: string) => {},
+    comments,
+    setComments = (value: string) => {};
 
-  const [reqFinancing, setReqFinancing] = useState<boolean>(false);
-  const [reqFinancingError, setReqFinancingError] =
-    useState("Select an option.");
+  if (context) {
+    handleOfferPrice = context.handleOfferPrice;
+    offerPrice = context.offerPrice;
+    offerPriceError = context.offerPriceError;
 
-  const [lenderName, setLenderName] = useState<string>("");
-  const [lenderNameError, setLenderNameError] = useState("Error");
+    emdAmount = context.emdAmount;
+    setEmdAmount = context.setEmdAmount;
 
-  const [buyerName, setBuyerName] = useState<string>("");
-  const [buyerNameError, setBuyerNameError] = useState("Error");
+    emdAmountError = context.emdAmountError;
+    setEmdAmountError = context.setEmdAmountError;
 
-  const [buyerCompany, setBuyerCompany] = useState<string>("");
-  const [buyerCompanyError, setBuyerCompanyError] = useState("Error");
+    reqFinancing = context.reqFinancing;
+    setReqFinancing = context.setReqFinancing;
 
-  const [comments, setComments] = useState<string>("");
-  const [commentsError, setCommentsError] = useState("Error");
+    reqFinancingError = context.reqFinancingError;
+    setReqFinancingError = context.setReqFinancingError;
 
-  const handleOfferPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length === 0) {
-      setOfferPriceError("Please enter an offer price.");
-    } else {
-      setOfferPriceError("");
-    }
-    setOfferPrice(e.target.value);
-  };
+    lenderName = context.lenderName;
+    setLenderName = context.setLenderName;
+
+    buyerName = context.buyerName;
+    setBuyerName = context.setBuyerName;
+
+    buyerCompany = context.buyerCompany;
+    setBuyerCompany = context.setBuyerCompany;
+
+    comments = context.comments;
+    setComments = context.setComments;
+  }
 
   // Validation function
-  const validateForm = useCallback(() => {
-    let isValid = true;
+  // const validateForm = useCallback(() => {
+  //   let isValid = true;
 
-    if (!offerPrice) {
-      setOfferPriceError("Please enter an offer price.");
-      isValid = false;
-    } else {
-      setOfferPriceError("");
-    }
+  //   if (!offerPrice) {
+  //     setOfferPriceError("Please enter an offer price.");
+  //     isValid = false;
+  //   } else {
+  //     setOfferPriceError("");
+  //   }
 
-    if (!emdAmount) {
-      setEmdAmountError("Please enter an EMD amount.");
-      isValid = false;
-    } else {
-      setEmdAmountError("");
-    }
+  //   if (!emdAmount) {
+  //     setEmdAmountError("Please enter an EMD amount.");
+  //     isValid = false;
+  //   } else {
+  //     setEmdAmountError("");
+  //   }
 
-    if (!reqFinancing) {
-      setReqFinancingError("Please select an option.");
-      isValid = false;
-    } else {
-      setReqFinancingError("");
-    }
+  //   if (!reqFinancing) {
+  //     setReqFinancingError("Please select an option.");
+  //     isValid = false;
+  //   } else {
+  //     setReqFinancingError("");
+  //   }
 
-    if (!lenderName) {
-      setLenderNameError("Please enter a lender name.");
-      isValid = false;
-    } else {
-      setLenderNameError("");
-    }
+  //   if (!lenderName) {
+  //     setLenderNameError("Please enter a lender name.");
+  //     isValid = false;
+  //   } else {
+  //     setLenderNameError("");
+  //   }
 
-    if (!buyerName) {
-      setBuyerNameError("Please enter a buyer name.");
-      isValid = false;
-    } else {
-      setBuyerNameError("");
-    }
+  //   if (!buyerName) {
+  //     setBuyerNameError("Please enter a buyer name.");
+  //     isValid = false;
+  //   } else {
+  //     setBuyerNameError("");
+  //   }
 
-    if (!buyerCompany) {
-      setBuyerCompanyError("Please enter a buyer company.");
-      isValid = false;
-    } else {
-      setBuyerCompanyError("");
-    }
+  //   if (!buyerCompany) {
+  //     setBuyerCompanyError("Please enter a buyer company.");
+  //     isValid = false;
+  //   } else {
+  //     setBuyerCompanyError("");
+  //   }
 
-    if (!comments) {
-      setCommentsError("Please enter a comment.");
-      isValid = false;
-    } else {
-      setCommentsError("");
-    }
+  //   if (!comments) {
+  //     setCommentsError("Please enter a comment.");
+  //     isValid = false;
+  //   } else {
+  //     setCommentsError("");
+  //   }
 
-    return isValid;
-  }, [
-    offerPrice,
-    emdAmount,
-    reqFinancing,
-    lenderName,
-    buyerName,
-    buyerCompany,
-    comments,
-  ]);
-
-  const handleOffer = async () => {
-    if (!validateForm()) {
-      return;
-
-      const userId = user?.id;
-      console.log("userId", userId);
-      console.log("propertyId", propertyId);
-
-      if (!userId || !propertyId) return;
-      try {
-        await axios.post(`/api/user/${userId}/offers/property/${propertyId}`, {
-          offerPrice,
-          emdAmount,
-          reqFinancing,
-          lenderName,
-          buyerName,
-          buyerCompany,
-          comments,
-        });
-      } catch (error) {
-        console.error(error);
-      }
-      // Refresh UI after the offer is deleted
-      // location.reload();
-    }
-  };
+  //   return isValid;
+  // }, [
+  //   offerPrice,
+  //   emdAmount,
+  //   reqFinancing,
+  //   lenderName,
+  //   buyerName,
+  //   buyerCompany,
+  //   comments,
+  // ]);
 
   return (
     <form className="flex h-full w-full flex-col justify-between gap-4">
@@ -181,7 +171,7 @@ function OfferStepOne({
             aria-label="finacing"
             className="mx-auto h-[50px] w-[290px] rounded-[7px] border border-zinc-400 bg-transparent text-zinc-400 outline-none"
             placeholder="Financing"
-            value={reqFinancing.toString()}
+            value={reqFinancing?.toString() || "false"}
             required
             onChange={(e) => setReqFinancing(e.target.value === "true")}
           >

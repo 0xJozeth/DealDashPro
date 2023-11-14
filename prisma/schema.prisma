@@ -27,7 +27,13 @@ model User {
   updatedAt DateTime @updatedAt
 
   favorites Favorite[]
-  offers    Offers[]
+  offers    Offer[]
+  documents Document[]
+
+  company   Company? @relation(fields: [companyId], references: [id])
+  companyId String?
+
+  @@index([companyId])
 }
 
 model Favorite {
@@ -58,21 +64,23 @@ model Property {
   views      Int?
   popularity EnumPopularity?
 
-  desc        String?
-  streetView  String?
-  mapLocation String?
+  desc           String? @db.LongText
+  matterportUrl  String?
+  streetViewUrl  String?
+  mapLocationUrl String? @db.LongText
 
-  askPrice String?
-  arv      String?
-  address1 String?
-  address2 String?
-  city     String?
-  state    String?
-  county   String?
-  zip      String?
-  beds     Int?
-  baths    Int?
-  sqft     Int?
+  winNowPrice String
+  askPrice    String?
+  arv         String?
+  address1    String?
+  address2    String?
+  city        String?
+  state       String?
+  county      String?
+  zip         String?
+  beds        Int?
+  baths       Int?
+  sqft        Int?
 
   type      String?
   parking   String?
@@ -84,14 +92,34 @@ model Property {
   updatedAt DateTime @updatedAt // Timestamp when the property was updated
 
   favorites Favorite[]
+  offers    Offer[]
+
+  company   Company? @relation(fields: [companyId], references: [id])
+  companyId String?
+
+  @@index([companyId])
 }
 
-model Offers {
+model Offer {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  image         String
+  offerPrice    String? 
+  emdAmount     String? 
+  reqFinancing Boolean?
+  lenderName    String? 
+  buyerName     String? 
+  buyerCompany  String?  
+  comments      String? @db.LongText
+
+  documents Document[] 
+
+  accepted      Boolean? @default(false)
+  acceptedAt String?
+
+
+  image         String?
   address1      String?
   address2      String?
   city          String?
@@ -99,12 +127,71 @@ model Offers {
   county        String?
   zip           String?
   dateSubmitted String?
-  offerPrice    String?
   status        EnumStatus?
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
 
+  property   Property? @relation(fields: [propertyId], references: [id])
+  propertyId String?
+
+  company   Company? @relation(fields: [companyId], references: [id])
+  companyId String?
+
+  @@index([companyId])
+  @@index([userId])
+  @@index([propertyId])
+}
+
+model Company {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  companyName        String
+  companyLogo        String?
+  companyUrl         String?
+  companyListingsUrl String?
+  companyEmail       String
+  companyPhone       String
+  companyAddress1    String?
+  companyAddress2    String?
+  companyCity        String?
+  companyState       String?
+  companyZip         String?
+  companyCountry     String?
+
+  companyDescription String? @db.LongText
+
+  companyFacebook  String?
+  companyTwitter   String?
+  companyInstagram String?
+  companyLinkedin  String?
+  companyYoutube   String?
+
+  offers     Offer[]
+  properties Property[]
+  users      User[]
+}
+
+model Document {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  uploadStatus UploadStatus @default(PENDING)
+
+  name String
+  url  String
+  key String
+
+  offer   Offer @relation(fields: [offerId], references: [id])
+  offerId String
+
+  user User? @relation(fields: [userId], references: [id])
+  userId String?
+
+  @@index([offerId])
   @@index([userId])
 }
 
@@ -126,4 +213,11 @@ enum EnumPopularity {
 enum EnumFavoriteCategory {
   NeedsRehab
   LightRenovation
+}
+
+enum UploadStatus {
+  PENDING
+  PROCESSING
+  FAILED
+  SUCCESS
 }

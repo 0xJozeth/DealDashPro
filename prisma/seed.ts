@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Offers, PropertyData } from "./data";
+import { Offers, PropertyData, companiesData } from "./data";
 
 const prisma = new PrismaClient();
 
@@ -8,8 +8,11 @@ async function main() {
     await prisma.property.createMany({
       data: PropertyData,
     });
-    await prisma.offers.createMany({
+    await prisma.offer.createMany({
       data: Offers,
+    });
+    await prisma.company.createMany({
+      data: companiesData,
     });
     console.log("Added offer data");
   } catch (e) {

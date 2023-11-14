@@ -11,6 +11,11 @@ export async function GET(
     where: {
       id: id,
     },
+    include: {
+      company: {
+        include: { properties: true },
+      },
+    },
   });
   return NextResponse.json(property);
 }

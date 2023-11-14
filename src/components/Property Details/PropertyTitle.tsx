@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const PropertyTitle = ({ property }: { property: Property }) => {
   return (
-    <div className="flex h-auto w-full flex-col py-2">
+    <div className="mt-6 flex h-auto w-full flex-col py-2">
       <div className="flex h-[1.8rem] items-center py-4">
         <h1 className="text-[26px] font-medium leading-[30px] text-black">
           {property.heading}

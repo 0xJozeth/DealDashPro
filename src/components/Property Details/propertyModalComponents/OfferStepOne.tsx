@@ -14,7 +14,9 @@ function OfferStepOne({
 
   let handleOfferPrice = (e: React.ChangeEvent<HTMLInputElement>) => {},
     offerPrice,
+    setOfferPrice = (value: string) => {},
     offerPriceError,
+    setOfferPriceError = (value: string) => {},
     emdAmount,
     setEmdAmount = (value: string) => {},
     emdAmountError,
@@ -35,7 +37,10 @@ function OfferStepOne({
   if (context) {
     handleOfferPrice = context.handleOfferPrice;
     offerPrice = context.offerPrice;
+    setOfferPrice = context.setOfferPrice;
+
     offerPriceError = context.offerPriceError;
+    setOfferPriceError = context.setOfferPriceError;
 
     emdAmount = context.emdAmount;
     setEmdAmount = context.setEmdAmount;
@@ -137,11 +142,11 @@ function OfferStepOne({
               offerPriceError && "border-red-400 hover:border-red-500"
             } border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
             placeholder="Offer Price"
-            type="number"
+            type="text"
             value={offerPrice}
             required
-            onChange={handleOfferPrice}
-            onBlur={() => handleOfferPrice}
+            onChange={(e) => setOfferPrice(e.target.value)}
+            // onBlur={() => offerPrice}
           />
           {offerPriceError && (
             <div className="h-4 text-sm text-red-400">{offerPriceError}</div>
@@ -153,7 +158,7 @@ function OfferStepOne({
             aria-label="earnest money deposit amount"
             className=" duration-30 mx-auto h-[50px] w-[290px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500"
             placeholder="EMD Amount"
-            type="number"
+            type="text"
             value={emdAmount}
             min={5000}
             required
@@ -171,11 +176,13 @@ function OfferStepOne({
             aria-label="finacing"
             className="mx-auto h-[50px] w-[290px] rounded-[7px] border border-zinc-400 bg-transparent text-zinc-400 outline-none"
             placeholder="Financing"
-            value={reqFinancing?.toString() || "false"}
+            value={reqFinancing?.toString() === "false" ? "false" : "true"}
             required
-            onChange={(e) => setReqFinancing(e.target.value === "true")}
+            onChange={(e) =>
+              setReqFinancing(e.target.value === "false" ? false : true)
+            }
           >
-            <option value="">Select an option.</option>
+            <option value="Select an option">Select an option.</option>
             <option value="true">Yes, I require financing.</option>
             <option value="false">Cash</option>
           </select>

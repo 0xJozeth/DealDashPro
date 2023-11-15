@@ -14,9 +14,11 @@ export interface FormContextType {
   prevHide: boolean;
   nextHide: boolean;
   submitHide: boolean;
-  offerPrice: string;
-  offerPriceError: string;
   handleOfferPrice: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  offerPrice: string;
+  setOfferPrice: React.Dispatch<React.SetStateAction<string>>;
+  offerPriceError: string;
+  setOfferPriceError: React.Dispatch<React.SetStateAction<string>>;
   emdAmount: string;
   setEmdAmount: React.Dispatch<React.SetStateAction<string>>;
   emdAmountError: string;
@@ -183,9 +185,11 @@ export const FormProvider = ({
         prevHide,
         nextHide,
         submitHide,
-        offerPrice,
-        offerPriceError,
         handleOfferPrice,
+        offerPrice,
+        setOfferPrice,
+        offerPriceError,
+        setOfferPriceError,
         emdAmount,
         setEmdAmount,
         emdAmountError,

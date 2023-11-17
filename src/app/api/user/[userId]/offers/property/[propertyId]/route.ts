@@ -9,7 +9,7 @@ export async function POST(
   const { userId, propertyId } = params;
   const offerDetails = await request.json();
 
-  console.log("absolutebullshit", offerDetails);
+  console.log("offerDetails", offerDetails);
 
   const newOffer = await db.offer.create({
     data: {

@@ -11,9 +11,7 @@ import FormContext, {
   FormContextType,
   FormProvider,
 } from "@/app/context/ModalContext";
-import OfferStepOne from "@/components/Property Details/propertyModalComponents/OfferStepOne";
-import OfferStepThree from "@/components/Property Details/propertyModalComponents/OfferStepThree";
-import OfferStepTwo from "@/components/Property Details/propertyModalComponents/OfferStepTwo";
+
 import { db } from "@/db";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Property } from "@prisma/client";
@@ -22,13 +20,10 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { SetStateAction, use, useState } from "react";
+import { SetStateAction, useState } from "react";
 import useModalContext from "@/app/hooks/useModalContext";
 
 const PropertyDetailsPage = () => {
-  // Destructure the form context
-  // const { page, setPage, data, title, canSubmit } = useModalContext();
-
   const [toggleModal, setToggleModal] = useState(false);
   const closeModal = () => {
     setToggleModal(false);
@@ -68,25 +63,19 @@ const PropertyDetailsPage = () => {
     return <div className="min-h-screen">Loading...</div>;
   }
 
-  const step1 = <OfferStepOne user={user} propertyId={property.id} />;
-  // const step2 = <OfferStepTwo user={user} propertyId={property.id} />;
-  // const step3 = <OfferStepThree user={user} propertyId={property.id} />;
-
   return (
     <>
       <MaxWidthWrapper>
-        <FormProvider>
-          {toggleModal && (
-            <PropertyModal
-              user={user}
-              propertyId={property.id}
-              toggleModal={toggleModal}
-              setToggleModal={setToggleModal}
-              closeModal={closeModal}
-              steps={[step1 /* step2, step3 */]}
-            />
-          )}
-        </FormProvider>
+        {toggleModal && (
+          <PropertyModal
+            user={user}
+            propertyId={property.id}
+            winNowPrice={property.winNowPrice}
+            toggleModal={toggleModal}
+            setToggleModal={setToggleModal}
+            closeModal={closeModal}
+          />
+        )}
 
         <PropertyTitle property={property} />
         <PropertyImages property={property} />

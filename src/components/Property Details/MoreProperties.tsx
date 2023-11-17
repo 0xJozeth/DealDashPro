@@ -20,8 +20,8 @@ const PropertyCards = ({
   const company: CompanyWithProperties = property.company;
   const companyProperties: Property[] = company.properties;
 
-  console.log("COMPANY", company);
-  console.log("PROPERTY", companyProperties);
+  // console.log("COMPANY", company);
+  // console.log("PROPERTY", companyProperties);
   return (
     <section
       id="media"

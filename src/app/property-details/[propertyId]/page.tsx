@@ -25,6 +25,7 @@ import useModalContext from "@/app/hooks/useModalContext";
 
 const PropertyDetailsPage = () => {
   const [toggleModal, setToggleModal] = useState(false);
+  const [winNowModal, setWinNowModal] = useState(false);
   const closeModal = () => {
     setToggleModal(false);
   };
@@ -63,6 +64,8 @@ const PropertyDetailsPage = () => {
     return <div className="min-h-screen">Loading...</div>;
   }
 
+  const winNowPrice = property.winNowPrice;
+
   return (
     <>
       <MaxWidthWrapper>
@@ -70,16 +73,17 @@ const PropertyDetailsPage = () => {
           <PropertyModal
             user={user}
             propertyId={property.id}
-            winNowPrice={property.winNowPrice}
-            toggleModal={toggleModal}
-            setToggleModal={setToggleModal}
             closeModal={closeModal}
+            winNowModal={winNowModal}
+            winNowPrice={winNowPrice}
           />
         )}
 
         <PropertyTitle property={property} />
         <PropertyImages property={property} />
         <PropertyMain
+          winNowModal={winNowModal}
+          setWinNowModal={setWinNowModal}
           property={property}
           toggleModal={toggleModal}
           setToggleModal={setToggleModal}

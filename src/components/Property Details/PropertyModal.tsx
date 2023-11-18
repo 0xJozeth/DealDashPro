@@ -2,8 +2,8 @@ import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
-import React, { FormEvent, ReactElement, useState } from "react";
-import { set, useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import type { FieldValues } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,27 +14,19 @@ import { useUploadThing } from "@/lib/uploadthing";
 import { useToast } from "../ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
 import { useRouter } from "next/navigation";
-import next from "next";
 import Link from "next/link";
 
 export type offerSchemaType = z.infer<typeof offerSchema>;
 
 export const offerSchema = z.object({
-  offerPrice: z
-    .string()
-    .regex(
-      /^\$?(\d{1,3}(,\d{3})*|(\d+))(\.\d{0,2})?$/,
-      "Offer price must be a valid dollar amount.",
-    )
-    .transform((value) => parseFloat(value.replace(/[^0-9.]/g, ""))),
-  emdAmount: z
-    .string()
-    .regex(
-      /^\$?(\d{1,3}(,\d{3})*|(\d+))(\.\d{0,2})?$/,
-      "Offer price must be a valid dollar amount.",
-    )
-    .transform((value) => parseFloat(value.replace(/[^0-9.]/g, "")))
-    .refine((value) => value >= 5000, "EMD Amount must be at least $5,000."),
+  offerPrice: z.string().refine((value) => {
+    const number = Number(value.replace(/[^0-9.]/g, ""));
+    return !isNaN(number) && number > 0;
+  }, "Please enter a valid number"),
+  emdAmount: z.string().refine((value) => {
+    const number = Number(value.replace(/[^0-9.]/g, ""));
+    return !isNaN(number) && number > 0;
+  }, "Please enter a valid number"),
   reqFinancing: z
     .string()
     .refine((value) => value !== "", "You must select an option."),
@@ -51,17 +43,21 @@ export const offerSchema = z.object({
 });
 
 function PropertyModal({
-  toggleModal,
-  setToggleModal,
+  // toggleModal,
+  // setToggleModal,
   closeModal,
   user,
   propertyId,
+  winNowModal,
+  winNowPrice,
 }: {
-  toggleModal: boolean;
-  setToggleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  // toggleModal: boolean;
+  // setToggleModal: React.Dispatch<React.SetStateAction<boolean>>;
   closeModal: () => void;
   user: KindeUser;
   propertyId: string;
+  winNowModal: boolean;
+  winNowPrice: string;
 }) {
   // Destructure useForm props and methods
   const {
@@ -72,7 +68,12 @@ function PropertyModal({
     reset,
     clearErrors,
     setValue,
-  } = useForm<offerSchemaType>({ resolver: zodResolver(offerSchema) });
+  } = useForm<offerSchemaType>({
+    resolver: zodResolver(offerSchema),
+    defaultValues: {
+      offerPrice: winNowModal ? winNowPrice : "",
+    },
+  });
 
   // Logic for steps
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -80,6 +81,8 @@ function PropertyModal({
   const [confirmOffer, setConfirmOffer] = useState(false);
   const [proceedToAcceptance, setProceedToAcceptance] = useState(false);
   const [winNowModalContent, setWinNowModalContent] = useState(false);
+
+  console.log("winNowModal", winNowModal);
 
   const steps = [
     {
@@ -277,44 +280,124 @@ function PropertyModal({
             >
               <>
                 <div className="flex h-full w-full flex-col justify-between gap-4">
-                  <div className="flex w-full justify-between gap-4">
-                    <div className="flex flex-col gap-1">
-                      <input
-                        {...register("offerPrice")}
-                        onChange={() => clearErrors("offerPrice")}
-                        title="Enter your offer price."
-                        aria-label="offer price"
-                        type="text"
-                        placeholder="Offer Price"
-                        className={` duration-30 mx-auto h-[50px] w-[280px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-                      />
-                      {errors.offerPrice &&
-                        typeof errors.offerPrice.message === "string" && (
-                          <div className="shake h-4 text-sm text-red-400">
-                            {errors.offerPrice.message}
-                          </div>
-                        )}
+                  {!winNowModal ? (
+                    <div className="flex w-full justify-between gap-4">
+                      <div className="flex flex-col gap-1">
+                        <input
+                          {...register("offerPrice")}
+                          onChange={(e) => {
+                            // Clear errors when the input changes
+                            clearErrors("offerPrice");
+                            // Prevent non-numeric input
+                            const value = e.target.value.replace(
+                              /[^0-9.]/g,
+                              "",
+                            );
+                            // Format the value as a dollar amount
+                            const formattedValue =
+                              "$" + Number(value).toLocaleString();
+                            // Update the form value
+                            setValue("offerPrice", formattedValue);
+                          }}
+                          title="Enter your offer price."
+                          aria-label="offer price"
+                          type="text"
+                          placeholder="Offer Price"
+                          className={` duration-30 mx-auto h-[50px] w-[280px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                        />
+                        {errors.offerPrice &&
+                          typeof errors.offerPrice.message === "string" && (
+                            <div className="shake h-4 text-sm text-red-400">
+                              {errors.offerPrice.message}
+                            </div>
+                          )}
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <input
+                          {...register("emdAmount")}
+                          onChange={(e) => {
+                            // Clear errors when the input changes
+                            clearErrors("emdAmount");
+                            // Prevent non-numeric input
+                            const value = e.target.value.replace(
+                              /[^0-9.]/g,
+                              "",
+                            );
+                            // Format the value as a dollar amount
+                            const formattedValue =
+                              "$" + Number(value).toLocaleString();
+                            // Update the form value
+                            setValue("emdAmount", formattedValue);
+                          }}
+                          name="emdAmount"
+                          title="Enter an amount above $5000."
+                          aria-label="earnest money deposit amount"
+                          className=" duration-30 mx-auto h-[50px] w-[280px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500"
+                          placeholder="EMD Amount"
+                          type="text"
+                          min={5000}
+                        />
+                        {errors.emdAmount &&
+                          typeof errors.emdAmount.message === "string" && (
+                            <div className="shake h-4 text-sm text-red-400">
+                              {errors.emdAmount.message}
+                            </div>
+                          )}
+                      </div>
                     </div>
-                    <div className="flex flex-col gap-1">
-                      <input
-                        {...register("emdAmount")}
-                        onChange={() => clearErrors("emdAmount")}
-                        name="emdAmount"
-                        title="Enter an amount above $5000."
-                        aria-label="earnest money deposit amount"
-                        className=" duration-30 mx-auto h-[50px] w-[280px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500"
-                        placeholder="EMD Amount"
-                        type="text"
-                        min={5000}
-                      />
-                      {errors.emdAmount &&
-                        typeof errors.emdAmount.message === "string" && (
-                          <div className="shake h-4 text-sm text-red-400">
-                            {errors.emdAmount.message}
-                          </div>
-                        )}
+                  ) : (
+                    <div className="flex w-full justify-between gap-4">
+                      <div className="flex flex-col gap-1">
+                        <input
+                          {...register("offerPrice")}
+                          title="Enter your offer price."
+                          readOnly={winNowModal}
+                          aria-label="offer price"
+                          type="text"
+                          placeholder={winNowPrice}
+                          className={`duration-30 mx-auto h-[50px] w-[280px] rounded-[7px] border border-zinc-400 bg-transparent px-2 text-[#58A053] outline-none transition-all hover:border-zinc-500`}
+                        />
+                        {errors.offerPrice &&
+                          typeof errors.offerPrice.message === "string" && (
+                            <div className="shake h-4 text-sm text-red-400">
+                              {errors.offerPrice.message}
+                            </div>
+                          )}
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <input
+                          {...register("emdAmount")}
+                          onChange={(e) => {
+                            // Clear errors when the input changes
+                            clearErrors("emdAmount");
+                            // Prevent non-numeric input
+                            const value = e.target.value.replace(
+                              /[^0-9.]/g,
+                              "",
+                            );
+                            // Format the value as a dollar amount
+                            const formattedValue =
+                              "$" + Number(value).toLocaleString();
+                            // Update the form value
+                            setValue("emdAmount", formattedValue);
+                          }}
+                          name="emdAmount"
+                          title="Enter an amount above $5000."
+                          aria-label="earnest money deposit amount"
+                          className=" duration-30 mx-auto h-[50px] w-[280px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500"
+                          placeholder="EMD Amount"
+                          type="text"
+                          min={5000}
+                        />
+                        {errors.emdAmount &&
+                          typeof errors.emdAmount.message === "string" && (
+                            <div className="shake h-4 text-sm text-red-400">
+                              {errors.emdAmount.message}
+                            </div>
+                          )}
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <div className="flex w-full justify-between gap-4">
                     <div className="flex flex-col gap-1">
                       <select
@@ -445,7 +528,13 @@ function PropertyModal({
                         onClick={handleSubmit(submitOffer)}
                         className={`duration-30 h-[45px] w-1/2 rounded-[5px]  bg-[#58A053] text-base font-normal leading-normal text-white shadow-none transition-all hover:border-none  hover:bg-[#58A053] hover:text-white hover:shadow-sm`}
                       >
-                        {isSubmitting ? "Submitting..." : "SEEEEND ITTT"}
+                        {isSubmitting ? (
+                          <div className="flex items-center justify-center gap-1 text-center text-sm text-white">
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          </div>
+                        ) : (
+                          "Confirm Offer"
+                        )}
                       </button>
                     </div>
                   )}

@@ -18,10 +18,15 @@ import { useState } from "react";
 const PropertyMain = ({
   property,
   toggleModal,
+  winNowModal,
   setToggleModal,
+  setWinNowModal,
   closeModal,
 }: {
+  setWinNowModal: React.Dispatch<React.SetStateAction<boolean>>;
   toggleModal: boolean;
+  winNowModal: boolean;
+
   setToggleModal: React.Dispatch<React.SetStateAction<boolean>>;
   closeModal: () => void;
 
@@ -82,7 +87,10 @@ const PropertyMain = ({
               </p>
             </div>
             <div
-              onClick={() => setToggleModal(true)}
+              onClick={() => {
+                setToggleModal(true);
+                setWinNowModal(false);
+              }}
               className="hover:cursor-pointer"
             >
               <p className="text-xs font-semibold underline">
@@ -103,26 +111,6 @@ const PropertyMain = ({
               } overflow-hidden text-base font-normal leading-normal text-black transition-all duration-300`}
             >
               {property.desc}
-              Incididunt id non deserunt dolor. Id magna sint laborum anim nulla
-              aliquip ullamco ut esse deserunt elit sit laborum. Aliqua
-              cupidatat ad duis reprehenderit. Sint ullamco excepteur officia id
-              tempor. Nulla sint mollit proident id duis minim magna. Ex officia
-              nisi deserunt nisi esse fugiat ipsum excepteur. Nostrud magna enim
-              ad id anim aliquip esse laborum in nostrud. Reprehenderit amet
-              culpa exercitation aliqua. Aliquip sint sunt sint consequat fugiat
-              dolore sit labore. Incididunt cupidatat ea exercitation excepteur.
-              Nostrud et labore nulla occaecat ut anim mollit fugiat dolore
-              velit nisi minim dolore. Adipisicing reprehenderit id fugiat
-              aliquip dolore laborum eiusmod officia eiusmod minim. Quis nisi
-              minim do eu nisi minim labore ex eiusmod culpa officia cupidatat
-              nostrud in. Enim ullamco aliqua minim amet. Enim et pariatur
-              laboris deserunt minim cupidatat veniam. Ea adipisicing cillum non
-              velit. Minim reprehenderit exercitation sint et fugiat nulla nisi
-              sit excepteur in est magna. Excepteur proident eu pariatur mollit
-              veniam voluptate adipisicing officia est fugiat officia. Mollit do
-              Lorem sunt excepteur id. Ex cillum qui Lorem labore sint cillum
-              elit amet voluptate anim ut enim laborum est. Duis consequat nisi
-              nostrud esse incididunt labore deserunt sint.
             </p>
             <div
               onClick={handleDescViewMore}
@@ -218,13 +206,6 @@ const PropertyMain = ({
                 </h3>
               </div>
               <div className="">
-                {/* <Image
-                src={"/matterport1.png"}
-                width={400}
-                height={264}
-                alt={"logo"}
-                className="object-cover blur-sm"
-              /> */}
                 <div className="w-[425px] ">
                   <div className="relative items-center justify-center rounded-[10px]">
                     <div
@@ -315,15 +296,6 @@ const PropertyMain = ({
               </h3>
               <div className="relative w-[425px] overflow-hidden rounded-[10px]">
                 <div className="relative">
-                  {/* <Image
-                    src={"/location1.png"}
-                    width={400}
-                    height={264}
-                    alt={"logo"}
-                    className={`rounded-[10px] border-0 object-cover ${
-                      !user && "pointer-events-none blur-sm"
-                    }`}
-                  /> */}
                   <iframe
                     title="map"
                     width="425px"
@@ -358,21 +330,29 @@ const PropertyMain = ({
             {/* TODO: mapping for buttons */}
             <div className="flex flex-col items-center justify-center gap-4 py-4">
               <div
-                onClick={() => setToggleModal(true)}
-                id="makeAnOfferButton"
+                onClick={() => {
+                  setToggleModal(true);
+                  setWinNowModal(false);
+                }}
+                id="makeAnOffefalseButton"
                 className="flex h-[45px] w-[250px] min-w-[175px] items-center justify-center rounded-[5px] bg-[#58A053] hover:cursor-pointer"
               >
                 <p className="text-base font-medium leading-normal text-white">
                   Make an offer
                 </p>
               </div>
-              <Link href="#" className="group">
-                <div className="flex h-[45px] w-[250px] min-w-[175px] items-center justify-center rounded-[5px] border border-black transition-all duration-300 group-hover:border-[#58A053]">
-                  <p className="text-base font-medium leading-normal text-black transition-all duration-300 group-hover:text-[#58A053]">
-                    Win it now for {property.winNowPrice}
-                  </p>
-                </div>
-              </Link>
+              <div
+                onClick={() => {
+                  setToggleModal(true);
+                  setWinNowModal(true);
+                }}
+                id="winNowButton"
+                className=" flex h-[45px] w-[250px] min-w-[175px] items-center justify-center rounded-[5px] border border-black transition-all duration-300 hover:cursor-pointer group-hover:border-[#58A053]"
+              >
+                <p className="text-base font-medium leading-normal text-black transition-all duration-300 group-hover:text-[#58A053]">
+                  Win it now for {property.winNowPrice}
+                </p>
+              </div>
 
               <div className="flex h-[45px] w-[250px] min-w-[175px] items-center justify-center">
                 <p className="text-center text-sm font-normal leading-[14px] text-black">

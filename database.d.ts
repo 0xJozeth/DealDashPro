@@ -19,9 +19,11 @@ interface PropertyDataProps {
   popularity: EnumPopularity;
 
   desc: string;
-  streetView: string;
-  mapLocation: string;
+  matterportUrl: string;
+  streetViewUrl: string;
+  mapLocationUrl: string;
 
+  winNowPrice: string;
   askPrice: string;
   arv: string;
   address1: string;
@@ -43,6 +45,16 @@ interface PropertyDataProps {
 }
 
 interface OfferProps {
+  offerPrice: string;
+  emdAmount: string;
+  reqFinancing: boolean;
+  lenderName: string;
+  buyerName: string;
+  buyerCompany: string;
+  comments: string;
+
+  accepted: true;
+  acceptedAt: string;
   image: string;
   address1: string;
   address2: string;
@@ -53,10 +65,35 @@ interface OfferProps {
   dateSubmitted: string;
   offerPrice: string;
   status: EnumStatus;
-  userId: string;
 }
 
 interface FavoritesDataProps {
   propertyId: string;
   userId: string;
 }
+
+interface CompanyProps {
+  companyName: string;
+  companyLogo: string;
+  companyListingsUrl: string;
+  companyUrl: string;
+  companyEmail: string;
+  companyPhone: string;
+  companyAddress1: string;
+  companyAddress2: string;
+  companyCity: string;
+  companyState: string;
+  companyZip: string;
+  companyCountry: string;
+
+  companyDescription: string;
+
+  companyFacebook: string;
+  companyTwitter: string;
+  companyInstagram: string;
+  companyLinkedin: string;
+  companyYoutube: string;
+}
+
+type PropertyWithCompany = Property & { company: Company };
+type CompanyWithProperties = Company & { properties: Property[] };

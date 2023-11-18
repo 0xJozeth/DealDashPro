@@ -1,3 +1,4 @@
+// import { db } from "@/db";
 import { db } from "@/db";
 import { NextResponse } from "next/server";
 
@@ -15,3 +16,5 @@ export async function GET(
 
   return NextResponse.json(offers);
 }
+
+// TODO: CHANGE THIS TO SIMPLY LOOK THROUGH ALL OFFERS

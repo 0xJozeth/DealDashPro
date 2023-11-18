@@ -1,102 +1,103 @@
-import Image from 'next/image';
+import Image from "next/image";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImages } from '@fortawesome/free-solid-svg-icons';
-import Link from 'next/link';
-const PropertyImages = () => {
-	return (
-		<section className='relative flex gap-1 my-2 w-full rounded-[10px] overflow-hidden'>
-			{/* Featured Property Image */}
-			<Link href='#'>
-				<div className='flex relative min-w-[50%]'>
-					<Image
-						src='/demo1.png'
-						alt=''
-						width={800}
-						height={800}
-						className='object-cover aspect-square hover:scale-95 transition-all duration-30'
-					/>
-					<div className='absolute inset-0 bg-zinc-700 opacity-0 hover:opacity-20 transition-all duration-300'></div>
-				</div>
-			</Link>
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faImages } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
+import { Property } from "@prisma/client";
+const PropertyImages = ({ property }: { property: Property }) => {
+  return (
+    <section className="relative my-2 flex w-full gap-1 overflow-hidden rounded-[10px]">
+      {/* Featured Property Image */}
+      <Link href="#">
+        <div className="relative flex min-w-[50%]">
+          <Image
+            src={property.imgSrc}
+            alt=""
+            width={800}
+            height={800}
+            className="duration-30 aspect-square object-cover transition-all hover:scale-95"
+          />
+          <div className="absolute inset-0 bg-zinc-700 opacity-0 transition-all duration-300 hover:opacity-20"></div>
+        </div>
+      </Link>
 
-			{/* Gallery of Property Images */}
-			<div className='grid grid-cols-2 gap-1 w-auto h-auto'>
-				<div className='flex relative'>
-					<Link href='#'>
-						<Image
-							src='/demo2.png'
-							alt=''
-							width={400}
-							height={400}
-							className='object-cover aspect-square hover:scale-95 transition-all duration-30'
-						/>
-						<div className='absolute inset-0 bg-zinc-700 opacity-0 hover:opacity-20 transition-all duration-300'></div>
-					</Link>
-				</div>
+      {/* Gallery of Property Images */}
+      <div className="grid h-auto w-auto grid-cols-2 gap-1">
+        <div className="relative flex">
+          <Link href="#">
+            <Image
+              src="/demo2.png"
+              alt=""
+              width={400}
+              height={400}
+              className="duration-30 aspect-square object-cover transition-all hover:scale-95"
+            />
+            <div className="absolute inset-0 bg-zinc-700 opacity-0 transition-all duration-300 hover:opacity-20"></div>
+          </Link>
+        </div>
 
-				<div className='flex relative'>
-					<Link href='#'>
-						<Image
-							src='/demo3.png'
-							alt=''
-							width={400}
-							height={400}
-							className='object-cover aspect-square hover:scale-95 transition-all duration-30'
-						/>
-						<div className='absolute inset-0 bg-zinc-700 opacity-0 hover:opacity-20 transition-all duration-300'></div>
-					</Link>
-				</div>
+        <div className="relative flex">
+          <Link href="#">
+            <Image
+              src="/demo3.png"
+              alt=""
+              width={400}
+              height={400}
+              className="duration-30 aspect-square object-cover transition-all hover:scale-95"
+            />
+            <div className="absolute inset-0 bg-zinc-700 opacity-0 transition-all duration-300 hover:opacity-20"></div>
+          </Link>
+        </div>
 
-				<Link href='#'>
-					<div className='flex relative'>
-						<Image
-							src='/demo4.png'
-							alt=''
-							width={400}
-							height={400}
-							className='object-cover aspect-square hover:scale-95 transition-all duration-30'
-						/>
-						<div className='absolute inset-0 bg-zinc-700 opacity-0 hover:opacity-20 transition-all duration-300'></div>
-					</div>
-				</Link>
+        <Link href="#">
+          <div className="relative flex">
+            <Image
+              src="/demo4.png"
+              alt=""
+              width={400}
+              height={400}
+              className="duration-30 aspect-square object-cover transition-all hover:scale-95"
+            />
+            <div className="absolute inset-0 bg-zinc-700 opacity-0 transition-all duration-300 hover:opacity-20"></div>
+          </div>
+        </Link>
 
-				<div className='flex relative'>
-					<Link href='#'>
-						<Image
-							src='/demo5.png'
-							alt=''
-							width={400}
-							height={400}
-							className='object-cover aspect-square hover:scale-95 transition-all duration-30'
-						/>
-						<div className='absolute inset-0 bg-zinc-700 opacity-0 hover:opacity-20 transition-all duration-300'></div>
-					</Link>
+        <div className="relative flex">
+          <Link href="#">
+            <Image
+              src="/demo5.png"
+              alt=""
+              width={400}
+              height={400}
+              className="duration-30 aspect-square object-cover transition-all hover:scale-95"
+            />
+            <div className="absolute inset-0 bg-zinc-700 opacity-0 transition-all duration-300 hover:opacity-20"></div>
+          </Link>
 
-					{/* Show all photos button */}
-					<Link href='#'>
-						<div
-							id='galleryButtonWrapper'
-							className='absolute bottom-0 right-0 mr-[19px] mb-[21px] z-[100] group'
-						>
-							<div
-								id='gallerybutton'
-								className=' flex justify-center items-center h-7 gap-1  bg-white border border-black rounded-[5px] w-[131px] shadow-lg group-hover:border-white group-hover:bg-zinc-600  group-hover:text-white transition-all duration-300'
-							>
-								<FontAwesomeIcon
-									icon={faImages}
-									className=' group-hover:text-white'
-								/>
-								<p className='text-black group-hover:text-white text-xs font-normal leading-tight whitespace-nowrap'>
-									Show all photos
-								</p>
-							</div>
-						</div>
-					</Link>
-				</div>
-			</div>
-		</section>
-	);
+          {/* Show all photos button */}
+          <Link href="#">
+            <div
+              id="galleryButtonWrapper"
+              className="group absolute bottom-0 right-0 z-[100] mb-[21px] mr-[19px]"
+            >
+              <div
+                id="gallerybutton"
+                className=" flex h-7 w-[131px] items-center justify-center  gap-1 rounded-[5px] border border-black bg-white shadow-lg transition-all duration-300  group-hover:border-white group-hover:bg-zinc-600 group-hover:text-white"
+              >
+                <FontAwesomeIcon
+                  icon={faImages}
+                  className=" group-hover:text-white"
+                />
+                <p className="whitespace-nowrap text-xs font-normal leading-tight text-black group-hover:text-white">
+                  Show all photos
+                </p>
+              </div>
+            </div>
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default PropertyImages;

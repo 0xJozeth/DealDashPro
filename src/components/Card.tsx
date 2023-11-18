@@ -49,8 +49,7 @@ function Card({
   // console.log("CARD propertyData", propertyData);
 
   return (
-    // <Link href={`/property-details/${propertyData.url}`}>
-    <Link href={`/property-details/${propertyData.url}`}>
+    <Link href={`/property-details/${propertyData.id}`}>
       <div
         id="cardMainWrapper"
         className="relative flex h-full w-full min-w-[250px] flex-col items-center justify-center overflow-hidden rounded-lg p-2"

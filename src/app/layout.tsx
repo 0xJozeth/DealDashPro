@@ -9,6 +9,7 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { Toaster } from "@/components/ui/toaster";
 
 //setting to `false` prevents Font Awesome core SVG library from inserting <style> elements into the <head> of the page.
 config.autoAddCss = false;
@@ -37,6 +38,7 @@ export default function RootLayout({
             lato.className,
           )}
         >
+          <Toaster />
           <Header />
           <main className="m-0 p-0">{children}</main>
           <Footer />

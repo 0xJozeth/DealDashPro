@@ -2,7 +2,6 @@ import { db } from "@/db";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  console.log("GET function called for property/route.ts");
   const property = await db.property.findMany();
   return NextResponse.json(property);
 }

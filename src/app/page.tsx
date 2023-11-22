@@ -68,11 +68,6 @@ export default function Home() {
     },
   });
 
-  console.log("HOME pathname", pathname);
-  console.log("HOME searchParams", searchParams);
-
-  // console.log("NEW propertyData", propertyData);
-
   return (
     <>
       <MaxWidthWrapper>

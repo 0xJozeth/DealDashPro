@@ -49,12 +49,10 @@ export function TableDemo({
   const [offerId, setOfferId] = useState("");
 
   const userId = user.id;
-  console.log("userId", userId);
 
   const handleConfirm = async (id: string) => {
     // Toggle confirmation modal useState
     setToggleModal(!toggleModal);
-    console.log("toggleModal", toggleModal);
   };
 
   const handleCancel = async () => {
@@ -189,7 +187,6 @@ export function TableDemo({
                   className="flex w-full items-center justify-center"
                   onClick={() => {
                     setOfferId(offers.id);
-                    console.log("offerId", offerId);
                     setToggleModal(true);
                   }}
                 >

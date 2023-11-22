@@ -61,9 +61,6 @@ function AccountPath() {
     );
   }
 
-  console.log("propertyData", propertyData);
-  console.log("offerData", offerData);
-
   return (
     <MaxWidthWrapper className="{/*border border-red-600*/} max-w-[1280px]">
       <section className="{/*border border-red-600*/} flex min-h-screen flex-col justify-start p-2">

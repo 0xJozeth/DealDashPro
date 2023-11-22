@@ -35,7 +35,7 @@ function AccountDocuments() {
       if (!data.user.id) {
         return;
       }
-      console.log("data.user.id:", data.user.id);
+
       setUserId(data.user.id);
       const userId = data.user.id;
       return data.user.id as KindeUser;
@@ -47,15 +47,11 @@ function AccountDocuments() {
     queryFn: async () => {
       // const userId = user?.id;
       const { data } = await axios.get(`/api/user/${userId}/documents`);
-      console.log("documents:", documents);
       return data;
     },
   });
 
   const HandleDocumentDelete = async (documentId: string) => {
-    console.log("HandleDocumentDelete called");
-    console.log("userId???:", userId);
-    console.log("documentId???:", documentId);
     if (!userId || userLoading) {
       // userId is undefined, handle this case as needed
       console.error("User ID is undefined");
@@ -66,7 +62,6 @@ function AccountDocuments() {
     );
     // After a successful deletion, invalidate the 'documents' query
     queryClient.invalidateQueries(["documents", user]);
-    console.log("deleted document:", res);
   };
 
   return (
@@ -156,7 +151,6 @@ const UploadDropZone = () => {
 
   const { mutate: startPolling } = trpc.getFile.useMutation({
     onSuccess: (file) => {
-      console.log(file);
       // router.push(`/user/${file.id}`);
     },
     retry: true,
@@ -224,7 +218,6 @@ const UploadDropZone = () => {
 
         //Start polling for file
         startPolling({ key });
-        console.log(acceptedFile);
 
         //refetch new files
         queryClient.invalidateQueries(["documents", userData]);

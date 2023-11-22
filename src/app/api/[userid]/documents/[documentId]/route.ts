@@ -7,10 +7,6 @@ export async function DELETE(
 ) {
   const { userId, documentId } = params;
 
-  console.log(
-    "DELETE function called for user/[userId]/documents/[documentId]/route.ts",
-  );
-
   if (!userId || !documentId) {
     return NextResponse.error();
   }
@@ -27,26 +23,3 @@ export async function DELETE(
     return NextResponse.error();
   }
 }
-
-// export async function DELETE(
-//   request: Request,
-//   { params }: { params: { userId: string; offerId: string } },
-// ) {
-//   const { userId, offerId } = params;
-
-//   if (!userId || !offerId) {
-//     return NextResponse.error();
-//   }
-
-//   const offer = await db.offer.delete({
-//     where: {
-//       id: offerId,
-//     },
-//   });
-//   if (!offer) {
-//     return NextResponse.error();
-//   }
-//   // console.log("params", params);
-
-//   return NextResponse.json(offer);
-// }

@@ -2,9 +2,11 @@
 
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Property } from "@prisma/client";
+import { HeartFilledIcon } from "@radix-ui/react-icons";
 import axios from "axios";
-import Image from "next/image";
+import { Heart } from "lucide-react";
 import { usePathname } from "next/navigation";
+import React from "react";
 
 const HeartButton = ({
   user,
@@ -14,9 +16,11 @@ const HeartButton = ({
   property: Property;
 }) => {
   const route = usePathname();
+  const [favorite, setFavorite] = React.useState(false);
 
   const addFavorite: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
+    setFavorite(true);
     try {
       const response = await axios.post(
         `/api/user/${user.id}/property/${property.id}`,
@@ -30,6 +34,7 @@ const HeartButton = ({
     e,
   ) => {
     e.preventDefault();
+    setFavorite(false);
     try {
       const response = await axios.delete(
         `/api/user/${user.id}/property/${property.id}`,
@@ -47,13 +52,11 @@ const HeartButton = ({
       className="flex"
       onClick={route === "/" ? addFavorite : deleteFavorite}
     >
-      <Image
-        src="/heart-outline.svg"
-        width={22}
-        height={20}
-        alt="heart"
-        className="h-full"
-      />
+      {!favorite ? (
+        <Heart className="h-3 w-3 text-zinc-600" />
+      ) : (
+        <HeartFilledIcon className="h-3 w-3 text-red-600" />
+      )}
     </button>
   );
 };

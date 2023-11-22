@@ -1,8 +1,8 @@
 import { db } from "@/db";
-import { EnumPopularity } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
+  console.log("GET function called for property/route.ts");
   const property = await db.property.findMany();
   return NextResponse.json(property);
 }

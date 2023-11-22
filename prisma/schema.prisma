@@ -105,20 +105,19 @@ model Offer {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  winNowPrice   String?
-  offerPrice    String? 
-  emdAmount     String? 
+  winNowPrice  String?
+  offerPrice   String?
+  emdAmount    String?
   reqFinancing Boolean? @default(false)
-  lenderName    String? 
-  buyerName     String? 
-  buyerCompany  String?  
-  comments      String? @db.LongText
+  lenderName   String?
+  buyerName    String?
+  buyerCompany String?
+  comments     String?  @db.LongText
 
-  documents Document[] 
+  documents Document[]
 
-  accepted      Boolean? @default(false)
+  accepted   Boolean? @default(false)
   acceptedAt String?
-
 
   image         String?
   address1      String?
@@ -184,16 +183,21 @@ model Document {
 
   name String
   url  String
-  key String
+  key  String
 
-  offer   Offer @relation(fields: [offerId], references: [id])
-  offerId String  @default(cuid())
+  offer   Offer  @relation(fields: [offerId], references: [id])
+  offerId String @default(cuid())
 
-  user User? @relation(fields: [userId], references: [id])
+  user   User?   @relation(fields: [userId], references: [id])
   userId String?
 
   @@index([offerId])
   @@index([userId])
+}
+
+model SearchQuery {
+  id    String @id @default(cuid())
+  query String
 }
 
 enum EnumStatus {

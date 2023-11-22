@@ -29,6 +29,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { isAuthenticated, getUser } = getKindeServerSession();
+  const user = getUser();
+  const auth = isAuthenticated();
+
   return (
     <html lang="en" className="light !scroll-smooth">
       <Providers>
@@ -39,7 +43,7 @@ export default function RootLayout({
           )}
         >
           <Toaster />
-          <Header />
+          <Header user={user} isAuthenticated={auth} />
           <main className="m-0 p-0">{children}</main>
           <Footer />
         </body>

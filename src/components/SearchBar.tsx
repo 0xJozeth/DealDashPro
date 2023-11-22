@@ -65,7 +65,6 @@ function SearchBar() {
     );
 
     const url = `/api/search/${pathname}/minPrice/${minPrice}/maxPrice/${maxPrice}`;
-    console.log("Request URL:", url);
 
     // GET request to the /api/search endpoint
     const response = await axios
@@ -98,7 +97,7 @@ function SearchBar() {
       />
       <Select
         onValueChange={(value) => {
-          setMinPrice(value), console.log("minPrice", minPrice);
+          setMinPrice(value);
         }}
       >
         <SelectTrigger className="w-1/4 truncate border-none text-sm text-neutral-500">

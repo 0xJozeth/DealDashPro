@@ -31,8 +31,6 @@ async function AddFavorite({
     });
   }
 
-  console.log("I am a server component");
-
   return null;
 }
 

@@ -40,13 +40,9 @@ function Card({
     },
   };
 
-  // console.log("CARD user", user);
-
   const selectedTag = propertyData?.popularity
     ? tag[propertyData.popularity]
     : null;
-
-  // console.log("CARD propertyData", propertyData);
 
   return (
     <Link href={`/property-details/${propertyData.id}`}>

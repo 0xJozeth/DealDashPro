@@ -19,8 +19,6 @@ function AccountFavorites({
   user: KindeUser;
   isAuthenticated: boolean;
 }) {
-  // console.log("FAVORITES user", user);
-
   return (
     <section
       id="contentWrapper"

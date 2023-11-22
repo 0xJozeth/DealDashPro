@@ -1,22 +1,6 @@
 import { PropertyDataProps, OfferProps, CompanyProps } from "../database";
 import { EnumStatus, EnumPopularity } from "@prisma/client";
 
-// const { getUser } = getKindeServerSession();
-// const user = getUser();
-
-// const getServerSideProps = async () => {
-//   const res = await fetch("/api/property/clonkhcyo0004p01l0vbwak2o");
-//   const data = await res.json();
-//   console.log("data)", data);
-//   return {
-//     props: {
-//       propertyId: data.id,
-//     },
-//   };
-// };
-
-// getServerSideProps();
-
 export const PropertyData: PropertyDataProps[] = [
   {
     heading: "Amazing New home in the heart of Jacksonville 🏡",

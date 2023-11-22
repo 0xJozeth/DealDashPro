@@ -1,12 +1,6 @@
 import { db } from "@/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import {
-  PrismaClient,
-  Property,
-  EnumFavoriteCategory,
-  Favorites,
-  EnumPopularity,
-} from "@prisma/client";
+import { PrismaClient, EnumPopularity } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -26,8 +20,6 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
       userId,
     },
   });
-
-  console.log("favorite", favorite);
 
   if (!favorite) {
     return new Response("Not Found", { status: 404 });

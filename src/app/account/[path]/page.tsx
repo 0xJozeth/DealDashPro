@@ -21,6 +21,7 @@ import AccountSettings from "../_components/Settings";
 import { TableDemo } from "../_components/data-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
+import { Loader2 } from "lucide-react";
 
 function AccountPath() {
   const route = usePathname();
@@ -54,14 +55,11 @@ function AccountPath() {
   //Loading state...
   if (userLoading || propertyLoading || offerLoading) {
     return (
-      <div className="flex min-h-[50vh] items-center justify-center">
-        Loading...
+      <div className="flex min-h-[100dvh] items-center justify-center">
+        <Loader2 className="h-10 w-10 animate-spin text-zinc-600" />
       </div>
     );
   }
-
-  console.log("propertyData", propertyData);
-  console.log("offerData", offerData);
 
   return (
     <MaxWidthWrapper className="{/*border border-red-600*/} max-w-[1280px]">

@@ -9,8 +9,6 @@ export async function POST(
   const { userId, propertyId } = params;
   const offerDetails = await request.json();
 
-  console.log("offerDetails", offerDetails);
-
   const newOffer = await db.offer.create({
     data: {
       ...offerDetails,
@@ -54,8 +52,6 @@ export async function PATCH(
     },
   });
 
-  console.log("updatedOfferDetails", offerDetails);
-
   if (!offerDetails) {
     return NextResponse.error();
   }
@@ -87,13 +83,9 @@ export async function DELETE(
     },
   });
 
-  console.log("offerDetails", offerDetails);
-
   if (!offerDetails) {
     return NextResponse.error();
   }
-
-  console.log("offerDetails.id", offerDetails.id);
   const deletedOffer = await db.offer.delete({
     where: {
       id: offerDetails.id,

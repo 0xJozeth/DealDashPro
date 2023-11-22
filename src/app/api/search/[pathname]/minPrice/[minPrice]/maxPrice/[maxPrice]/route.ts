@@ -23,8 +23,6 @@ function convertPriceRange(minPrice: string, maxPrice: string) {
     .replace(/M/g, "000000")
     .replace(/\+/g, "");
 
-  console.log("min", min);
-  console.log("max", max);
   return [Number(min), max === "$20M+" ? Infinity : Number(max)];
 }
 // Helper function to convert askPrice string into a number
@@ -38,14 +36,8 @@ export async function GET(
     params,
   }: { params: { pathname: string; minPrice: string; maxPrice: string } },
 ) {
-  console.log("params", params);
-
   // Convert minPrice and maxPrice to numbers
   const [min, max] = convertPriceRange(params.minPrice, params.maxPrice);
-
-  // Log the minPrice and maxPrice
-  // console.log("minPrice", params.minPrice);
-  // console.log("maxPrice", params.maxPrice);
 
   const properties = await db.property.findMany({
     where: {
@@ -62,7 +54,6 @@ export async function GET(
     if (property.askPrice !== null) {
       const askPrice = convertAskPrice(property.askPrice);
       if (isNaN(askPrice)) {
-        console.log("Invalid askPrice:", property.askPrice);
         return false;
       }
       return askPrice >= min && (max === Infinity || askPrice <= max);

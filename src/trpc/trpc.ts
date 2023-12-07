@@ -1,5 +1,6 @@
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { TRPCError, initTRPC } from "@trpc/server";
+import axios from "axios";
 
 const t = initTRPC.create();
 const middleware = t.middleware;
@@ -12,10 +13,16 @@ const isAuth = middleware(async (opts) => {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
+  {
+    /* FETCH the property here with useQuery and pass it under user below as propertyId... */
+  }
+  const { data: property } = await axios.get(`/api/property/`);
+
   return opts.next({
     ctx: {
       userId: user.id,
       user,
+      propertyId: property.id,
     },
   });
 });

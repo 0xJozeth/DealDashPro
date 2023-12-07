@@ -62,12 +62,9 @@ function AccountPath() {
   }
 
   return (
-    <MaxWidthWrapper className="{/*border border-red-600*/} max-w-[1280px]">
-      <section className="{/*border border-red-600*/} flex min-h-screen flex-col justify-start p-2">
-        <div
-          id="mainContainerWrapper"
-          className="{/*border border-red-600*/} flex w-full gap-4 p-2"
-        >
+    <MaxWidthWrapper className="max-w-[1280px]">
+      <section className="flex min-h-screen flex-col justify-start p-2">
+        <div id="mainContainerWrapper" className="flex w-full gap-4 p-2">
           {/* Account Navigation Section */}
           <AccountPanel />
 
@@ -75,10 +72,10 @@ function AccountPath() {
           {route === "/account/favorites" && (
             <section
               id="contentWrapper"
-              className="{/*border border-red-600*/} m-0 block w-full flex-col gap-4 p-0"
+              className="m-0 block w-full flex-col gap-4 p-0"
             >
-              <div className="{/*border border-red-600*/} p-4">
-                <div className="{/*border border-red-600*/} p-4">
+              <div className="p-4">
+                <div className="p-4">
                   <h2 className=" text-[26px] font-medium leading-[17px] text-black">
                     Favorites
                   </h2>
@@ -96,17 +93,7 @@ function AccountPath() {
               </div>
             </section>
           )}
-          {route === "/account/offers" && (
-            <AccountOffersSent>
-              {Array.isArray(offerData) && offerData.length > 0 ? (
-                <TableDemo offer={offerData} user={userData} />
-              ) : (
-                <div className=" mx-auto flex items-center justify-center text-xl text-zinc-300">
-                  No offers yet. Submit an offer to see it here.
-                </div>
-              )}
-            </AccountOffersSent>
-          )}
+          {route === "/account/offers" && <AccountOffersSent />}
           {route === "/account/documents" && <AccountDocuments />}
           {route === "/account/settings" && <AccountSettings />}
         </div>

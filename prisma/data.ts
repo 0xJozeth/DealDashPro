@@ -1,17 +1,19 @@
-import { PropertyDataProps, OfferProps, CompanyProps } from "../database";
-import { EnumStatus, EnumPopularity } from "@prisma/client";
+import {
+  CompanyProps,
+  OfferProps,
+  PropertyDataProps,
+  EnumOfferStatus,
+  EnumPopularity,
+} from "./database";
 
 export const PropertyData: PropertyDataProps[] = [
   {
     heading: "Amazing New home in the heart of Jacksonville 🏡",
     desc: "Here's a description of the property!",
     imgSrc: "/prop1.png",
-    imgWidth: 400,
-    imgHeight: 200,
     imgAlt: "image alt here",
     cn: "classname",
-    views: 276,
-    popularity: EnumPopularity.Pending,
+    popularity: EnumPopularity.NewListing,
     matterportUrl: "https://my.matterport.com/show/?m=Qojjx8x9Fu4&play=1",
     streetViewUrl:
       "https://www.google.com/maps/embed/v1/streetview?location=30.2959%2C-81.4075&key=",
@@ -39,11 +41,9 @@ export const PropertyData: PropertyDataProps[] = [
     heading: "Beautiful townhome ready for repairs 🏡",
     desc: "Here's a description of the property!",
     imgSrc: "/prop3.png",
-    imgWidth: 400,
-    imgHeight: 200,
+
     imgAlt: "image alt here",
     cn: "classname",
-    views: 276,
     popularity: EnumPopularity.Pending,
     matterportUrl: "https://my.matterport.com/show/?m=Qojjx8x9Fu4&play=1",
     streetViewUrl:
@@ -91,7 +91,7 @@ export const Offers: OfferProps[] = [
     county: "Duval",
     zip: "32256",
     dateSubmitted: new Date().toLocaleDateString("en-US"),
-    status: EnumStatus.Pending,
+    status: EnumOfferStatus.Pending,
   },
 ];
 

@@ -13,7 +13,6 @@ import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import { Offers } from "@prisma/client";
 import axios from "axios";
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import { useState } from "react";
@@ -21,6 +20,8 @@ import {
   KindeUser,
   getKindeServerSession,
 } from "@kinde-oss/kinde-auth-nextjs/server";
+import { useQuery } from "@tanstack/react-query";
+import { Offer } from "@prisma/client";
 
 function getStatusColorClass(status: string): {
   bgColor: string;
@@ -38,17 +39,33 @@ function getStatusColorClass(status: string): {
   }
 }
 
-export function TableDemo({
-  user,
-  offer,
-}: {
-  user: KindeUser;
-  offer: Offers[];
-}) {
+export function TableDemo() {
   const [toggleModal, setToggleModal] = useState(false);
   const [offerId, setOfferId] = useState("");
+  const [userId, setUserId] = useState("");
 
-  const userId = user.id;
+  // Fetch the user session
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const { data } = await axios.get("/api/kindeSession");
+      setUserId(data.user.id);
+      return data.user as KindeUser;
+    },
+  });
+
+  //Fetch the user offers
+  const { data: offer } = useQuery({
+    queryKey: ["offers", user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data } = await axios.get(`/api/user/${user.id}/offers`);
+      console.log(data);
+      return data as Offer[];
+    },
+  });
+
+  if (!offer) return null;
 
   const handleConfirm = async (id: string) => {
     // Toggle confirmation modal useState
@@ -149,7 +166,7 @@ export function TableDemo({
                   className="flex items-center justify-center"
                 >
                   <Image
-                    src={offers.image} // Assuming the property name is "image"
+                    src={offers.property.imgSrc || ""} // Assuming the property name is "image"
                     alt="Offer Image"
                     fill
                     sizes="(max-width: 640px) 40px, (max-width: 768px) 50px, (max-width: 1024px) 60px, (max-width: 1280px) 70px, (max-width: 1536px) 80px, 90px"
@@ -159,12 +176,12 @@ export function TableDemo({
               </TableCell>
               <TableCell className="hover:text-blue-300 hover:underline">
                 <Link href={`/property-details/${offers.id}`}>
-                  {offers.address1}, <br />
-                  {offers.city}, {offers.state}
+                  {offers.property.address1}, <br />
+                  {offers.property.city}, {offers.property.state}
                 </Link>
               </TableCell>
               <TableCell className="text-center">
-                {offers.dateSubmitted?.toLocaleString() || null}
+                {new Date(offers.createdAt).toLocaleDateString("en-US")}
               </TableCell>
               <TableCell className="text-center">
                 <p>{offers.offerPrice}</p>
@@ -172,12 +189,14 @@ export function TableDemo({
               <TableCell className="text-center">
                 <div
                   className={`${
-                    getStatusColorClass(offers.status as string).bgColor
+                    getStatusColorClass(offers.property.status as string)
+                      .bgColor
                   } ${
-                    getStatusColorClass(offers.status as string).textColor
+                    getStatusColorClass(offers.property.status as string)
+                      .textColor
                   } flex items-center justify-center rounded-[20px] p-1`}
                 >
-                  {offers.status}
+                  {offers.property.status}
                 </div>
               </TableCell>
               <TableCell className="text-right">

@@ -6,7 +6,10 @@ import { PropertyData } from "../../../prisma/data";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
-import { CompanyWithProperties, PropertyWithCompany } from "../../../database";
+import {
+  CompanyWithProperties,
+  PropertyWithCompany,
+} from "../../../prisma/database";
 
 const PropertyCards = ({
   property,
@@ -18,7 +21,7 @@ const PropertyCards = ({
   isAuthenticated: boolean;
 }) => {
   const company: CompanyWithProperties = property.company;
-  const companyProperties: Property[] = company.properties;
+  const companyProperties: Property[] = company?.properties;
 
   // console.log("COMPANY", company);
   // console.log("PROPERTY", companyProperties);

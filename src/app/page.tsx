@@ -13,6 +13,9 @@ import { Filter } from "lucide-react";
 import { usePropertiesStore, useSearchParamsStore } from "@/store/store";
 
 export default function Home() {
+  // Define pathname and utilize in a useEffect function for dynamic content rendering.
+  const pathname = usePathname();
+
   const { data: user, isLoading: userLoading } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
@@ -24,9 +27,6 @@ export default function Home() {
   const setAllProperties = usePropertiesStore(
     (state) => state.setAllProperties,
   );
-
-  // Define pathname and utilize in a useEffect function for dynamic content rendering.
-  const pathname = usePathname();
 
   // Define the searchParams and setter function
   const searchParams = useSearchParamsStore((state) => state.searchParams);
@@ -62,6 +62,7 @@ export default function Home() {
         const { data } = await axios.get(url);
         return data as Property[];
       } else {
+        // TODO fetch only the published properties from e.g. "api/property?published=true"
         const { data } = await axios.get("/api/property");
         return data as Property[];
       }

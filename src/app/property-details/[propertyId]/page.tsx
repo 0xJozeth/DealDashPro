@@ -14,7 +14,6 @@ import FormContext, {
 
 import { db } from "@/db";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
-import { Property } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
@@ -22,6 +21,8 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { SetStateAction, useState } from "react";
 import useModalContext from "@/app/hooks/useModalContext";
+import { Property } from "@prisma/client";
+import { PropertyWithImages } from "../../../../prisma/database";
 
 const PropertyDetailsPage = () => {
   const [toggleModal, setToggleModal] = useState(false);
@@ -56,6 +57,7 @@ const PropertyDetailsPage = () => {
     queryKey: ["property"],
     queryFn: async () => {
       const { data } = await axios.get(`/api/property/${params.propertyId}`);
+
       return data as Property;
     },
   });
@@ -64,7 +66,7 @@ const PropertyDetailsPage = () => {
     return <div className="min-h-screen">Loading...</div>;
   }
 
-  const winNowPrice = property.winNowPrice;
+  const winNowPrice = property.winNowPrice as string;
 
   return (
     <>
@@ -82,8 +84,6 @@ const PropertyDetailsPage = () => {
         <PropertyTitle property={property} />
         <PropertyImages property={property} />
         <PropertyMain
-          winNowModal={winNowModal}
-          setWinNowModal={setWinNowModal}
           property={property}
           toggleModal={toggleModal}
           setToggleModal={setToggleModal}

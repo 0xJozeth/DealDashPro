@@ -1,21 +1,20 @@
-import { EnumStatus, EnumPopularity } from "@prisma/client";
+import { CreatePropertySchemaType } from "@/components/Dashboard";
+import { Company, Property, PropertyImage } from "@prisma/client";
 
-interface Tag {
+export interface Tag {
   [key: string]: {
     src: string;
     width: string;
   };
 }
 
-interface PropertyDataProps {
+export interface PropertyDataProps {
   heading: string;
 
   imgSrc: string;
-  imgWidth: number;
-  imgHeight: number;
+
   imgAlt: string;
   cn: string;
-  views: number;
   popularity: EnumPopularity;
 
   desc: string;
@@ -44,7 +43,7 @@ interface PropertyDataProps {
   listedAt: string;
 }
 
-interface OfferProps {
+export interface OfferProps {
   offerPrice: string;
   emdAmount: string;
   reqFinancing: boolean;
@@ -63,16 +62,15 @@ interface OfferProps {
   county: string;
   zip: string;
   dateSubmitted: string;
-  offerPrice: string;
-  status: EnumStatus;
+  status: EnumOfferStatus;
 }
 
-interface FavoritesDataProps {
+export interface FavoritesDataProps {
   propertyId: string;
   userId: string;
 }
 
-interface CompanyProps {
+export interface CompanyProps {
   companyName: string;
   companyLogo: string;
   companyListingsUrl: string;
@@ -95,5 +93,22 @@ interface CompanyProps {
   companyYoutube: string;
 }
 
-type PropertyWithCompany = Property & { company: Company };
-type CompanyWithProperties = Company & { properties: Property[] };
+export type PropertyWithCompany = Property & { company: Company };
+export type CompanyWithProperties = Company & { properties: Property[] };
+export type PropertyWithImages = Property & { images: PropertyImage[] };
+export type ImagesWithProperty = PropertyImage & { properties: Property[] };
+
+export enum EnumOfferStatus {
+  Accepted,
+  Pending,
+  Denied,
+}
+
+export enum EnumPopularity {
+  NewListing,
+  HotHome,
+  ShortSale,
+  Pending,
+  Sold,
+  OffMarket,
+}

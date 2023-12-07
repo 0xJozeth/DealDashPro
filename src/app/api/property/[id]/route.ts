@@ -12,6 +12,7 @@ export async function GET(
       id: id,
     },
     include: {
+      images: true,
       company: {
         include: { properties: true },
       },

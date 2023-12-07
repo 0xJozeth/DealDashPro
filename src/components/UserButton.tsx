@@ -17,6 +17,7 @@ import {
   faUser,
   faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/navigation";
 
 export default function UserButton({
   isAuthenticated,
@@ -25,6 +26,7 @@ export default function UserButton({
   isAuthenticated: boolean;
   user: KindeUser;
 }) {
+  const router = useRouter();
   return (
     <>
       <Menu as="div" className="relative z-[999999]">
@@ -127,8 +129,8 @@ export default function UserButton({
             {!user && (
               <Menu.Item>
                 {({ active }) => (
-                  <Link
-                    href="/api/auth/login"
+                  <div
+                    onClick={() => router.push("/api/auth/login")}
                     className={clsx(
                       active && "bg-stone-700/50 dark:bg-stone-200",
                       "inline-flex items-center gap-2 px-[34px] py-2 text-sm font-normal leading-[14px] text-black dark:text-stone-500",
@@ -139,7 +141,7 @@ export default function UserButton({
                       className="h-5 w-5  text-black"
                     />
                     <span>Login</span>
-                  </Link>
+                  </div>
                 )}
               </Menu.Item>
             )}

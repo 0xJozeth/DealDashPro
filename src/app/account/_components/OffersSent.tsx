@@ -1,7 +1,12 @@
 import React, { PropsWithChildren } from "react";
+import { TableDemo } from "./data-table";
 
-function AccountOffersSent({ children }: PropsWithChildren<{}>) {
-  return <div className='flex m-0 p-0 box-border w-full'>{children}</div>;
+function AccountOffersSent() {
+  return (
+    <div className="m-0 box-border flex w-full p-0">
+      <TableDemo />
+    </div>
+  );
 }
 
 export default AccountOffersSent;

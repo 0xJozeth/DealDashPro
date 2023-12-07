@@ -41,7 +41,8 @@ export async function GET(
 
   const properties = await db.property.findMany({
     where: {
-      OR: [
+      published: true,
+      AND: [
         { city: { contains: params.pathname.toLowerCase() } },
         { state: { contains: params.pathname.toLowerCase() } },
         { county: { contains: params.pathname.toLowerCase() } },

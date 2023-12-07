@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { AspectRatio } from "./ui/aspect-ratio";
-import { PropertyDataProps, Tag } from "../../database";
+import { PropertyDataProps, Tag } from "../../prisma/database";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { db } from "@/db";
@@ -21,6 +21,8 @@ function Card({
   isAuthenticated: boolean;
   propertyData: Property;
 }) {
+  const imageUrls = propertyData?.images?.map((image) => image.url);
+
   const tag: Tag = {
     HotHome: {
       src: "/tag-hot-home.svg",
@@ -64,13 +66,16 @@ function Card({
           </div>
         )}
         <AspectRatio ratio={16 / 9} className="h-full w-full">
-          <Image
-            src={propertyData?.imgSrc!}
-            alt="propertyData-image"
-            sizes="(100vw, 100vh)"
-            fill
-            className="rounded-t-[10px] object-cover"
-          />
+          {imageUrls?.map((url, index) => (
+            <Image
+              key={index}
+              src={url}
+              alt="propertyData-image"
+              sizes="(100vw, 100vh)"
+              fill
+              className="rounded-t-[10px] object-cover"
+            />
+          ))}
         </AspectRatio>
         <div
           id="cardContents"

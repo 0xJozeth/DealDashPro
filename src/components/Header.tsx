@@ -10,7 +10,7 @@ import SearchBar from "./SearchBar";
 import { headers } from "next/headers";
 import { dom } from "@fortawesome/fontawesome-svg-core";
 import { R } from "uploadthing/dist/upload-builder-6c9b2b59";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSearchParamsStore } from "@/store/store";
 
 function Header({
@@ -21,6 +21,7 @@ function Header({
   isAuthenticated: boolean;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
 
   const notHome = pathname !== "/";
 
@@ -65,20 +66,22 @@ function Header({
                     </div>
                   </Link>
                   <div className="flex items-center justify-between gap-6">
-                    <Link href="/api/auth/register">
-                      <div className="duration-30 flex h-11 w-24 items-center justify-center rounded-[10px] border border-zinc-600 bg-transparent py-5 text-black transition-all hover:bg-zinc-100 hover:text-black">
-                        <p className="text-sm font-normal leading-normal">
-                          Sign Up
-                        </p>
-                      </div>
-                    </Link>
-                    <Link href="api/auth/login">
+                    <div
+                      onClick={() => router.push("/api/auth/register")}
+                      className="duration-30 flex h-11 w-24 items-center justify-center rounded-[10px] border border-zinc-600 bg-transparent py-5 text-black transition-all hover:bg-zinc-100 hover:text-black"
+                    >
+                      <p className="text-sm font-normal leading-normal">
+                        Sign Up
+                      </p>
+                    </div>
+
+                    <div onClick={() => router.push("/api/auth/login")}>
                       <div className="flex h-11 w-24 items-center justify-center rounded-[10px] bg-[#4D8C49]  py-5 text-white transition-all duration-300 hover:bg-[#58a053] hover:text-white">
                         <p className="text-sm font-normal leading-normal">
                           Login
                         </p>
                       </div>
-                    </Link>
+                    </div>
                   </div>
                 </div>
                 <div className="md:hidden">
@@ -129,21 +132,25 @@ function Header({
                     </p>
                   </div>
                 </Link>
-                <div className="flex items-center justify-between gap-6">
-                  <Link href="/api/auth/register">
-                    <div className="duration-30 flex h-11 w-24 items-center justify-center rounded-[10px] border border-white bg-transparent py-5 text-white transition-all hover:bg-zinc-100 hover:text-black">
-                      <p className="text-sm font-normal leading-normal">
-                        Sign Up
-                      </p>
-                    </div>
-                  </Link>
-                  <Link href="api/auth/login">
-                    <div className="flex h-11 w-24 items-center justify-center rounded-[10px]  bg-white py-5 transition-all duration-300 hover:bg-[#4D8C49] hover:text-white">
+                <div className="flex cursor-pointer items-center justify-between gap-6">
+                  <div
+                    onClick={() => router.push("/api/auth/register")}
+                    className="duration-30 flex h-11 w-24 items-center justify-center rounded-[10px] border border-white bg-transparent py-5 text-white transition-all hover:bg-zinc-100 hover:text-black"
+                  >
+                    <p className="text-sm font-normal leading-normal">
+                      Sign Up
+                    </p>
+                  </div>
+                  <div>
+                    <div
+                      onClick={() => router.push("/api/auth/login")}
+                      className="flex h-11 w-24 items-center justify-center rounded-[10px]  bg-white py-5 transition-all duration-300 hover:bg-[#4D8C49] hover:text-white"
+                    >
                       <p className="text-sm font-normal leading-normal">
                         Login
                       </p>
                     </div>
-                  </Link>
+                  </div>
                 </div>
               </div>
               <div className="md:hidden">

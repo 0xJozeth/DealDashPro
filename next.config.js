@@ -6,6 +6,7 @@ const nextConfig = {};
 
 module.exports = {
   images: {
+    domains: ["uploadthing-prod.s3.us-west-2.amazonaws.com"],
     remotePatterns: [
       {
         protocol: "https",

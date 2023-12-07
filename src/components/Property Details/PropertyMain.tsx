@@ -12,21 +12,16 @@ import {
 import { Company, Property } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { CompanyProps, PropertyWithCompany } from "../../../database";
+import { CompanyProps, PropertyWithCompany } from "../../../prisma/database";
 import { useState } from "react";
 
 const PropertyMain = ({
   property,
-  toggleModal,
-  winNowModal,
   setToggleModal,
   setWinNowModal,
   closeModal,
 }: {
   setWinNowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  toggleModal: boolean;
-  winNowModal: boolean;
-
   setToggleModal: React.Dispatch<React.SetStateAction<boolean>>;
   closeModal: () => void;
 
@@ -93,9 +88,7 @@ const PropertyMain = ({
               }}
               className="hover:cursor-pointer"
             >
-              <p className="text-xs font-semibold underline">
-                <p>make an offer</p>
-              </p>
+              <p className="text-xs font-semibold underline">make an offer</p>
             </div>
           </section>
           <section
@@ -396,7 +389,7 @@ const PropertyMain = ({
                           id=""
                           className="text-base font-semibold leading-tight text-black"
                         >
-                          {company.companyName}
+                          {company?.companyName}
                         </p>
                         <p
                           id=""
@@ -413,10 +406,10 @@ const PropertyMain = ({
                           />
                           <a
                             id=""
-                            href={`tel:${company.companyPhone}`}
+                            href={`tel:${company?.companyPhone}`}
                             className="text-sm font-normal leading-tight text-[#58A053]"
                           >
-                            {company.companyPhone}
+                            {company?.companyPhone}
                           </a>
                         </div>
                         <div className="flex items-center gap-2">
@@ -426,10 +419,10 @@ const PropertyMain = ({
                           />
                           <a
                             id=""
-                            href={`mailto:${company.companyEmail}`}
+                            href={`mailto:${company?.companyEmail}`}
                             className="text-sm font-normal leading-tight text-[#58A053]"
                           >
-                            {company.companyEmail}
+                            {company?.companyEmail}
                           </a>
                         </div>
                       </div>
@@ -444,7 +437,7 @@ const PropertyMain = ({
                     </div>
                   </Link>
                   <Link
-                    href={`/${company.companyName.replace(
+                    href={`/${company?.companyName.replace(
                       /\s+/g,
                       "-",
                     )}/listings`}

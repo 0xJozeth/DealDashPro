@@ -94,6 +94,39 @@ export const appRouter = router({
 
       return document;
     }),
+
+  /* IMAGE UPLOAD LOGIC */
+  getUserImages: privateProcedure.query(async ({ ctx }) => {
+    const { userId } = ctx;
+    const { propertyId } = ctx;
+
+    return await db.propertyImage.findMany({
+      where: {
+        // userId,
+        propertyId,
+      },
+    });
+  }),
+
+  getImage: privateProcedure
+    .input(z.object({ key: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { userId } = ctx;
+      const { propertyId } = ctx;
+
+      const image = await db.propertyImage.findFirst({
+        where: {
+          key: input.key,
+          // userId,
+          // work in progress
+          propertyId,
+        },
+      });
+
+      if (!image) throw new TRPCError({ code: "NOT_FOUND" });
+
+      return image;
+    }),
 });
 
 export type AppRouter = typeof appRouter;

@@ -13,17 +13,3 @@ export async function GET(req: NextRequest) {
   console.log("property:", property);
   return NextResponse.json(property);
 }
-
-export async function POST(request: Request) {
-  console.log("POST hit");
-  const json = await request.json();
-  console.log("json:", json);
-
-  const created = await db.property.create({
-    data: json,
-  });
-
-  return new NextResponse(JSON.stringify(created), {
-    status: 201,
-  });
-}

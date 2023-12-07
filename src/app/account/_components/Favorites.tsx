@@ -9,7 +9,7 @@ import {
   getKindeServerSession,
 } from "@kinde-oss/kinde-auth-nextjs/server";
 import Card from "@/components/Card";
-import { FavoritesDataProps } from "../../../../database";
+import { FavoritesDataProps } from "../../../../prisma/database";
 import { db } from "@/db";
 
 function AccountFavorites({

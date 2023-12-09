@@ -96,7 +96,7 @@ model Property {
   documents Document[]
   images    PropertyImage[]
 
-
+  featuredImage String?
 
   company   Company? @relation(fields: [companyId], references: [id])
   companyId String?

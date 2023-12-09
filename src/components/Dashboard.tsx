@@ -12,7 +12,7 @@ import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
 import { useToast } from "./ui/use-toast";
 import { useUploadThing } from "@/lib/uploadthing";
 import { trpc } from "@/app/_trpc/client";
-import { CheckCircle, Cloud, File as FileIcon } from "lucide-react";
+import { Camera, CheckCircle, Cloud, File as FileIcon } from "lucide-react";
 import { Progress } from "./ui/progress";
 import { Property } from "@prisma/client";
 import { PropertyData } from "../../prisma/data";
@@ -179,6 +179,9 @@ export const Dashboard = () => {
     setCurrentStep((prevStep) => prevStep + 1);
     setUploadedImages([]);
   };
+
+  // Logic for routing
+  const router = useRouter();
 
   const {
     data: unpublishedProperties,
@@ -579,14 +582,30 @@ export const Dashboard = () => {
                 </div>
               )}
             </div>
-
-            <button
-              title="submit-button"
-              type="submit"
-              className="rounded-[10px] border border-black p-2 px-4"
-            >
-              Submit
-            </button>
+            <div className="flex justify-between gap-6">
+              <div>
+                <button
+                  title="submit-button"
+                  type="submit"
+                  className="rounded-[10px] border border-black p-2 px-4"
+                >
+                  Save Draft
+                </button>
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <button
+                  title="submit-button"
+                  type="submit"
+                  onClick={() => {
+                    router.push(`/dashboard/post-property/${newPropertyId}`);
+                  }}
+                  className="flex justify-between gap-2 rounded-[10px] border border-black p-2 px-4"
+                >
+                  <Camera className="h-6 w-6 text-zinc-500" />
+                  Upload Images
+                </button>
+              </div>
+            </div>
           </form>
         </section>
         <section className="mt-20">

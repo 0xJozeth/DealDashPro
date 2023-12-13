@@ -37,14 +37,14 @@ const PropertyDetailsPage = () => {
     queryKey: ["user"],
     queryFn: async () => {
       const { data } = await axios.get("/api/kindeSession");
-      return data.user;
+      return data.user || null;
     },
   });
   const { data: isAuthenticated, isLoading: authLoading } = useQuery({
     queryKey: ["isAuthenticated"],
     queryFn: async () => {
       const { data } = await axios.get("/api/kindeSession");
-      return data.isAuthenticated;
+      return data.isAuthenticated || null;
     },
   });
 

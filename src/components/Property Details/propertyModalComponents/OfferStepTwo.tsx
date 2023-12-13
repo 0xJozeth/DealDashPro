@@ -11,8 +11,6 @@ function OfferStepTwo({
 }) {
   const handleOffer = async () => {
     const userId = user?.id;
-    console.log("userId", userId);
-    console.log("propertyId", propertyId);
 
     if (!userId || !propertyId) return;
     try {

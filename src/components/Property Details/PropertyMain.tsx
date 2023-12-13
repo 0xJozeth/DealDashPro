@@ -45,7 +45,7 @@ const PropertyMain = ({
     queryKey: ["user"],
     queryFn: async () => {
       const { data } = await axios.get("/api/kindeSession");
-      return data.user;
+      return data.user || null;
     },
   });
 

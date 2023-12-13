@@ -10,6 +10,5 @@ export async function GET(req: NextRequest) {
       images: true,
     },
   });
-  console.log("property:", property);
   return NextResponse.json(property);
 }

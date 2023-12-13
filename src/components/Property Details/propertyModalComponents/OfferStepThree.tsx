@@ -14,8 +14,6 @@ function OfferStepThree({
       return;
 
       const userId = user?.id;
-      console.log("userId", userId);
-      console.log("propertyId", propertyId);
 
       if (!userId || !propertyId) return;
       try {

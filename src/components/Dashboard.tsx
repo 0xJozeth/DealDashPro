@@ -1,5 +1,5 @@
 "use client";
-import { FieldError, useForm } from "react-hook-form";
+import { FieldError, set, useForm } from "react-hook-form";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -7,18 +7,32 @@ import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Dropzone from "react-dropzone";
 import { useRouter } from "next/navigation";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/server";
 import { useToast } from "./ui/use-toast";
 import { useUploadThing } from "@/lib/uploadthing";
 import { trpc } from "@/app/_trpc/client";
-import { Camera, CheckCircle, Cloud, File as FileIcon } from "lucide-react";
+import {
+  Camera,
+  CheckCircle,
+  Cloud,
+  File,
+  File as FileIcon,
+} from "lucide-react";
 import { Progress } from "./ui/progress";
-import { Property } from "@prisma/client";
+import { Property, PropertyImage } from "@prisma/client";
 import { PropertyData } from "../../prisma/data";
 import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
+import { UploadButton } from "@/utils/uploadthing";
+import { OurFileRouter } from "@/app/api/uploadthing/core";
+import { UploadFileResponse } from "uploadthing/client";
+
+//use Zustand to manage property state
+import { usePropertyIdStore } from "@/store/store";
+import { Input } from "./ui/input";
+import { Label } from "@/components/ui/label";
 
 // Create interface for the schema
 type CreatePropertySchemaType = z.infer<typeof CreatePropertySchema>;
@@ -64,9 +78,11 @@ export const Dashboard = () => {
   const [currentTab, setCurrentTab] = useState("info");
   const [activeTab, setActiveTab] = useState("addProperty");
   const [key, setKey] = useState(0);
-  const steps = ["info", "images", "publishing"];
+  // const steps = ["info", "images", "publishing"];
+  const [steps, setSteps] = useState("info");
   const [currentStep, setCurrentStep] = useState(0);
-  const [newPropertyId, setNewPropertyId] = useState("");
+  // const [newPropertyId, setNewPropertyId] = useState("");
+  const { propertyId, setPropertyId } = usePropertyIdStore();
 
   // Destructure useForm props and methods
   const {
@@ -85,7 +101,6 @@ export const Dashboard = () => {
     queryKey: ["user"],
     queryFn: async () => {
       const { data } = await axios.get("/api/kindeSession");
-      console.log("useQuery data", data);
       return (data.user as KindeUser) || [];
     },
   });
@@ -96,7 +111,6 @@ export const Dashboard = () => {
       queryFn: async () => {
         try {
           const { data } = await axios.get("/api/property");
-          console.log("publishedProperties", publishedProperties);
           return (data.publishedProperties as Property[]) || [];
         } catch (error) {
           console.error(error);
@@ -105,19 +119,37 @@ export const Dashboard = () => {
     });
 
   // Add state variables for the property information and the uploaded images.
-  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
+  // const [uploadedImages, setUploadedImages] = useState<File[]>([]);
 
   const { toast } = useToast();
 
   // Instantiate queryClient as useQueryClient hook
   const queryClient = useQueryClient();
 
+  useEffect(() => {
+    console.log("useEffect propertyId", propertyId);
+  }, [propertyId]);
+
   const mutation = useMutation(
     async (propertyData: CreatePropertySchemaType) => {
       try {
         const response = await axios.post(`/api/property`, propertyData);
-        console.log("let's see the response here:", response.data);
-        setNewPropertyId(response.data.id);
+        if (!response.data) {
+          return toast({
+            title: "Now loading...",
+            description: "Processing submission. Please wait.",
+            variant: "default",
+            duration: 5000,
+          });
+        }
+
+        if (!response.data.id) {
+          return null;
+        }
+
+        console.log("response.data.id", response.data.id);
+        setPropertyId(response.data.id);
+        console.log("What is the propertyId?", propertyId);
         return response.data;
       } catch (error) {
         console.error(error);
@@ -132,13 +164,12 @@ export const Dashboard = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["unpublishedProperties"]);
+        setSteps("images");
       },
     },
   );
 
   const submitProperty = async (data: CreatePropertySchemaType) => {
-    console.log("submitProperty", data);
-
     // Check if user or user.id is undefined.
     if (!user || !user.id) {
       return toast({
@@ -148,8 +179,6 @@ export const Dashboard = () => {
         duration: 5000,
       });
     }
-
-    console.log("user", user.id);
 
     // Create a new object and convert user data into approapriate format for the backend
     const propertyData = {
@@ -168,36 +197,63 @@ export const Dashboard = () => {
       published: false, // Set the published status to false
     };
 
-    // console.log("formData", formData);
-    console.log("so many things", propertyData);
-
     // Use the mutate function from useMutation to submit the property data.
     mutation.mutate(propertyData);
 
     reset(); // Reset the form
-    setPropertyInfoAdded(true); // Set the propertyInfoAdded state to true
-    setCurrentStep((prevStep) => prevStep + 1);
-    setUploadedImages([]);
+    // setPropertyInfoAdded(true); // Set the propertyInfoAdded state to true
+    // setCurrentStep((prevStep) => prevStep + 1);
+  };
+
+  const submitFile = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const fileInput = document.getElementById("fileInput") as HTMLInputElement;
+
+    // Check if a file was selected
+    if (fileInput && fileInput.files && fileInput.files.length > 0) {
+      const file = fileInput.files[0]; // Get the first file
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const { data } = await axios.post(
+          `/api/user/${user?.id}/property/draftProperties/${propertyId}/upload-images`,
+          formData,
+        );
+        console.log("Uploaded data", data);
+        console.log("Uploaded file", file);
+        return (data as PropertyImage) || [];
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
 
   // Logic for routing
   const router = useRouter();
 
-  const {
-    data: unpublishedProperties,
-    isLoading: unpublishedPropertiesLoading,
-  } = useQuery({
-    queryKey: ["unpublishedProperties"],
-    queryFn: async () => {
-      try {
-        const { data } = await axios.get(`/api/user/${user?.id}/property`);
-        console.log("UNpublishedProperties", data);
-        return (data as Property[]) || [];
-      } catch (error) {
-        console.error(error);
-      }
-    },
-  });
+  // navigate to the Upload Images page after the property is created
+  // useEffect(() => {
+  //   if (propertyId) {
+  //     router.push(`/dashboard/post-property/${propertyId}/upload-images`);
+  //   }
+  // }, [router, propertyId]);
+
+  // const {
+  //   data: unpublishedProperties,
+  //   isLoading: unpublishedPropertiesLoading,
+  // } = useQuery({
+  //   queryKey: ["unpublishedProperties"],
+  //   queryFn: async () => {
+  //     try {
+  //       const { data } = await axios.get(`/api/user/${user?.id}/property`);
+  //       return (data as Property[]) || [];
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   },
+  // });
 
   return (
     <div className="flex gap-8">
@@ -225,417 +281,436 @@ export const Dashboard = () => {
       <div className="my-36 px-8">
         <h1 className="">Post A Property</h1>
 
-        <section className="flex-col gap-8">
-          <form
-            className="flex flex-col items-start gap-2"
-            onSubmit={handleSubmit(submitProperty)}
-          >
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("heading")}
-                title="Enter a catchy heading for your property."
-                aria-label="property heading"
-                type="text"
-                placeholder="Enter a heading"
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.heading && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.heading.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <textarea
-                {...register("desc")}
-                title="Enter a catchy description for your property."
-                aria-label="property description"
-                // type="text"
-                placeholder="Enter a description"
-                className={` duration-30 mx-auto h-[75px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.desc && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.desc.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("matterportUrl")}
-                title="Enter a matterport url for your property."
-                aria-label="matterport url"
-                type="text"
-                placeholder="Enter a matterport url"
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.matterportUrl && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.matterportUrl.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("streetViewUrl")}
-                title="Enter a catchy streetViewUrl for your property."
-                aria-label="property streetViewUrl"
-                type="text"
-                placeholder="Enter a streetViewUrl"
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.streetViewUrl && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.streetViewUrl.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("mapLocationUrl")}
-                title="Enter a catchy mapLocation for your property."
-                aria-label="property mapLocation"
-                type="text"
-                placeholder="Enter a mapLocation"
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.mapLocationUrl && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.mapLocationUrl.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("winNowPrice")}
-                onChange={(e) => {
-                  // Clear errors when the input changes
-                  clearErrors("winNowPrice");
-                  // Prevent non-numeric input
-                  const value = e.target.value.replace(/[^0-9.]/g, "");
-                  // Format the value as a dollar amount
-                  const formattedValue = "$" + Number(value).toLocaleString();
-                  // Update the form value
-                  setValue("winNowPrice", formattedValue);
-                }}
-                title="Enter your Win Now Price."
-                aria-label="Win Now Price"
-                type="text"
-                placeholder="Enter a Win Now Price"
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.winNowPrice &&
-                typeof errors.winNowPrice.message === "string" && (
+        <section className="flex-col gap-8 border border-red-600">
+          {steps === "info" && (
+            <form
+              className="flex flex-col items-start gap-2"
+              onSubmit={handleSubmit(submitProperty)}
+            >
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("heading")}
+                  title="Enter a catchy heading for your property."
+                  aria-label="property heading"
+                  type="text"
+                  placeholder="Enter a heading"
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.heading && (
                   <div className="shake h-4 text-sm text-red-400">
-                    {errors.winNowPrice.message}
+                    {errors.heading.message}
                   </div>
                 )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("askPrice")}
-                onChange={(e) => {
-                  // Clear errors when the input changes
-                  clearErrors("askPrice");
-                  // Prevent non-numeric input
-                  const value = e.target.value.replace(/[^0-9.]/g, "");
-                  // Format the value as a dollar amount
-                  const formattedValue = "$" + Number(value).toLocaleString();
-                  // Update the form value
-                  setValue("askPrice", formattedValue);
-                }}
-                title="Enter your ask price."
-                aria-label="ask price"
-                type="text"
-                placeholder="Enter an ask price"
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.askPrice && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.askPrice.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("arv")}
-                onChange={(e) => {
-                  // Clear errors when the input changes
-                  clearErrors("arv");
-                  // Prevent non-numeric input
-                  const value = e.target.value.replace(/[^0-9.]/g, "");
-                  // Format the value as a dollar amount
-                  const formattedValue = "$" + Number(value).toLocaleString();
-                  // Update the form value
-                  setValue("arv", formattedValue);
-                }}
-                title="Enter your after repair value."
-                aria-label="after repair value"
-                type="text"
-                placeholder="Enter an after repair value"
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.arv && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.arv.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("address1")}
-                title="Enter a catchy address for your property."
-                aria-label="property address-1"
-                type="text"
-                placeholder="Enter an address"
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.address1 && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.address1.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("address2")}
-                title="Enter a catchy address for your property."
-                aria-label="property address-2"
-                type="text"
-                placeholder="Enter an address"
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("city")}
-                title="City"
-                aria-label="property city"
-                type="text"
-                placeholder="Enter an city"
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.city && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.city.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("state")}
-                title="City"
-                aria-label="property state"
-                type="text"
-                placeholder="Enter an state"
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.state && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.state.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("county")}
-                title="City"
-                aria-label="property county"
-                type="text"
-                placeholder="Enter an county"
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("zip")}
-                title="City"
-                aria-label="property zip"
-                type="text"
-                placeholder="Enter an zip"
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.zip && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.zip.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("country")}
-                title="City"
-                aria-label="property country"
-                type="text"
-                placeholder="Enter an country"
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.country && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.country.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("beds")}
-                title="Beds"
-                aria-label="property beds"
-                type="text"
-                placeholder="Enter number of beds"
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.beds && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.beds.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("baths")}
-                title="Baths"
-                aria-label="property baths"
-                type="text"
-                placeholder="Enter an baths"
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.baths && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.baths.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("sqft")}
-                title="Sqft"
-                aria-label="property sqft"
-                type="text"
-                placeholder="Enter the square footage."
-                className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.sqft && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.sqft.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("type")}
-                title="Type"
-                aria-label="property type"
-                type="string"
-                placeholder="Enter the property type, e.g. single-family, etc.)."
-                className={`duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.type && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.type.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("parking")}
-                title="Parking"
-                aria-label="property parking"
-                type="string"
-                placeholder="Enter the property parking option."
-                className={`duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.parking && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.parking.message}
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("yearBuilt")}
-                title="Year Built"
-                aria-label="property year built"
-                type="text"
-                placeholder="Enter the property build year."
-                className={`duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.yearBuilt &&
-                typeof errors.yearBuilt.message === "number" && (
-                  <div className="shake h-4 text-sm text-red-400">
-                    {errors.yearBuilt.message}
-                  </div>
-                )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <input
-                {...register("lotSize")}
-                title="Lot Size"
-                aria-label="property lot size"
-                type="text"
-                placeholder="Enter the property lot size."
-                className={`duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
-              />
-              {errors.lotSize && (
-                <div className="shake h-4 text-sm text-red-400">
-                  {errors.lotSize.message}
-                </div>
-              )}
-            </div>
-            <div className="flex justify-between gap-6">
-              <div>
-                <button
-                  title="submit-button"
-                  type="submit"
-                  className="rounded-[10px] border border-black p-2 px-4"
-                >
-                  Save Draft
-                </button>
               </div>
-              <div className="flex items-center justify-center gap-2">
-                <button
-                  title="submit-button"
-                  type="submit"
-                  onClick={() => {
-                    router.push(`/dashboard/post-property/${newPropertyId}`);
+              <div className="flex flex-col gap-1">
+                <textarea
+                  {...register("desc")}
+                  title="Enter a catchy description for your property."
+                  aria-label="property description"
+                  // type="text"
+                  placeholder="Enter a description"
+                  className={` duration-30 mx-auto h-[75px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.desc && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.desc.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("matterportUrl")}
+                  title="Enter a matterport url for your property."
+                  aria-label="matterport url"
+                  type="text"
+                  placeholder="Enter a matterport url"
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.matterportUrl && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.matterportUrl.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("streetViewUrl")}
+                  title="Enter a catchy streetViewUrl for your property."
+                  aria-label="property streetViewUrl"
+                  type="text"
+                  placeholder="Enter a streetViewUrl"
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.streetViewUrl && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.streetViewUrl.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("mapLocationUrl")}
+                  title="Enter a catchy mapLocation for your property."
+                  aria-label="property mapLocation"
+                  type="text"
+                  placeholder="Enter a mapLocation"
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.mapLocationUrl && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.mapLocationUrl.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("winNowPrice")}
+                  onChange={(e) => {
+                    // Clear errors when the input changes
+                    clearErrors("winNowPrice");
+                    // Prevent non-numeric input
+                    const value = e.target.value.replace(/[^0-9.]/g, "");
+                    // Format the value as a dollar amount
+                    const formattedValue = "$" + Number(value).toLocaleString();
+                    // Update the form value
+                    setValue("winNowPrice", formattedValue);
                   }}
-                  className="flex justify-between gap-2 rounded-[10px] border border-black p-2 px-4"
-                >
-                  <Camera className="h-6 w-6 text-zinc-500" />
-                  Upload Images
-                </button>
+                  title="Enter your Win Now Price."
+                  aria-label="Win Now Price"
+                  type="text"
+                  placeholder="Enter a Win Now Price"
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.winNowPrice &&
+                  typeof errors.winNowPrice.message === "string" && (
+                    <div className="shake h-4 text-sm text-red-400">
+                      {errors.winNowPrice.message}
+                    </div>
+                  )}
               </div>
-            </div>
-          </form>
-        </section>
-        <section className="mt-20">
-          <section className="mt-20">
-            <h1>Uploaded Images</h1>
-          </section>
-          <h1>Unpublished Drafts</h1>
-
-          <div className="flex flex-col gap-4">
-            {unpublishedProperties &&
-              !unpublishedPropertiesLoading &&
-              unpublishedProperties.map((prop, index) => (
-                <div key={index} className="flex flex-col gap-4">
-                  <p className="text-[22px] text-black">{prop.heading}</p>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("askPrice")}
+                  onChange={(e) => {
+                    // Clear errors when the input changes
+                    clearErrors("askPrice");
+                    // Prevent non-numeric input
+                    const value = e.target.value.replace(/[^0-9.]/g, "");
+                    // Format the value as a dollar amount
+                    const formattedValue = "$" + Number(value).toLocaleString();
+                    // Update the form value
+                    setValue("askPrice", formattedValue);
+                  }}
+                  title="Enter your ask price."
+                  aria-label="ask price"
+                  type="text"
+                  placeholder="Enter an ask price"
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.askPrice && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.askPrice.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("arv")}
+                  onChange={(e) => {
+                    // Clear errors when the input changes
+                    clearErrors("arv");
+                    // Prevent non-numeric input
+                    const value = e.target.value.replace(/[^0-9.]/g, "");
+                    // Format the value as a dollar amount
+                    const formattedValue = "$" + Number(value).toLocaleString();
+                    // Update the form value
+                    setValue("arv", formattedValue);
+                  }}
+                  title="Enter your after repair value."
+                  aria-label="after repair value"
+                  type="text"
+                  placeholder="Enter an after repair value"
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.arv && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.arv.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("address1")}
+                  title="Enter a catchy address for your property."
+                  aria-label="property address-1"
+                  type="text"
+                  placeholder="Enter an address"
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.address1 && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.address1.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("address2")}
+                  title="Enter a catchy address for your property."
+                  aria-label="property address-2"
+                  type="text"
+                  placeholder="Enter an address"
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("city")}
+                  title="City"
+                  aria-label="property city"
+                  type="text"
+                  placeholder="Enter an city"
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.city && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.city.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("state")}
+                  title="City"
+                  aria-label="property state"
+                  type="text"
+                  placeholder="Enter an state"
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.state && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.state.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("county")}
+                  title="City"
+                  aria-label="property county"
+                  type="text"
+                  placeholder="Enter an county"
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("zip")}
+                  title="City"
+                  aria-label="property zip"
+                  type="text"
+                  placeholder="Enter an zip"
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.zip && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.zip.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("country")}
+                  title="City"
+                  aria-label="property country"
+                  type="text"
+                  placeholder="Enter an country"
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.country && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.country.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("beds")}
+                  title="Beds"
+                  aria-label="property beds"
+                  type="text"
+                  placeholder="Enter number of beds"
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.beds && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.beds.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("baths")}
+                  title="Baths"
+                  aria-label="property baths"
+                  type="text"
+                  placeholder="Enter an baths"
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.baths && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.baths.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("sqft")}
+                  title="Sqft"
+                  aria-label="property sqft"
+                  type="text"
+                  placeholder="Enter the square footage."
+                  className={` duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.sqft && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.sqft.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("type")}
+                  title="Type"
+                  aria-label="property type"
+                  type="string"
+                  placeholder="Enter the property type, e.g. single-family, etc.)."
+                  className={`duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.type && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.type.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("parking")}
+                  title="Parking"
+                  aria-label="property parking"
+                  type="string"
+                  placeholder="Enter the property parking option."
+                  className={`duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.parking && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.parking.message}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("yearBuilt")}
+                  title="Year Built"
+                  aria-label="property year built"
+                  type="text"
+                  placeholder="Enter the property build year."
+                  className={`duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.yearBuilt &&
+                  typeof errors.yearBuilt.message === "number" && (
+                    <div className="shake h-4 text-sm text-red-400">
+                      {errors.yearBuilt.message}
+                    </div>
+                  )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <input
+                  {...register("lotSize")}
+                  title="Lot Size"
+                  aria-label="property lot size"
+                  type="text"
+                  placeholder="Enter the property lot size."
+                  className={`duration-30 mx-auto h-[35px] w-[360px] rounded-[7px] border border-zinc-400 bg-transparent px-2 outline-none transition-all hover:border-zinc-500`}
+                />
+                {errors.lotSize && (
+                  <div className="shake h-4 text-sm text-red-400">
+                    {errors.lotSize.message}
+                  </div>
+                )}
+              </div>
+              <div className="mt-10 flex items-start justify-between gap-6">
+                <div className="flex items-center justify-center gap-2">
+                  <button
+                    title="submit-button"
+                    type="submit"
+                    className="rounded-[10px] border border-zinc-600 p-2 px-4"
+                  >
+                    Save Draft
+                  </button>
                 </div>
-              ))}
-          </div>
+                <div className="flex items-start justify-center gap-2">
+                  <button
+                    title="submit-and-upload-images-button"
+                    type="button"
+                    className="flex justify-between gap-2 rounded-[10px] border border-zinc-600 p-2 px-4"
+                  >
+                    <Camera className="h-6 w-6 text-zinc-500" />
+                    Upload Images
+                  </button>
+                  {/* <UploadButton
+                    endpoint="imageUploader"
+                    appearance={{
+                      button:
+                        "flex justify-between gap-2 rounded-[10px] border border-zinc-600 p-2 px-4 text-black",
+                    }}
+                    onClientUploadComplete={(
+                      res: UploadFileResponse<null>[],
+                    ) => {
+                      console.log("res", res);
+                      console.log(
+                        "onClientUploadComplete propertyId",
+                        propertyId,
+                      );
+                      alert("Upload Completed");
+                    }}
+                    onUploadError={(error: Error) => {
+                      // TODO: Add toast notification for error
+                      console.error(error);
+                      alert(`ERROR! ${error.message}`);
+                    }}
+                  /> */}
+                </div>
+              </div>
+            </form>
+          )}
+          {steps === "images" && (
+            <div className="">
+              <h1>Images for id: {propertyId}</h1>
+              {/* <form onSubmit={submitFile}>
+                <Input id="fileInput" type="file" />
+                <button
+                  title="submit-button"
+                  type="submit"
+                  className="rounded-[10px] border border-zinc-600 p-2 px-4"
+                >
+                  Upload Image
+                </button>
+              </form> */}
+              <UploadDropZone />
+            </div>
+          )}
         </section>
       </div>
     </div>
   );
 };
 
-const UploadDropZone = ({
-  setUploadedImages,
-  newPropertyId,
-}: {
-  setUploadedImages: React.Dispatch<React.SetStateAction<File[]>>;
-  newPropertyId: string;
-}) => {
+export default Dashboard;
+
+const UploadDropZone = () => {
+  // ...
+
   const router = useRouter();
 
   const [isUploading, setIsUploading] = useState<boolean | null>(false);
@@ -661,14 +736,17 @@ const UploadDropZone = ({
   // Instantiate useUploadThing hook
   const { startUpload } = useUploadThing("imageUploader");
 
-  const { mutate: startPolling } = trpc.getImage.useMutation({
-    onSuccess: (image) => {
-      // router.push(`/user/${file.id}`);
-      console.log("image", image.id);
-    },
-    retry: true,
-    retryDelay: 500,
-  });
+  // const { mutate: startPolling } = trpc.getImage.useMutation({
+  //   onSuccess: (file) => {
+  //     router.push(`/user/${file.id}`);
+  //   },
+  //   onError: (err) => {
+  //     console.error("An error occurred:", err);
+  //     // Handle the error
+  //   },
+  //   retry: true,
+  //   retryDelay: 500,
+  // });
 
   // Used to display progress with the progress bar
   const startSimulatedProgress = () => {
@@ -690,19 +768,17 @@ const UploadDropZone = ({
 
   return (
     <Dropzone
-      multiple={true}
-      onDrop={async (acceptedFiles) => {
+      multiple={false}
+      onDrop={async (acceptedFile) => {
         setIsUploading(true);
 
         // Handle file upload
         const progressInterval = startSimulatedProgress();
 
-        // // Instantiate startUpload function from useUploadThing hook
-        console.log("newPropertyId INSIDE DROPZONE", newPropertyId);
-        const res = await startUpload(acceptedFiles);
+        // Instantiate startUpload function from useUploadThing hook
+        const res = await startUpload(acceptedFile);
         // Handle upload errors
         if (!res) {
-          console.log("res after uplosding image", res);
           return toast({
             title: "Oops! Something went wrong.",
             description: "Please try again later.",
@@ -711,7 +787,7 @@ const UploadDropZone = ({
           });
         }
 
-        // // Get response from destrutured array
+        // Get response from destrutured array
         const [fileResponse] = res;
         // Get key from fileResponse object to identify it against database
         const key = fileResponse?.key;
@@ -728,9 +804,6 @@ const UploadDropZone = ({
         clearInterval(progressInterval);
         setUploadProgress(100);
 
-        setUploadedImages(acceptedFiles);
-        console.log("acceptedFiles", acceptedFiles);
-
         // // Set isFileUploaded to true
         setIsFileUploaded(true);
 
@@ -738,13 +811,13 @@ const UploadDropZone = ({
         // startPolling({ key });
 
         //refetch new files
-        queryClient.invalidateQueries(["images", userData]);
+        queryClient.invalidateQueries(["documents", userData]);
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
         <div
           {...getRootProps()}
-          className="h-full w-[600px] rounded-lg border border-dashed border-gray-300"
+          className="mt-20 h-full w-[600px] rounded-lg border border-dashed border-gray-300"
         >
           <div className="flex h-full w-full items-center justify-center">
             <label
@@ -758,9 +831,7 @@ const UploadDropZone = ({
                     <p className="mb-2 text-sm text-zinc-500">
                       Upload in progress. Please wait...
                     </p>
-                    <p className="text-xs text-zinc-500">
-                      Supported file types: jpg, jpeg, png (up to 16MB)
-                    </p>
+                    <p className="text-xs text-zinc-500">PDF (up to 16MB)</p>
                   </>
                 ) : (
                   <>
@@ -768,20 +839,18 @@ const UploadDropZone = ({
                       <span className="font-semibold">Click to upload</span> or
                       drag and drop your documents.
                     </p>
-                    <p className="text-xs text-zinc-500">
-                      Supported file types: jpg, jpeg, png (up to 16MB)
-                    </p>
+                    <p className="text-xs text-zinc-500">PDF (up to 16MB)</p>
                   </>
                 )}
               </div>
 
-              {acceptedFiles && !isFileUploaded && (
+              {acceptedFiles && acceptedFiles[0] && !isFileUploaded && (
                 <div className="flex max-w-xs items-center divide-x divide-zinc-200 overflow-hidden rounded-md bg-white outline outline-[1px] outline-zinc-200">
                   <div className="grid h-full place-items-center px-3 py-2">
-                    <FileIcon className="h-4 w-4 text-[#58A053]" />
+                    <File className="h-4 w-4 text-[#58A053]" />
                   </div>
                   <div className="h-full truncate px-3 py-2 text-sm">
-                    {acceptedFiles.map((file) => file.name).join(", ")}
+                    {acceptedFiles[0].name}
                   </div>
                 </div>
               )}
@@ -814,5 +883,3 @@ const UploadDropZone = ({
     </Dropzone>
   );
 };
-
-export default Dashboard;

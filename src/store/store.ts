@@ -15,6 +15,11 @@ type PropertiesState = {
   setSearchProperties: (properties: Property[]) => void;
 };
 
+type NewPropertyIdState = {
+  propertyId: string | null;
+  setPropertyId: (id: string | null) => void;
+};
+
 export const useSearchParamsStore = create<SearchState>((set, get) => ({
   // Define the searchParams state
   searchParams: null,
@@ -56,8 +61,11 @@ export const usePropertiesStore = create<PropertiesState>((set, get) => ({
         : false;
     });
 
-    console.log("filteredProperties", filteredProperties);
-
     set({ searchProperties: filteredProperties });
   },
+}));
+
+export const usePropertyIdStore = create<NewPropertyIdState>((set) => ({
+  propertyId: null,
+  setPropertyId: (id) => set({ propertyId: id }),
 }));

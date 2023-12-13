@@ -10,13 +10,12 @@ export async function GET(req: NextRequest) {
       images: true,
     },
   });
-  console.log("property:", property);
   return NextResponse.json(property);
 }
 
-export async function POST(request: Request) {
+export async function POST(req: NextRequest) {
   console.log("POST hit");
-  const json = await request.json();
+  const json = await req.json();
   console.log("json:", json);
 
   const created = await db.property.create({

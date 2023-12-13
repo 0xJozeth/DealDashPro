@@ -1,6 +1,9 @@
 import { db } from "@/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { usePropertyIdStore } from "@/store/store";
+import { usePropertyId } from "@/utils/usePropertyId";
 
 const f = createUploadthing();
 
@@ -19,7 +22,12 @@ const middleware = async () => {
     },
   });
 
-  return { user, userId: user.id, offerId: offerId?.id };
+  return {
+    user,
+    userId: user.id,
+    offerId: offerId?.id,
+    propertyId: offerId?.propertyId,
+  };
 };
 
 const onUploadComplete = async ({
@@ -41,6 +49,9 @@ const onUploadComplete = async ({
   });
 
   if (isFileExist) return;
+  if (!metadata.propertyId) {
+    throw new Error("Property ID is required");
+  }
 
   const createdFile = await db.document.create({
     data: {
@@ -50,6 +61,7 @@ const onUploadComplete = async ({
       url: `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`,
       offerId: metadata.offerId,
       uploadStatus: "PROCESSING",
+      propertyId: metadata.propertyId,
     },
   });
   try {
@@ -79,28 +91,30 @@ const onUploadComplete = async ({
 {
   /* IMAGE UPLOAD LOGIC */
 }
-const imageMiddleware = async () => {
+
+const ImageMiddleware = async () => {
   const { getUser } = getKindeServerSession();
   const user = getUser();
 
   if (!user || !user.id) throw new Error("Unauthorized");
-  const propertyId = await db.property.findFirst({
+
+  const property = await db.property.findFirst({
     where: {
       userId: user.id,
     },
-    include: {
-      images: true,
+    orderBy: {
+      createdAt: "desc",
     },
   });
 
-  return { user, userId: user.id, propertyId: propertyId?.id };
+  return { user, userId: user.id, property };
 };
 
 const onImageUploadComplete = async ({
   metadata,
   file,
 }: {
-  metadata: Awaited<ReturnType<typeof imageMiddleware>>;
+  metadata: Awaited<ReturnType<typeof ImageMiddleware>>;
   file: {
     key: string;
     name: string;
@@ -118,11 +132,9 @@ const onImageUploadComplete = async ({
 
   // Check if propertyId exists and return early if it does not
 
-  if (!metadata.propertyId) {
+  if (!metadata.property) {
     throw new Error("propertyId is required");
   }
-
-  console.log("SHOW ME THE metadata", metadata);
 
   const createdFile = await db.propertyImage.create({
     data: {
@@ -130,14 +142,25 @@ const onImageUploadComplete = async ({
       key: file.key,
       name: file.name,
       url: `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`,
-      propertyId: metadata.propertyId,
+      propertyId: metadata.property.id,
       uploadStatus: "PROCESSING",
     },
   });
+
+  // try {
+  //   const response = await fetch(
+  //     `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`,
+  //   );
+  // } catch (err) {
+  //   console.error("Error fetching file:", err);
+  //   // Handle error
+  // }
+
+  if (!createdFile) {
+    throw new Error("Error creating property image");
+  }
+
   try {
-    const response = await fetch(
-      `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`,
-    );
     await db.propertyImage.update({
       data: {
         uploadStatus: "SUCCESS",
@@ -147,15 +170,17 @@ const onImageUploadComplete = async ({
       },
     });
   } catch (err) {
-    await db.propertyImage.update({
-      data: {
-        uploadStatus: "FAILED",
-      },
-      where: {
-        id: createdFile.id,
-      },
-    });
+    console.error("Error updating property image:", err);
+    // Handle error
   }
+
+  console.log("metadata.property:", metadata.property);
+
+  // Update the property's featuredImage
+  await db.property.update({
+    where: { id: metadata.property.id },
+    data: { featuredImage: createdFile.url },
+  });
 };
 
 export const ourFileRouter = {
@@ -163,16 +188,8 @@ export const ourFileRouter = {
     .middleware(middleware)
     .onUploadComplete(onUploadComplete),
   imageUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 50 } })
-    .middleware(imageMiddleware)
+    .middleware(ImageMiddleware)
     .onUploadComplete(onImageUploadComplete),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
-
-// export const ourImageRouter = {
-//   pdfUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 50 } })
-//     .middleware(middleware)
-//     .onUploadComplete(onUploadComplete),
-// } satisfies FileRouter;
-
-// export type OurImageRouter = typeof ourImageRouter;

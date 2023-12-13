@@ -43,12 +43,39 @@ export const appRouter = router({
   getFile: privateProcedure
     .input(z.object({ key: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      console.log("getFile called with input:", input);
+      console.log("ctx:", ctx);
+
       const { userId } = ctx;
+
+      console.log("userId:", userId);
 
       const file = await db.document.findFirst({
         where: {
           key: input.key,
           userId,
+        },
+      });
+
+      if (!file) throw new TRPCError({ code: "NOT_FOUND" });
+
+      return file;
+    }),
+
+  getImage: privateProcedure
+    .input(z.object({ key: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      console.log("getFile called with input:", input);
+      console.log("ctx:", ctx);
+
+      const { userId } = ctx;
+
+      console.log("userId:", userId);
+
+      const file = await db.propertyImage.findFirst({
+        where: {
+          key: input.key,
+          propertyId: ctx.propertyId,
         },
       });
 

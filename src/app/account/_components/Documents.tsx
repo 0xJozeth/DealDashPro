@@ -33,12 +33,12 @@ function AccountDocuments() {
       const { data } = await axios.get("/api/kindeSession");
       // Check if there is a user id else return
       if (!data.user.id) {
-        return;
+        return null;
       }
 
-      setUserId(data.user.id);
+      setUserId(data?.user.id);
       const userId = data.user.id;
-      return data.user.id as KindeUser;
+      return (data.user.id as KindeUser) || null;
     },
   });
 

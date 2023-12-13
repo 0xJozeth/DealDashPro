@@ -4,7 +4,7 @@ import { Property } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { redirect, useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 
 function Page() {
   const router = useRouter();
@@ -31,19 +31,16 @@ function Page() {
         console.error(error);
       }
     },
+    enabled: !!user?.id,
   });
 
-  // Auth Logic
-  if (userLoading || draftsLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!user || !user.id) {
-    return router.push("/api/auth/login");
-  }
-
-  // if the user is authenticated, send them to the post property page
-  return router.push("/dashboard/post-property");
+  useEffect(() => {
+    if (!userLoading && (!user || !user.id)) {
+      router.push("/api/auth/login");
+    } else if (!userLoading && !draftsLoading) {
+      router.push("/dashboard/post-property");
+    }
+  }, [userLoading, draftsLoading, user, router]);
 }
 
 export default Page;

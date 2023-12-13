@@ -48,9 +48,13 @@ export function TableDemo() {
   const { data: user } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
-      const { data } = await axios.get("/api/kindeSession");
-      setUserId(data.user.id);
-      return data.user as KindeUser;
+      try {
+        const { data } = await axios.get("/api/kindeSession");
+        return data.user || null;
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
     },
   });
 

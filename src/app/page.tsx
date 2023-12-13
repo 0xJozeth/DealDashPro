@@ -19,8 +19,13 @@ export default function Home() {
   const { data: user, isLoading: userLoading } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
-      const { data } = await axios.get("/api/kindeSession");
-      return data.user;
+      try {
+        const { data } = await axios.get("/api/kindeSession");
+        return data.user || null;
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
     },
   });
 
